@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile "io.reactivex.rxjava2:rxjava:$rxJava_version"
+    compile 'com.github.amatkivskiy:gitter.sdk.rx:1.6.0'
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
