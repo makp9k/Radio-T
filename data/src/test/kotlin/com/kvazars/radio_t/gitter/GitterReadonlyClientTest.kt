@@ -9,7 +9,7 @@ class GitterReadonlyClientTest {
 
     @Test
     fun connect() {
-        val observer = GitterReadonlyClient().connect().take(3).test()
+        val observer = GitterReadonlyClient().connect().doOnNext(::println).test()
 
         println(observer.values())
 

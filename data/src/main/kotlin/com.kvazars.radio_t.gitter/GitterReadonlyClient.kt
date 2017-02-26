@@ -1,15 +1,20 @@
 package com.kvazars.radio_t.gitter
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import okio.ByteString
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 /**
@@ -23,7 +28,10 @@ class GitterReadonlyClient {
     //region CLASS VARIABLES -----------------------------------------------------------------------
 
     private val httpClient: OkHttpClient = OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor(HttpLoggingInterceptor.Logger(::println)).setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addInterceptor(
+                    HttpLoggingInterceptor(HttpLoggingInterceptor.Logger(::println))
+                            .setLevel(HttpLoggingInterceptor.Level.BODY)
+            )
             .build()
 
     //endregion
@@ -48,6 +56,10 @@ class GitterReadonlyClient {
 
                     Observable.create(webSocketOnSubscribe)
                 }
+                .retryWhen {
+                    it.zipWith(Observable.just(0, 0, 0, 1, 2, 3), BiFunction<Throwable, Int, Int> { e, i -> i })
+                            .flatMap { Observable.timer(Math.pow(3.0, it * 1.0).toLong(), TimeUnit.SECONDS) }
+                }
     }
 
     private fun getAccessData(): Observable<Pair<String, String>> {
@@ -58,8 +70,8 @@ class GitterReadonlyClient {
                 .build()
                 .create(GitterApi::class.java)
 
-        val clientIdPattern = Pattern.compile("\"accessToken\":\"([^\"]+)\"");
-        val roomIdPattern = Pattern.compile("\"troupe\":\\{\"id\":\"([^\"]+)\"");
+        val clientIdPattern = Pattern.compile("\"accessToken\":\"([^\"]+)\"")
+        val roomIdPattern = Pattern.compile("\"troupe\":\\{\"id\":\"([^\"]+)\"")
         return gitterApi.getChatPage("testtestasd/Lobby")
                 .map { it.string() }
                 .map {
@@ -86,18 +98,21 @@ class GitterReadonlyClient {
     }
 
     private fun createHandshakePayload(accessToken: String): String {
-        return "message=[{\"channel\":\"/meta/handshake\",\"id\":\"1\",\"ext\":{\"token\":\"$accessToken\",\"version\":\"b23011\",\"connType\":\"online\",\"client\":\"web\",\"uniqueClientId\":61000,\"realtimeLibrary\":\"halley\"},\"version\":\"1.0\",\"supportedConnectionTypes\":[\"websocket\",\"long-polling\"]}]"
+        return "message=[{\"channel\":\"/meta/handshake\",\"id\":\"1\",\"ext\":{\"token\":\"$accessToken\",\"version\":\"b23011\",\"connType\":\"online\",\"client\":\"web\",\"realtimeLibrary\":\"halley\"},\"version\":\"1.0\",\"supportedConnectionTypes\":[\"websocket\",\"long-polling\"]}]"
     }
 
-//endregion
+    //endregion
 
-//region INNER CLASSES -------------------------------------------------------------------------
+    //region INNER CLASSES -------------------------------------------------------------------------
 
     private class WebSocketOnSubscribe(val clientId: String, val roomId: String) : WebSocketListener(), ObservableOnSubscribe<ChatMessage> {
 
         var emitter: ObservableEmitter<ChatMessage>? = null
         var socket: WebSocket? = null
         var isClosed = true
+
+        val gson = GsonBuilder().create()
+        val messageChannel = "/api/v1/rooms/$roomId/chatMessages"
 
         override fun subscribe(e: ObservableEmitter<ChatMessage>?) {
             emitter = e
@@ -132,16 +147,19 @@ class GitterReadonlyClient {
 
         override fun onMessage(webSocket: WebSocket?, text: String?) {
             if (text != null) {
-                emitter?.onNext(ChatMessage("author", text))
-            }
-        }
+                val json = gson.fromJson(text, JsonArray::class.java).get(0).asJsonObject
 
-        override fun onMessage(webSocket: WebSocket?, bytes: ByteString?) {
-            if (bytes != null) {
-                emitter?.onNext(ChatMessage("author", bytes.utf8()))
+                val channel = json.get("channel").asString
+                if ("/meta/handshake" == channel && !json.get("successful").asBoolean) {
+                    emitter?.onError(RuntimeException("error"))
+                } else if (messageChannel == channel) {
+                    val model = json.get("data")?.asJsonObject?.get("model")
+                    emitter?.onNext(gson.fromJson(model, ChatMessage::class.java))
+                }
+
             }
         }
     }
 
-//endregion
+    //endregion
 }
