@@ -1,6 +1,6 @@
-package com.kvazars.radio_t.gitter
+package com.kvazars.radio_t.gitter.auth
 
-import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -11,6 +11,6 @@ import retrofit2.http.Path
 interface GitterApi {
 
     @GET("{room}/~chat")
-    fun getChatPage(@Path("room") room: String): Observable<ResponseBody>
+    fun getChatPage(@Path("room") room: String): Single<ResponseBody>
 
 }

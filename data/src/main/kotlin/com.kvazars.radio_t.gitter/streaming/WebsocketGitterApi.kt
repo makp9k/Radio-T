@@ -1,6 +1,8 @@
-package com.kvazars.radio_t.gitter
+package com.kvazars.radio_t.gitter.streaming
 
+import com.kvazars.radio_t.gitter.streaming.models.HandshakeResponse
 import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.Headers
@@ -13,6 +15,6 @@ interface WebsocketGitterApi {
 
     @POST("bayeux")
     @Headers("Content-Type: application/x-www-form-urlencoded")
-    fun handshake(@Body payload: RequestBody): Observable<List<HandshakeResponse>>
+    fun handshake(@Body payload: RequestBody): Single<List<HandshakeResponse>>
 
 }

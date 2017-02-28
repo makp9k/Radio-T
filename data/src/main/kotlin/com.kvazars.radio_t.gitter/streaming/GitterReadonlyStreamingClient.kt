@@ -1,38 +1,37 @@
-package com.kvazars.radio_t.gitter
+package com.kvazars.radio_t.gitter.streaming
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
+import com.kvazars.radio_t.gitter.auth.models.GitterChatAccessData
+import com.kvazars.radio_t.gitter.models.ChatMessage
+import com.kvazars.radio_t.gitter.streaming.models.HandshakeResponse
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import okhttp3.*
-import okhttp3.logging.HttpLoggingInterceptor
-import okio.ByteString
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
-import java.util.regex.Pattern
 
 /**
  * Created by lza on 24.02.2017.
  */
-class GitterReadonlyClient {
+class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient) {
+
     //region CONSTANTS -----------------------------------------------------------------------------
 
     //endregion
 
     //region CLASS VARIABLES -----------------------------------------------------------------------
 
-    private val httpClient: OkHttpClient = OkHttpClient.Builder()
-            .addInterceptor(
-                    HttpLoggingInterceptor(HttpLoggingInterceptor.Logger(::println))
-                            .setLevel(HttpLoggingInterceptor.Level.BODY)
-            )
+    private val gitterApi = Retrofit.Builder()
+            .client(httpClient)
+            .baseUrl("https://ws.gitter.im/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
+            .create(WebsocketGitterApi::class.java)
 
     //endregion
 
@@ -42,59 +41,24 @@ class GitterReadonlyClient {
 
     //region LOCAL METHODS -------------------------------------------------------------------------
 
-    fun connect(): Observable<ChatMessage> {
-        return getAccessData()
-                .flatMap(
-                        { pair -> handshake(createHandshakePayload(pair.first)) },
-                        { pair, handshakeResponse -> Pair(handshakeResponse.clientId, pair.second) }
-                )
-                .flatMap { pair ->
+    fun connect(accessData: GitterChatAccessData): Observable<ChatMessage> {
+        return handshake(createHandshakePayload(accessData.accessToken))
+                .flatMap {
                     val request = Request.Builder().url("wss://ws.gitter.im/bayeux").build()
 
-                    val webSocketOnSubscribe = WebSocketOnSubscribe(pair.first, pair.second)
+                    val webSocketOnSubscribe = WebSocketOnSubscribe(it.clientId, accessData.roomId)
                     httpClient.newWebSocket(request, webSocketOnSubscribe)
 
                     Observable.create(webSocketOnSubscribe)
                 }
-                .retryWhen {
-                    it.zipWith(Observable.just(0, 0, 0, 1, 2, 3), BiFunction<Throwable, Int, Int> { e, i -> i })
-                            .flatMap { Observable.timer(Math.pow(3.0, it * 1.0).toLong(), TimeUnit.SECONDS) }
-                }
-    }
-
-    private fun getAccessData(): Observable<Pair<String, String>> {
-        val gitterApi = Retrofit.Builder()
-                .client(httpClient)
-                .baseUrl("https://gitter.im/")
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-                .create(GitterApi::class.java)
-
-        val clientIdPattern = Pattern.compile("\"accessToken\":\"([^\"]+)\"")
-        val roomIdPattern = Pattern.compile("\"troupe\":\\{\"id\":\"([^\"]+)\"")
-        return gitterApi.getChatPage("testtestasd/Lobby")
-                .map { it.string() }
-                .map {
-                    val matcherClientId = clientIdPattern.matcher(it)
-                    val matcherRoomId = roomIdPattern.matcher(it)
-                    if (matcherClientId.find() && matcherRoomId.find()) {
-                        Pair(matcherClientId.group(1), matcherRoomId.group(1))
-                    } else {
-                        null
-                    }
-                }
     }
 
     private fun handshake(payload: String): Observable<HandshakeResponse> {
-        val gitterApi = Retrofit.Builder()
-                .client(httpClient)
-                .baseUrl("https://ws.gitter.im/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-                .create(WebsocketGitterApi::class.java)
-
-        return gitterApi.handshake(RequestBody.create(MediaType.parse("text/plain"), payload)).flatMapIterable { it }.take(1)
+        return gitterApi
+                .handshake(RequestBody.create(MediaType.parse("text/plain"), payload))
+                .toObservable()
+                .flatMapIterable { it }
+                .take(1)
     }
 
     private fun createHandshakePayload(accessToken: String): String {
@@ -150,7 +114,7 @@ class GitterReadonlyClient {
                 val json = gson.fromJson(text, JsonArray::class.java).get(0).asJsonObject
 
                 val channel = json.get("channel").asString
-                if ("/meta/handshake" == channel && !json.get("successful").asBoolean) {
+                if (json.has("successful") && !json.get("successful").asBoolean) {
                     emitter?.onError(RuntimeException("error"))
                 } else if (messageChannel == channel) {
                     val model = json.get("data")?.asJsonObject?.get("model")

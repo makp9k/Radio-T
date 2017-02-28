@@ -21,7 +21,7 @@ android {
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-
+        test.java.srcDirs += 'src/test/kotlin'
     }
 
     testOptions {
@@ -42,4 +42,7 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+}
+repositories {
+    mavenCentral()
 }
