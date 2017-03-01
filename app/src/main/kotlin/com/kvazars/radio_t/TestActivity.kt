@@ -18,6 +18,10 @@ class TestActivity : AppCompatActivity() {
         gitter.getMessageStream()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { Toast.makeText(this, it.text, Toast.LENGTH_SHORT).show() }
+                .subscribe(
+                        { Toast.makeText(this, it.text, Toast.LENGTH_SHORT).show() },
+                        { Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show() },
+                        { Toast.makeText(this, "CLOSED", Toast.LENGTH_SHORT).show() }
+                )
     }
 }

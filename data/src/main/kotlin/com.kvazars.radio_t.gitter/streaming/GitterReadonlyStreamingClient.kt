@@ -59,10 +59,22 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient) {
                 .toObservable()
                 .flatMapIterable { it }
                 .take(1)
+                .flatMap {
+                    if (it.clientId.isEmpty()) {
+                        Observable.error<HandshakeResponse>(RuntimeException())
+                    } else {
+                        Observable.just(it)
+                    }
+                }
     }
 
     private fun createHandshakePayload(accessToken: String): String {
-        return "message=[{\"channel\":\"/meta/handshake\",\"id\":\"1\",\"ext\":{\"token\":\"$accessToken\",\"version\":\"b23011\",\"connType\":\"online\",\"client\":\"web\",\"realtimeLibrary\":\"halley\"},\"version\":\"1.0\",\"supportedConnectionTypes\":[\"websocket\",\"long-polling\"]}]"
+        val uniqueClientId = Math.floor(1e5 * Math.random())
+        return "message=[{\"channel\":\"/meta/handshake\"," +
+                "\"id\":\"1\",\"ext\":{\"token\":\"$accessToken\"," +
+                "\"version\":\"b23011\",\"connType\":\"online\",\"client\":\"web\"," +
+                "\"uniqueClientId\":\"$uniqueClientId\", \"realtimeLibrary\":\"halley\"},\"version\":\"1.0\"," +
+                "\"supportedConnectionTypes\":[\"websocket\",\"long-polling\"]}]"
     }
 
     //endregion

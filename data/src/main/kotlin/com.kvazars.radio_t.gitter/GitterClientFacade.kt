@@ -54,7 +54,7 @@ class GitterClientFacade {
     private fun applyRetry(): ObservableTransformer<in ChatMessage, out ChatMessage>? {
         return ObservableTransformer {
             it.retryWhen {
-                it.zipWith(Observable.just(0, 0, 0, 1, 2, 3), BiFunction<Throwable, Int, Int> { e, i -> i })
+                it.zipWith(Observable.just(0, 0, 0, 1, 2), BiFunction<Throwable, Int, Int> { e, i -> i })
                         .flatMap { Observable.timer(Math.pow(3.0, it * 1.0).toLong(), TimeUnit.SECONDS) }
             }
         }
