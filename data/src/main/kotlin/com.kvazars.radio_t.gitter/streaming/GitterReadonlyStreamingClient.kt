@@ -8,6 +8,7 @@ import com.kvazars.radio_t.gitter.streaming.models.HandshakeResponse
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
+import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import okhttp3.*
 import retrofit2.Retrofit
@@ -18,7 +19,8 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by lza on 24.02.2017.
  */
-class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient) {
+class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient,
+                                    private val scheduler: Scheduler) {
 
     //region CONSTANTS -----------------------------------------------------------------------------
 
@@ -47,7 +49,7 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient) {
                 .flatMap {
                     val request = Request.Builder().url("wss://ws.gitter.im/bayeux").build()
 
-                    val webSocketOnSubscribe = WebSocketOnSubscribe(it.clientId, accessData.roomId)
+                    val webSocketOnSubscribe = WebSocketOnSubscribe(it.clientId, accessData.roomId, scheduler)
                     httpClient.newWebSocket(request, webSocketOnSubscribe)
 
                     Observable.create(webSocketOnSubscribe)
@@ -59,14 +61,6 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient) {
                 .handshake(RequestBody.create(MediaType.parse("text/plain"), payload))
                 .toObservable()
                 .flatMapIterable { it }
-                .take(1)
-                .flatMap {
-                    if (it.clientId.isEmpty()) {
-                        Observable.error<HandshakeResponse>(RuntimeException())
-                    } else {
-                        Observable.just(it)
-                    }
-                }
     }
 
     private fun createHandshakePayload(accessToken: String): String {
@@ -82,7 +76,9 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient) {
 
     //region INNER CLASSES -------------------------------------------------------------------------
 
-    private class WebSocketOnSubscribe(val clientId: String, val roomId: String) : WebSocketListener(), ObservableOnSubscribe<ChatMessage> {
+    private class WebSocketOnSubscribe(private val clientId: String,
+                                       private val roomId: String,
+                                       private val scheduler: Scheduler) : WebSocketListener(), ObservableOnSubscribe<ChatMessage> {
 
         var emitter: ObservableEmitter<ChatMessage>? = null
         var socket: WebSocket? = null
@@ -113,8 +109,8 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient) {
             sendConnectMessage()
 
             Observable
-                    .interval(30, TimeUnit.SECONDS)
-                    .takeUntil { isClosed }
+                    .interval(30, TimeUnit.SECONDS, scheduler)
+                    .takeUntil { ignore: Long -> isClosed }
                     .subscribe { webSocket?.send("[{\"channel\":\"/api/v1/ping2\",\"data\":{\"reason\":\"ping\"},\"id\":\"$it\",\"clientId\":\"$clientId\"}]") }
         }
 

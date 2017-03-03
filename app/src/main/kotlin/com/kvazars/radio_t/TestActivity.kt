@@ -1,15 +1,27 @@
 package com.kvazars.radio_t
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.kvazars.radio_t.gitter.GitterClientFacade
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.internal.functions.Functions
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+
 
 class TestActivity : AppCompatActivity() {
 
-    val gitter = GitterClientFacade()
+    val httpClient: OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(
+                    HttpLoggingInterceptor(HttpLoggingInterceptor.Logger(::println))
+                            .setLevel(HttpLoggingInterceptor.Level.BODY)
+            )
+            .build()
+
+    val gitter = GitterClientFacade(httpClient)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,5 +35,7 @@ class TestActivity : AppCompatActivity() {
                         { Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show() },
                         { Toast.makeText(this, "CLOSED", Toast.LENGTH_SHORT).show() }
                 )
+
+        RxJavaPlugins.setErrorHandler(Functions.emptyConsumer())
     }
 }
