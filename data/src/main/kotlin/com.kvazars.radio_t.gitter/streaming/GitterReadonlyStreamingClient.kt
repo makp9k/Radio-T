@@ -110,8 +110,7 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient) {
             socket = webSocket
             isClosed = false
 
-            webSocket?.send("[{\"channel\":\"/meta/connect\",\"id\":\"2\",\"connectionType\":\"websocket\",\"clientId\":\"$clientId\"}]")
-            webSocket?.send("[{\"channel\":\"/meta/subscribe\",\"subscription\":\"/api/v1/rooms/$roomId/chatMessages\",\"id\":\"3\",\"ext\":{\"snapshot\":false},\"clientId\":\"$clientId\"}]")
+            sendConnectMessage()
 
             Observable
                     .interval(30, TimeUnit.SECONDS)
@@ -141,10 +140,15 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient) {
                     val model = json.get("data")?.asJsonObject?.get("model")
                     emitter?.onNext(gson.fromJson(model, ChatMessage::class.java))
                 } else if (channel == "/meta/connect") {
-                    webSocket?.send("[{\"channel\":\"/meta/subscribe\",\"subscription\":\"/api/v1/rooms/$roomId/chatMessages\",\"id\":\"3\",\"ext\":{\"snapshot\":false},\"clientId\":\"$clientId\"}]")
+                    sendConnectMessage()
                 }
 
             }
+        }
+
+        fun sendConnectMessage() {
+            socket?.send("[{\"channel\":\"/meta/connect\",\"id\":\"2\",\"connectionType\":\"websocket\",\"clientId\":\"$clientId\"}]")
+            socket?.send("[{\"channel\":\"/meta/subscribe\",\"subscription\":\"/api/v1/rooms/$roomId/chatMessages\",\"id\":\"3\",\"ext\":{\"snapshot\":false},\"clientId\":\"$clientId\"}]")
         }
     }
 
