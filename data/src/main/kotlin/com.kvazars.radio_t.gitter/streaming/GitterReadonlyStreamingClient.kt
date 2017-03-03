@@ -13,6 +13,7 @@ import okhttp3.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by lza on 24.02.2017.
@@ -111,17 +112,25 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient) {
 
             webSocket?.send("[{\"channel\":\"/meta/connect\",\"id\":\"2\",\"connectionType\":\"websocket\",\"clientId\":\"$clientId\"}]")
             webSocket?.send("[{\"channel\":\"/meta/subscribe\",\"subscription\":\"/api/v1/rooms/$roomId/chatMessages\",\"id\":\"3\",\"ext\":{\"snapshot\":false},\"clientId\":\"$clientId\"}]")
+
+            Observable
+                    .interval(30, TimeUnit.SECONDS)
+                    .takeUntil { isClosed }
+                    .subscribe { webSocket?.send("[{\"channel\":\"/api/v1/ping2\",\"data\":{\"reason\":\"ping\"},\"id\":\"$it\",\"clientId\":\"$clientId\"}]") }
         }
 
         override fun onFailure(webSocket: WebSocket?, t: Throwable?, response: Response?) {
+            println(response?.message())
             emitter?.onError(t)
         }
 
         override fun onClosed(webSocket: WebSocket?, code: Int, reason: String?) {
+            println(reason)
             emitter?.onComplete()
         }
 
         override fun onMessage(webSocket: WebSocket?, text: String?) {
+            println(text)
             if (text != null) {
                 val json = gson.fromJson(text, JsonArray::class.java).get(0).asJsonObject
 
@@ -131,6 +140,8 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient) {
                 } else if (messageChannel == channel) {
                     val model = json.get("data")?.asJsonObject?.get("model")
                     emitter?.onNext(gson.fromJson(model, ChatMessage::class.java))
+                } else if (channel == "/meta/connect") {
+                    webSocket?.send("[{\"channel\":\"/meta/subscribe\",\"subscription\":\"/api/v1/rooms/$roomId/chatMessages\",\"id\":\"3\",\"ext\":{\"snapshot\":false},\"clientId\":\"$clientId\"}]")
                 }
 
             }
