@@ -1,0 +1,83 @@
+[
+  {
+    "id": "1",
+    "channel": "/meta/handshake",
+    "successful": true,
+    "version": "1.0",
+    "supportedConnectionTypes": [
+      "long-polling",
+      "cross-origin-long-polling",
+      "callback-polling",
+      "websocket",
+      "eventsource",
+      "in-process"
+    ],
+    "clientId": "005fx4ilr3rflemygoyya4fjqhborug",
+    "advice": {
+      "reconnect": "retry",
+      "interval": 500,
+      "timeout": 120000
+    },
+    "ext": {
+      "appVersion": "b23011",
+      "userId": "58ab7380d73408ce4f4bb926",
+      "context": {
+        "user": {
+          "id": "58ab7380d73408ce4f4bb926",
+          "username": "Makp9k",
+          "displayName": "Leonid Zavodnik",
+          "url": "/Makp9k",
+          "avatarUrl": "https://avatars-04.gitter.im/gh/uv/3/Makp9k",
+          "avatarUrlSmall": "https://avatars0.githubusercontent.com/u/12616909?v=3&s=60",
+          "avatarUrlMedium": "https://avatars0.githubusercontent.com/u/12616909?v=3&s=128",
+          "scopes": {
+            "public_repo": false,
+            "private_repo": false
+          },
+          "providers": [
+            "github"
+          ],
+          "v": 6,
+          "gv": "3"
+        },
+        "troupe": {
+          "id": "58b0ccf4d73408ce4f4cb9fa",
+          "name": "testtestasd/Lobby",
+          "topic": "",
+          "avatarUrl": "https://avatars-03.gitter.im/group/i/58b0ccf4d73408ce4f4cb9f9",
+          "uri": "testtestasd/Lobby",
+          "oneToOne": false,
+          "userCount": 1,
+          "unreadItems": 0,
+          "mentions": 0,
+          "lastAccessTime": "2017-03-03T20:38:07.484Z",
+          "lurk": false,
+          "url": "/testtestasd/Lobby",
+          "githubType": "REPO_CHANNEL",
+          "associatedRepo": false,
+          "security": "PUBLIC",
+          "noindex": false,
+          "permissions": {
+            "admin": true
+          },
+          "roomMember": true,
+          "groupId": "58b0ccf4d73408ce4f4cb9f9",
+          "group": {
+            "id": "58b0ccf4d73408ce4f4cb9f9",
+            "name": "testtestasd",
+            "uri": "testtestasd",
+            "homeUri": "testtestasd",
+            "backedBy": {
+              "type": null
+            },
+            "avatarUrl": "https://avatars-03.gitter.im/group/i/58b0ccf4d73408ce4f4cb9f9"
+          },
+          "backend": {
+            "type": "GROUP"
+          },
+          "public": true
+        }
+      }
+    }
+  }
+]

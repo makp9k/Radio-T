@@ -1,0 +1,1251 @@
+<!doctype html>
+<html class="no-js fonts-loaded" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=IE9" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+    <meta charset="utf-8">
+    <title>testtestasd/Lobby - Gitter</title>
+    <style>
+
+      @-webkit-keyframes pulsey {
+        0% { opacity: 0.6; }
+        50% { opacity: 1; }
+        100% { opacity: 0.6; }
+      }
+
+      html.loading .trpContentPanel { background: url("//cdn01.gitter.im/_s/b230113/images/logo-mark-grey-64.png") center no-repeat; height: 90%; -webkit-animation: pulsey 2s ease-out; -webkit-animation-iteration-count: infinite;  }
+      html.loading .trpContentPanel > * { visibility: hidden; }
+    </style>
+    <base target="_parent">
+
+
+    <link rel="subresource" href="//cdn02.gitter.im/_s/b230113/js/vendor.js">
+    <link rel="subresource" href="//cdn03.gitter.im/_s/b230113/js/router-chat.js">
+    <link rel="subresource" href="//cdn03.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-Regular.otf.woff">
+
+        <link rel="preload" href="//cdn03.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-Regular.otf.woff" as="font" type="font/woff">
+    <link rel="preload" href="//cdn01.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-It.otf.woff" as="font" type="font/woff">
+    <link rel="preload" href="//cdn01.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-Bold.otf.woff" as="font" type="font/woff">
+    <link rel="preload" href="//cdn02.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-Semibold.otf.woff" as="font" type="font/woff">
+    <link rel="preload" href="//cdn03.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-BoldIt.otf.woff" as="font" type="font/woff">
+    <link rel="preload" href="//cdn02.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-Light.otf.woff" as="font" type="font/woff">
+    <link rel="preload" href="//cdn03.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-ExtraLight.otf.woff" as="font" type="font/woff">
+
+  <style>
+    @font-face {
+      font-family: 'SourceSansLocal';
+      font-style: normal;
+      font-weight: bold;
+      src: local("SourceSansPro-Bold");
+    }
+    @font-face {
+      font-family: 'SourceSansLocal';
+      font-style: italic;
+      font-weight: bold;
+      src: local("SourceSansPro-BoldIt");
+    }
+    @font-face {
+      font-family: 'SourceSansLocal';
+      font-style: normal;
+      font-weight: 200;
+      src: local("SourceSansPro-ExtraLight");
+    }
+    @font-face {
+      font-family: 'SourceSansLocal';
+      font-style: italic;
+      font-weight: normal;
+      src: local("SourceSansPro-It");
+    }
+    @font-face {
+      font-family: 'SourceSansLocal';
+      font-style: normal;
+      font-weight: 300;
+      src: local("SourceSansPro-Light");
+    }
+    @font-face {
+      font-family: 'SourceSansLocal';
+      font-style: normal;
+      font-weight: normal;
+      src: local("SourceSansPro-Regular");
+    }
+    @font-face {
+      font-family: 'SourceSansLocal';
+      font-style: normal;
+      font-weight: 600;
+      src: local("SourceSansPro-Semibold");
+    }
+    @font-face {
+      font-family: "source-sans-pro";
+      src: url("//cdn03.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-Regular.otf.woff") format('woff');
+      font-weight: normal;
+      font-style: normal
+    }
+    @font-face {
+      font-family: "source-sans-pro";
+      src: url("//cdn01.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-It.otf.woff") format('woff');
+      font-weight: normal;
+      font-style: italic
+    }
+    @font-face {
+      font-family: "source-sans-pro";
+      src: url("//cdn01.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-Bold.otf.woff") format('woff');
+      font-weight: bold;
+      font-style: normal
+    }
+    @font-face {
+      font-family: "source-sans-pro";
+      src: url("//cdn02.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-Semibold.otf.woff") format('woff');
+      font-weight: 600;
+      font-style: normal
+    }
+    @font-face {
+      font-family: "source-sans-pro";
+      src: url("//cdn03.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-BoldIt.otf.woff") format('woff');
+      font-weight: bold;
+      font-style: italic
+    }
+    @font-face {
+      font-family: "source-sans-pro";
+      src: url("//cdn02.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-Light.otf.woff") format('woff');
+      font-weight: 300;
+      font-style: normal
+    }
+    @font-face {
+      font-family: "source-sans-pro";
+      src: url("//cdn03.gitter.im/_s/b230113/fonts/sourcesans/SourceSansPro-ExtraLight.otf.woff") format('woff');
+      font-weight: 200;
+      font-style: normal
+    }
+  </style>
+
+    <link rel="stylesheet" href='//cdn01.gitter.im/_s/b230113/sprites/services.css'>
+    <link rel="stylesheet" href='//cdn02.gitter.im/_s/b230113/styles/router-chat.css'>
+
+
+    <link id="favicon" rel="shortcut icon" href='//cdn03.gitter.im/_s/b230113/images/favicon-normal.ico'><!-- Le fav and touch icons -->
+
+  </head>
+  <body class="iframe ">
+    <div class="trpAlertWrapper" id="alert-panel">
+  <div class="trpAlertContainer">
+    <div class="trpAlertContent" id="alert-content">
+    </div>
+  </div>
+</div>
+<div class="chat-header-wrapper">
+<header class="chat-header" id="header-wrapper">
+  <div id="header" class="chat-header-inner">
+    <div class="chat-header__main-grouping chat-header__avatar-grouping">
+  <form
+    class="chat-header__avatar  js-chat-header-group-avatar-upload-form"
+    action=""
+    enctype="multipart/form-data"
+    method="POST">
+    <input type="hidden" class="js-chat-header-group-avatar-upload-signature" name="signature" value="">
+    <input type="hidden" class="js-chat-header-group-avatar-upload-params" name="params" value="">
+    <input
+      id="chat-header-group-avatar-upload-input"
+      class="chat-header__group-avatar-upload-input js-chat-header-group-avatar-upload-input"
+      name="file"
+      type="file"
+      accept="image/*"
+       />
+    <label
+      class="chat-header__group-avatar-upload-label js-chat-header-group-avatar-upload-label"
+      for="chat-header-group-avatar-upload-input"
+      title="Upload new avatar">
+      <img class="js-chat-header-avatar-image"  height='48' width='48' src='https://avatars-03.gitter.im/group/i/58b0ccf4d73408ce4f4cb9f9?s=48' srcset='https://avatars-03.gitter.im/group/i/58b0ccf4d73408ce4f4cb9f9?s=96 2x' >
+      <div class="chat-header__group-avatar-upload-progress hidden js-chat-header-group-avatar-upload-progress"></div>
+    </label>
+  </form>
+</div>
+
+<div class="chat-header__main-grouping chat-header__info-grouping">
+  <div class="chat-header__heading-sub-group">
+    <h1 class="js-chat-name chat-header__heading">
+      <a  class="chat-header__title" target="_blank">testtestasd/Lobby</a>
+    </h1>
+  </div>
+  <div class="chat-header__topic-sub-group js-room-topic-edit-activator" tabindex="0">
+    <div class="chat-header__topic-wrapper js-room-topic-wrapper is-admin "><p class="js-room-topic chat-header__topic is-admin "></p></div>
+  </div>
+</div>
+
+
+<div class="chat-header__main-grouping chat-header__action-grouping">
+    <a href="/orgs/testtestasd/rooms" class="chat-header__org-page org-page-link js-chat-header-org-page-action" title="More testtestasd rooms">
+      <i class="chat-header__action-icon icon-globe"></i>
+    </a>
+
+    <button class="chat-header__favourite js-favourite-button" title="Favourite testtestasd/Lobby">
+      <i class="chat-header__action-icon icon-star-empty " aria-hidden="true"></i>
+    </button>
+    <button class="chat-header__settings js-chat-settings" title="Room settings" data-toggle="dropdown">
+      <i class="chat-header__action-icon" aria-hidden="true">
+          <svg
+          class="chat-header__action-icon-svg--settings"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xml:space="preserve"
+          viewBox="0 0 27 26"
+          stroke="currentColor"
+          stroke-width="1.75"
+          fill="transparent">
+          <line vector-effect="non-scaling-stroke" class="st0" x1="4.5" y1="24" x2="4.5" y2="15"/>
+          <line vector-effect="non-scaling-stroke" class="st0" x1="4.5" y1="3" x2="4.5" y2="9"/>
+          <circle vector-effect="non-scaling-stroke" class="st0" cx="4.5" cy="12" r="3"/>
+
+          <line vector-effect="non-scaling-stroke" class="st0" x1="13.5" y1="24" x2="13.5" y2="20"/>
+          <line vector-effect="non-scaling-stroke" class="st0" x1="13.5" y1="3" x2="13.5" y2="14"/>
+          <circle vector-effect="non-scaling-stroke" class="st0" cx="13.5" cy="17" r="3"/>
+
+          <line vector-effect="non-scaling-stroke" class="st0" x1="22.5" y1="24" x2="22.5" y2="12"/>
+          <line vector-effect="non-scaling-stroke" class="st0" x1="22.5" y1="3" x2="22.5" y2="6"/>
+          <circle vector-effect="non-scaling-stroke" class="st0" cx="22.5" cy="9" r="3"/>
+        </svg>
+      </i>
+    </button>
+    <div id="profile-menu" class="profile-menu"></div>
+</div>
+
+  </div>
+</header>
+  <div class="chat-and-toolbar-wrapper">
+    <div class="right-toolbar-region" id="right-toolbar-layout">
+  <div class="right-toolbar right-toolbar--collapsible ">
+
+    <div id="toolbar-top-content" class="right-toolbar__body">
+      <div id="people-list">
+        <div class="trpToolbarHeader" id="top-header">
+          <h5 class="trpToolbarHeaderItem selected" id="people-header">
+            People
+          </h5>
+          <h5 class="trpToolbarHeaderItem hidden" id="info-header">
+              Repo info
+          </h5>
+        </div>
+        <div class="trpToolbarList">
+          <div class="trpToolbarListContent" id="people-roster">
+            <div>
+              <span class="frame-people">
+  <span id="roster-region">
+    <ul id="roster-view" class="roster">
+      <li class="js-model-id-58ab7380d73408ce4f4bb926">
+        <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline admin ">
+  <img src="https://avatars0.githubusercontent.com/Makp9k?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/Makp9k?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  <div class="trpStatus" id="status"> </div>
+</div>
+
+      </li>
+    </ul>
+  </span>
+<div id="remaining-region" class="remaining-region"></div>
+</span>
+
+            </div>
+          </div>
+          <div class="trpToolbarListContent" id="repo-info" style="display: none"></div>
+        </div>
+      </div>
+
+      <div id="activity-region" class="right-toolbar-activity-area">
+        <div  class="right-toolbar-activity-area-inner" >
+<div class="trpToolbarHeader">
+  <h5 class="trpToolbarHeaderItem selected" id="activity-header">Activity</h5>
+</div>
+
+<ul class="right-toolbar-activity-list u-font-smaller" id="activity-list"></ul>
+</div>
+      </div>
+    </div>
+
+    <div id="right-toolbar-footer-region" class="right-toolbar-region__footer">
+      <svg
+     class="menu-toggle-icon js-menu-toggle-icon"
+     width="30px"
+     height="34px"
+     viewBox="0 0 30 34"
+ >
+  <path d="M0,6 l15,0 l15,0" />
+  <path d="M0,17 l15,0 l15,0" />
+  <path d="M0,28 l15,0 l15,0" />
+</svg>
+    </div>
+
+  </div>
+</div>
+    <div class="chat-app">
+      <div class="collaborators-container" id="collaborators-container"></div>
+      <div class="trpContentPanel" id="content-wrapper">
+  <div>
+    <div class="trpChatPanel">
+
+      <div id="unread-banner" style="display:none"></div>
+      <div id="bottom-unread-banner" style="display:none"></div>
+
+      <div id="content-frame" class="trpChatContainer primary-scroll chat-container" role="log" aria-live="polite" aria-atomic="false" aria-relevant="additions text">
+        <div id="chat-container">
+            <div>
+                <div class="chat-item model-id-58b96177de504908223e21ff burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b96177de504908223e21ff' title="">13:28</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      u
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b96458f1a33b627575749a burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b96458f1a33b627575749a' title="">13:40</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      ewf
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b966cf21d548df2c86107f burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b966cf21d548df2c86107f' title="">13:51</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      vgb
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b96bd0de504908223e597d burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b96bd0de504908223e597d' title="">14:12</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      yujy
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b97014f1a33b627575bd43 burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b97014f1a33b627575bd43' title="">14:31</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      f
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9701e872fc8ce62af23cd burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      grtg
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9702521d548df2c864d6a burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      dgd
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b97085e961e53c7f9446b3 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      yuj
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9708cde504908223e75d5 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      yuj
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9709cde504908223e75f3 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      ujy
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b970dd1465c46a56df0d40 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      fre
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b97158de504908223e795e burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b97158de504908223e795e' title="">14:36</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      vvr
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9739ee961e53c7f945a02 burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b9739ee961e53c7f945a02' title="">14:46</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      tt
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b973a1f1a33b627575d4ec burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      dfgdg
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b973a2de504908223e8501 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      dfg
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b976dd872fc8ce62af4c44 burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b976dd872fc8ce62af4c44' title="">14:59</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      asd
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b976f200c00c3d4fb52dbb burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      fre
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b976f9de504908223e9c7e burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      wed
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b976fbde504908223e9ca2 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      dds
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9771c1465c46a56df38cf burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      fsf
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9771e00c00c3d4fb52e68 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      sd
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9774ce961e53c7f94724e burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      gg
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9777221d548df2c8679f7 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      dfs
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b977c2f1a33b627575ecb2 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      fr
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9786000c00c3d4fb536bc burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b9786000c00c3d4fb536bc' title="">15:06</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      bfgbf
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9790e00c00c3d4fb53c34 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      htyhty
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b979451465c46a56df4a12 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      iolui;uoiu
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b979b3e961e53c7f947f17 burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b979b3e961e53c7f947f17' title="">15:12</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      hytht
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b979fc00c00c3d4fb541b9 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      9uu
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b97a4d7ceae5376a677476 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      tyjt
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b97b3521d548df2c8692dc burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b97b3521d548df2c8692dc' title="">15:18</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      grtg
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b97c9b7ceae5376a6782e9 burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b97c9b7ceae5376a6782e9' title="">15:24</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      dfgd.
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b982f4872fc8ce62af9ac8 burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b982f4872fc8ce62af9ac8' title="">15:51</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      фыв
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b983d8e961e53c7f94c34d burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      gtr
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b98402e961e53c7f94c566 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      gtrg
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b98406872fc8ce62afa2ae burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      dgdg
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9840dde504908223eed92 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      jyuj
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b986e800c00c3d4fb5977a burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b986e800c00c3d4fb5977a' title="">16:08</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      sdfs
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b988221465c46a56dfa921 burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b988221465c46a56dfa921' title="">16:13</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      jh
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9acb5f1a33b6275773fc8 burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b9acb5f1a33b6275773fc8' title="">18:49</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      6
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9af087ceae5376a68d01d burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b9af087ceae5376a68d01d' title="">18:59</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      jhm
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9af0e00c00c3d4fb69530 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      kjni
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9af12872fc8ce62b0c393 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      jni
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9af241465c46a56e0b6e7 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      nj
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9af2800c00c3d4fb695f5 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      km
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9b040de504908223ffd94 burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b9b040de504908223ffd94' title="">19:04</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      g
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9b04421d548df2c87fd52 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      b
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9c2ace961e53c7f966917 burstStart read "><div class='chat-item__container'>
+  <div class='chat-item__aside'>
+    <div class="chat-item__avatar">
+      <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+    </div>
+  </div>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__details'>
+      <div class='chat-item__from js-chat-item-from'>Leonid Zavodnik</div>
+      <div class='chat-item__username js-chat-item-from'>@Makp9k</div>
+      <a class='chat-item__time js-chat-time'  href='https://gitter.im/testtestasd/Lobby?at=58b9c2ace961e53c7f966917' title="">20:23</a>
+    </div>
+    <div class='chat-item__text js-chat-item-text'>
+      3
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9c2e6872fc8ce62b14427 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      3
+    </div>
+  </div>
+</div>
+</div>
+                <div class="chat-item model-id-58b9c382872fc8ce62b14758 burstContinued read "><div class='chat-item__container'>
+  <div class="chat-item__actions js-chat-item-actions">
+    <i class="chat-item__icon icon-check chat-item__icon--read js-chat-item-readby"></i>
+    <i class="chat-item__icon icon-ellipsis"></i>
+  </div>
+  <div class='chat-item__content'>
+    <div class='chat-item__text js-chat-item-text'>
+      f
+    </div>
+  </div>
+</div>
+</div>
+            </div>
+        </div>
+          <div id='initial' style="height:1px;width:1px;overflow:hidden;opacity:0"><a name="initial"/>_</a></div>
+      </div>
+    </div>
+    <div class="chat-connectivity-indicator-wrapper"></div>
+  </div>
+</div>
+      <footer class="chat-input" id="chat-input-wrapper">
+  <div class="progress">
+    <div class="progress__bar" id="file-progress-bar"></div>
+  </div>
+  <div class="chat-input__container js-chat-input-container" id="chat-input">
+      <div class="chat-input__area">
+        <div class="chat-input__avatar">
+          <div
+  class="trpDisplayPicture avatar-58ab7380d73408ce4f4bb926 avatar-s offline  ">
+  <img src="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=30" srcset="https://avatars0.githubusercontent.com/u/12616909?v=3&amp;s=60 2x" height="30" width="30" class="avatar__image" alt="">
+  
+</div>
+
+        </div>
+        <div id="chat-input-box-region" class="chat-input-box__region">
+          <form class="chat-input__box" name="chat">
+            <textarea class="chat-input__text-area"
+  name="chat"
+  id="chat-input-textarea"
+  placeholder="Click here to type a chat message. Supports GitHub flavoured markdown."
+  autofocus
+  autocomplete="off"
+  autocorrect="off"
+  maxlength="4096"></textarea>
+
+          </form>
+        </div>
+        <div id="chat-input-buttons-region" class="chat-input__buttons">
+          <div>
+            <button class="chat-input__button js-toggle-compose-mode" data-compose-mode="false" aria-label="">
+  <i class="chat-input__button-icon chat-input__button-icon--compose icon-keyboard-1" aria-hidden="true"></i>
+  <i class="chat-input__button-icon chat-input__button-icon--chat icon-chat-alt" aria-hidden="true"></i>
+</button>
+<a href="#markdown" class="chat-input__button js-markdown-help" aria-label="">
+  <i class="chat-input__button-icon octicon octicon-markdown" aria-hidden="true"></i>
+</a>
+
+          </div>
+        </div>
+      </div>
+  </div>
+</footer>
+    </div>
+  </div>
+</div>
+
+
+<div class="trpBlankPage"></div>
+<script type="text/javascript">
+    var s = document.querySelector('#initial');
+    if(s) setTimeout(function() {
+      s.scrollIntoView();
+    }, 16) ;
+</script>
+<script type="text/javascript">window.gitterClientEnv = {"lang":"ru","domain":"gitter.im","baseServer":"gitter.im","basePath":"https://gitter.im","apiBasePath":"https://gitter.im/api","homeUrl":"/","badgeBaseUrl":"https://badges.gitter.im","mixpanelToken":"d43f5f0ef2f5e96d90325f539fc61337","googleTrackingId":"UA-45918290-1","googleTrackingDomain":"gitter.im","goSquaredTrackingId":"GSN-457403-A","env":"prod","cdns":["cdn01.gitter.im","cdn02.gitter.im","cdn03.gitter.im"],"version":"b23011","assetTag":"b230113","logging":false,"ravenUrl":"https://0f50f03f994740328ab6a67c82395948@app.getsentry.com/19257","websockets":{"fayeUrl":"https://ws.gitter.im/bayeux","options":{"timeout":120,"retry":2}},"avatarsUrl":"https://avatars.gitter.im","avatarCdns":["https://avatars-01.gitter.im","https://avatars-02.gitter.im","https://avatars-03.gitter.im","https://avatars-04.gitter.im","https://avatars-05.gitter.im"],"embed":{"basepath":"https://embed.gitter.im","cacheBuster":"1"},"billingUrl":"http://billing.gitter.im","maxFreeOrgRoomMembers":25,"vapidAppServerKey":"BMhrlZd_I5OFJSJQTbg2mZ5PTHarzenwsKfsRd8C0-HRBygpDj9O3M4VTJIQfB9VPDjAoO_w2eg7Sj_cMXzuLwI"};window.troupeContext = {"accessToken":"c502d18c2659629c8bc7085725d561339141cf08","isNativeDesktopApp":false,"locale":{"%d unread message":{"one":"%d unread message","other":"%d unread messages"},"Unread messages in %%s, %%s and one other":{"one":"Unread messages in %%s, %%s and one other","other":"Unread messages in %%s, %%s and %d others"},"Unread messages in %s":"Unread messages in %s","Unread messages in %s and %s":"Unread messages in %s and %s","Unread messages from %s":"Unread messages from %s","Unread messages from %s and %s":"Unread messages from %s and %s","Unread messages from %%s, %%s and one other":{"one":"Unread messages from %%s, %%s and one other","other":"Unread messages from %%s, %%s and %d others"}},"features":["halley","connectivity-indicator","left-menu"],"desktopNotifications":true,"roomMember":true,"user":{"id":"58ab7380d73408ce4f4bb926","username":"Makp9k","displayName":"Leonid Zavodnik","url":"/Makp9k","avatarUrl":"https://avatars-04.gitter.im/gh/uv/3/Makp9k","avatarUrlSmall":"https://avatars0.githubusercontent.com/u/12616909?v=3&s=60","avatarUrlMedium":"https://avatars0.githubusercontent.com/u/12616909?v=3&s=128","scopes":{"public_repo":false,"private_repo":false},"providers":["github"],"v":6,"gv":"3"},"troupe":{"id":"58b0ccf4d73408ce4f4cb9fa","name":"testtestasd/Lobby","topic":"","avatarUrl":"https://avatars-03.gitter.im/group/i/58b0ccf4d73408ce4f4cb9f9","uri":"testtestasd/Lobby","userCount":1,"unreadItems":0,"mentions":0,"lastAccessTime":"2017-03-03T20:38:05.727Z","lurk":false,"url":"/testtestasd/Lobby","githubType":"REPO_CHANNEL","associatedRepo":false,"security":"PUBLIC","permissions":{"admin":true},"roomMember":true,"groupId":"58b0ccf4d73408ce4f4cb9f9","group":{"id":"58b0ccf4d73408ce4f4cb9f9","name":"testtestasd","uri":"testtestasd","homeUri":"testtestasd","backedBy":{"type":null},"avatarUrl":"https://avatars-03.gitter.im/group/i/58b0ccf4d73408ce4f4cb9f9"},"backend":{"type":"GROUP"},"public":true},"roomHasWelcomeMessage":false,"snapshots":{"rightToolbar":{"isPinned":true}}};</script>
+<script type='text/javascript'>window.webpackPublicPath = '//cdn02.gitter.im/_s/b230113/js/';</script><script type='text/javascript' src='//cdn02.gitter.im/_s/b230113/js/vendor.js'></script><script type='text/javascript' src='//cdn03.gitter.im/_s/b230113/js/router-chat.js'></script>
+<div style="display: none;">
+  <form id="upload-form" action="" enctype="multipart/form-data" method="POST">
+    <input type="hidden" name="params" value="">
+    <input type="file" name="file" multiple="multiple"/>
+  </form>
+</div>
+
+    <div class="js-drag-overlay drag-frame hide">
+      <span class="octicon octicon-arrow-down"></span>
+    </div>
+  </body>
+</html>

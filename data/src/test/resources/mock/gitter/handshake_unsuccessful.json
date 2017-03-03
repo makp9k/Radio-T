@@ -1,0 +1,21 @@
+[
+  {
+    "id": "1",
+    "channel": "/meta/handshake",
+    "error": "401::Invalid access token",
+    "successful": false,
+    "version": "1.0",
+    "supportedConnectionTypes": [
+      "long-polling",
+      "cross-origin-long-polling",
+      "callback-polling",
+      "websocket",
+      "eventsource",
+      "in-process"
+    ],
+    "advice": {
+      "reconnect": "none",
+      "interval": 2000
+    }
+  }
+]
