@@ -36,6 +36,8 @@ class TestActivity : AppCompatActivity() {
                         { Toast.makeText(this, "CLOSED", Toast.LENGTH_SHORT).show() }
                 )
 
+        findViewById(R.id.reconnect_btn).setOnClickListener { gitter.reconnect() }
+
         RxJavaPlugins.setErrorHandler(Functions.emptyConsumer())
     }
 }

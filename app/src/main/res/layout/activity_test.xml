@@ -11,4 +11,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.kvazars.radio_t.TestActivity">
 
+    <Button
+        android:id="@+id/reconnect_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="reconnect"/>
+
 </RelativeLayout>
