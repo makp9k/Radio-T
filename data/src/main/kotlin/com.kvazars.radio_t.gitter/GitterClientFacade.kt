@@ -10,6 +10,7 @@ import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
@@ -32,25 +33,39 @@ class GitterClientFacade(httpClient: OkHttpClient = OkHttpClient(),
     private val streamingClient = GitterReadonlyStreamingClient(httpClient, scheduler)
     private val restClient = GitterReadonlyRestClient(httpClient)
 
+    private val reconnectSubject = PublishSubject.create<Boolean>()
+
     //endregion
 
     //region LOCAL METHODS -------------------------------------------------------------------------
 
     fun getMessageStream(): Observable<ChatMessage> {
         return authHelper.getAccessData("testtestasd/Lobby")
-                .flatMapObservable { streamingClient.connect(it) }
+                .flatMapObservable { streamingClient.connect(it).compose(applyRetry()) }
                 .compose(applyRetry())
+    }
+
+    fun reconnect() {
+        reconnectSubject.onNext(true)
     }
 
     fun getLastMessages(count: Int): Single<List<ChatMessage>> {
         return restClient.getLastMessages(count)
     }
 
-    private fun applyRetry(): ObservableTransformer<in ChatMessage, out ChatMessage>? {
+    private fun <T> applyRetry(): ObservableTransformer<in T, out T>? {
         return ObservableTransformer {
             it.retryWhen {
-                it.zipWith(Observable.just(0, 0, 0, 1, 2), BiFunction<Throwable, Int, Int> { e, i -> i })
-                        .flatMap { Observable.timer(Math.pow(3.0, it * 1.0).toLong(), TimeUnit.SECONDS, scheduler) }
+                Observable.merge(
+                        it.zipWith(Observable.rangeLong(1, 10000).startWithArray(1, 1, 1)
+                                .map {
+                                    Math.min(Math.pow(2.0, it * 1.0).toLong(), 15)
+                                },
+                                BiFunction<Throwable, Long, Long> { e, i -> i })
+                                .flatMap {
+                                    Observable.timer(it, TimeUnit.SECONDS, scheduler)
+                                },
+                        reconnectSubject.observeOn(scheduler))
             }
         }
     }

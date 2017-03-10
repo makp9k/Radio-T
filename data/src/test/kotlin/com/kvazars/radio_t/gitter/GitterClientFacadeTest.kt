@@ -43,8 +43,14 @@ private class MockedGitterServerInterceptor : Interceptor {
                 responseBuilder.body(ResponseBody.create(MediaType.parse("text/html"), getMockResponseBody("chat.html")))
             }
             "https://ws.gitter.im/bayeux" -> {
-                responseBuilder.code(200)
-                if (counter++ < 3) {
+                if (chain?.request()?.method() == "GET") {
+                    responseBuilder.code(101)
+                    responseBuilder.addHeader("Connection", "Upgrade")
+                } else {
+                    responseBuilder.code(200)
+                }
+
+                if (counter++ < 10) {
                     responseBuilder.body(ResponseBody.create(MediaType.parse("text/json"), getMockResponseBody("handshake_unsuccessful.json")))
                 } else {
                     responseBuilder.body(ResponseBody.create(MediaType.parse("text/json"), getMockResponseBody("handshake_successful.json")))
@@ -53,14 +59,13 @@ private class MockedGitterServerInterceptor : Interceptor {
         }
 
         val response = responseBuilder.build()
-        println(url)
         if (chain != null && response.code() == 0) {
             return chain.proceed(chain.request())
         }
-        return response;
+        return response
     }
 
-    fun getMockResponseBody(name:String): String {
+    fun getMockResponseBody(name: String): String {
         return javaClass.getResourceAsStream("/mock/gitter/$name").bufferedReader().readText()
     }
 
