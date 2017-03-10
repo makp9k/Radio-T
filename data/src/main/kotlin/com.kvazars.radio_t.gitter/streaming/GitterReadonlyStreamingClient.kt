@@ -14,6 +14,7 @@ import okhttp3.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
 /**
@@ -65,11 +66,11 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient,
 
     private fun createHandshakePayload(accessToken: String): String {
         val uniqueClientId = Math.floor(1e5 * Math.random())
-        return "message=[{\"channel\":\"/meta/handshake\"," +
+        return "message=" + URLEncoder.encode("[{\"channel\":\"/meta/handshake\"," +
                 "\"id\":\"1\",\"ext\":{\"token\":\"$accessToken\"," +
                 "\"version\":\"b23011\",\"connType\":\"online\",\"client\":\"web\"," +
                 "\"uniqueClientId\":\"$uniqueClientId\", \"realtimeLibrary\":\"halley\"},\"version\":\"1.0\"," +
-                "\"supportedConnectionTypes\":[\"websocket\",\"long-polling\"]}]"
+                "\"supportedConnectionTypes\":[\"websocket\",\"long-polling\"]}]", "UTF-8")
     }
 
     //endregion

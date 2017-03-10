@@ -1,8 +1,10 @@
 package com.kvazars.radio_t.gitter
 
+import io.reactivex.schedulers.TestScheduler
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Test
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by lza on 28.02.2017.
@@ -19,11 +21,12 @@ class GitterClientFacadeTest {
 
     @Test
     fun getMessageStream() {
-        val observer = GitterClientFacade(mockHttpClient).getMessageStream().doOnNext(::println).test()
+        val scheduler = TestScheduler()
+        val observer = GitterClientFacade(loggingHttpClient, scheduler).getMessageStream().doOnNext(::println).test()
 
-        println(observer.values())
+        scheduler.advanceTimeBy(30, TimeUnit.SECONDS)
 
-        observer.await()
+        observer.assertNoErrors()
     }
 
 }
