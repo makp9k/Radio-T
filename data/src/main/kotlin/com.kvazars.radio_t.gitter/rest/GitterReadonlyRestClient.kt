@@ -1,6 +1,5 @@
 package com.kvazars.radio_t.gitter.rest
 
-import com.kvazars.radio_t.gitter.auth.GitterApi
 import com.kvazars.radio_t.gitter.models.ChatMessage
 import io.reactivex.Single
 import okhttp3.OkHttpClient
@@ -25,7 +24,7 @@ class GitterReadonlyRestClient(httpClient: OkHttpClient) {
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-            .create(GitterApi::class.java)
+            .create(GitterRestApi::class.java)
 
     //endregion
 
@@ -35,8 +34,16 @@ class GitterReadonlyRestClient(httpClient: OkHttpClient) {
 
     //region LOCAL METHODS -------------------------------------------------------------------------
 
-    fun getLastMessages(count: Int): Single<List<ChatMessage>> {
-        return Single.just(emptyList())
+    fun getLastMessages(accessToken: String, roomId: String): Single<List<ChatMessage>> {
+        return gitterApi.getChatMessages(accessToken, roomId, null, null, null, null, 20, null)
+    }
+
+    fun getMessagesBefore(accessToken: String, roomId: String, messageId: String, count:Int): Single<List<ChatMessage>> {
+        return gitterApi.getChatMessages(accessToken, roomId, null, messageId, null, null, count, null)
+    }
+
+    fun getMessagesAfter(accessToken: String, roomId: String, messageId: String, count:Int): Single<List<ChatMessage>> {
+        return gitterApi.getChatMessages(accessToken, roomId, null, null, messageId, null, count, null)
     }
 
     //endregion

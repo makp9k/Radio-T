@@ -111,7 +111,7 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient,
 
             Observable
                     .interval(30, TimeUnit.SECONDS, scheduler)
-                    .takeUntil { ignore: Long -> isClosed }
+                    .takeUntil { _: Long -> isClosed }
                     .subscribe { webSocket?.send("[{\"channel\":\"/api/v1/ping2\",\"data\":{\"reason\":\"ping\"},\"id\":\"$it\",\"clientId\":\"$clientId\"}]") }
         }
 
@@ -134,8 +134,15 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient,
                 if (json.has("successful") && !json.get("successful").asBoolean) {
                     emitter?.onError(RuntimeException("error"))
                 } else if (messageChannel == channel) {
-                    val model = json.get("data")?.asJsonObject?.get("model")
-                    emitter?.onNext(gson.fromJson(model, ChatMessage::class.java))
+                    val data = json.get("data")?.asJsonObject
+                    if (data != null) {
+                        val model = data.get("model")
+                        val operation = data.get("operation").asString
+                        if (operation != "patch") {
+                            emitter?.onNext(gson.fromJson(model, ChatMessage::class.java))
+                        }
+                    }
+
                 } else if (channel == "/meta/connect") {
                     sendConnectMessage()
                 }

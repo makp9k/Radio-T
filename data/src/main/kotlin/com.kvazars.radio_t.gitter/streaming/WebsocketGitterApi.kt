@@ -1,7 +1,6 @@
 package com.kvazars.radio_t.gitter.streaming
 
 import com.kvazars.radio_t.gitter.streaming.models.HandshakeResponse
-import io.reactivex.Observable
 import io.reactivex.Single
 import okhttp3.RequestBody
 import retrofit2.http.Body

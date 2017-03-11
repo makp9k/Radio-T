@@ -1,7 +1,6 @@
 package com.kvazars.radio_t.gitter.auth
 
 import com.kvazars.radio_t.gitter.auth.models.GitterChatAccessData
-import io.reactivex.Observable
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -23,7 +22,7 @@ class GitterAuthHelper(httpClient: OkHttpClient) {
             .baseUrl("https://gitter.im/")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-            .create(GitterApi::class.java)
+            .create(GitterAuthApi::class.java)
 
     private val accessTokenPattern = Pattern.compile("\"accessToken\":\"([^\"]+)\"")
     private val roomIdPattern = Pattern.compile("\"troupe\":\\{\"id\":\"([^\"]+)\"")

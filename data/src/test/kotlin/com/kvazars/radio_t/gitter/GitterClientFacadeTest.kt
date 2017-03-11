@@ -11,7 +11,11 @@ import java.util.concurrent.TimeUnit
  */
 class GitterClientFacadeTest {
 
-    private val mockHttpClient = OkHttpClient.Builder().addInterceptor(MockedGitterServerInterceptor()).build()
+    private val mockHttpClient = OkHttpClient.Builder().addInterceptor(MockedGitterServerInterceptor())
+            .addInterceptor(
+                    HttpLoggingInterceptor(HttpLoggingInterceptor.Logger(::println))
+                            .setLevel(HttpLoggingInterceptor.Level.BODY)
+            ).build()
     private val loggingHttpClient: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(
                     HttpLoggingInterceptor(HttpLoggingInterceptor.Logger(::println))
@@ -27,6 +31,16 @@ class GitterClientFacadeTest {
         scheduler.advanceTimeBy(30, TimeUnit.SECONDS)
 
         observer.assertNoErrors()
+    }
+
+    @Test
+    fun reconnect() {
+        val scheduler = TestScheduler()
+        val gitterClientFacade = GitterClientFacade(mockHttpClient, scheduler)
+        val testObserver = gitterClientFacade.getMessageStream().test()
+
+        scheduler.advanceTimeBy(30, TimeUnit.SECONDS)
+        gitterClientFacade.reconnect()
     }
 
 }

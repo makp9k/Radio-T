@@ -7,7 +7,6 @@ import com.kvazars.radio_t.gitter.streaming.GitterReadonlyStreamingClient
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.Scheduler
-import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
@@ -35,37 +34,69 @@ class GitterClientFacade(httpClient: OkHttpClient = OkHttpClient(),
 
     private val reconnectSubject = PublishSubject.create<Boolean>()
 
+    private val accessDataObservable = reconnectSubject.startWith(true)
+            .flatMap { authHelper.getAccessData("testtestasd/Lobby").toObservable() }
+            .replay(1)
+            .autoConnect()
+
     //endregion
 
     //region LOCAL METHODS -------------------------------------------------------------------------
 
     fun getMessageStream(): Observable<ChatMessage> {
-        return authHelper.getAccessData("testtestasd/Lobby")
-                .flatMapObservable { streamingClient.connect(it).compose(applyRetry()) }
-                .compose(applyRetry())
+        return accessDataObservable
+                .observeOn(scheduler)
+                .switchMap { accessData ->
+                    getLastMessages(accessData.accessToken, accessData.roomId)
+                            .concatWith(streamingClient.connect(accessData))
+                            .compose<ChatMessage>(applyRetry())
+                }
+                .compose<ChatMessage>(applyRetry())
+    }
+
+    fun getMessagesBefore(messageId: String, count: Int): Observable<List<ChatMessage>> {
+        return accessDataObservable
+                .observeOn(scheduler)
+                .take(1)
+                .flatMap {
+                    restClient.getMessagesBefore(it.accessToken, it.roomId, messageId, count)
+                            .flatMapObservable { Observable.fromIterable(it) }
+                            .toList()
+                            .toObservable()
+                }
+    }
+
+    fun getMessagesAfter(messageId: String, count: Int): Observable<List<ChatMessage>> {
+        return accessDataObservable
+                .observeOn(scheduler)
+                .take(1)
+                .flatMap {
+                    restClient.getMessagesAfter(it.accessToken, it.roomId, messageId, count)
+                            .flatMapObservable { Observable.fromIterable(it) }
+                            .toList()
+                            .toObservable()
+                }
     }
 
     fun reconnect() {
         reconnectSubject.onNext(true)
     }
 
-    fun getLastMessages(count: Int): Single<List<ChatMessage>> {
-        return restClient.getLastMessages(count)
+    private fun getLastMessages(accessToken: String, roomId: String): Observable<ChatMessage> {
+        return restClient.getLastMessages(accessToken, roomId).toObservable().flatMapIterable { it }
     }
 
     private fun <T> applyRetry(): ObservableTransformer<in T, out T>? {
         return ObservableTransformer {
             it.retryWhen {
-                Observable.merge(
-                        it.zipWith(Observable.rangeLong(1, 10000).startWithArray(1, 1, 1)
-                                .map {
-                                    Math.min(Math.pow(2.0, it * 1.0).toLong(), 15)
-                                },
-                                BiFunction<Throwable, Long, Long> { e, i -> i })
-                                .flatMap {
-                                    Observable.timer(it, TimeUnit.SECONDS, scheduler)
-                                },
-                        reconnectSubject.observeOn(scheduler))
+                it.zipWith(Observable.rangeLong(1, 10000).startWithArray(1, 1, 1)
+                        .map {
+                            Math.min(Math.pow(2.0, it * 1.0).toLong(), 15)
+                        },
+                        BiFunction<Throwable, Long, Long> { e, i -> e.printStackTrace(); i })
+                        .flatMap {
+                            Observable.timer(it, TimeUnit.SECONDS, scheduler)
+                        }
             }
         }
     }
