@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 import com.kvazars.radio_t.gitter.GitterClientFacade
 import com.kvazars.radio_t.gitter.models.ChatMessage
+import com.kvazars.radio_t.news.NewsClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.internal.functions.Functions
 import io.reactivex.plugins.RxJavaPlugins
@@ -24,6 +25,7 @@ class TestActivity : AppCompatActivity() {
             .build()
 
     val gitter = GitterClientFacade(httpClient)
+    val news = NewsClient(httpClient)
 
     val messages = TreeSet<ChatMessage>(Comparator { o1, o2 -> o1.timestamp.compareTo(o2.timestamp) })
 
@@ -46,13 +48,11 @@ class TestActivity : AppCompatActivity() {
                 )
 
         findViewById(R.id.reconnect_btn).setOnClickListener {
-            gitter.getMessagesBefore(messages.first().id, 4)
+            news.getNews()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .flatMapIterable { it }
-                    .filter { messages.add(it) }
                     .subscribe(
-                            { displayMessages() },
+                            { println(it) },
                             { text.append(it.message + "\n") }
                     )
         }
