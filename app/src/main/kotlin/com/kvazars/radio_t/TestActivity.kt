@@ -3,9 +3,9 @@ package com.kvazars.radio_t
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
-import com.kvazars.radio_t.gitter.GitterClientFacade
-import com.kvazars.radio_t.gitter.models.ChatMessage
-import com.kvazars.radio_t.news.NewsClient
+import com.kvazars.radio_t.data.gitter.GitterClientFacade
+import com.kvazars.radio_t.data.gitter.models.ChatMessage
+import com.kvazars.radio_t.data.news.NewsClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.internal.functions.Functions
 import io.reactivex.plugins.RxJavaPlugins

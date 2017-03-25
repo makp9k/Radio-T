@@ -1,10 +1,16 @@
-apply plugin: 'java'
+apply plugin: 'kotlin'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.7.19'
 
     compile "io.reactivex.rxjava2:rxjava:$rxJava_version"
-    compile 'com.github.amatkivskiy:gitter.sdk.rx:1.6.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
 }
 
 sourceCompatibility = "1.7"
