@@ -18,7 +18,7 @@ class NewsClientTest {
 
     @Test
     fun getNews() {
-        val observer = NewsClient(loggingHttpClient).getNews().test()
+        val observer = NewsClient(loggingHttpClient).news.test()
 
         observer.assertNoErrors()
         observer.assertComplete()
@@ -26,7 +26,7 @@ class NewsClientTest {
 
     @Test
     fun getActiveNewsId() {
-        val observer = NewsClient(loggingHttpClient).getActiveNewsId().test()
+        val observer = NewsClient(loggingHttpClient).activeNews.test()
 
         observer.assertNoErrors()
         observer.assertComplete()

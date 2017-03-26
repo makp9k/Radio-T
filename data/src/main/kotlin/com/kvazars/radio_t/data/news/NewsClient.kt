@@ -1,7 +1,5 @@
 package com.kvazars.radio_t.data.news
 
-import com.kvazars.radio_t.data.news.models.ActiveNewsId
-import com.kvazars.radio_t.data.news.models.NewsItem
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -27,6 +25,10 @@ class NewsClient(httpClient: OkHttpClient = OkHttpClient()) {
             .build()
             .create(NewsApi::class.java)
 
+    val news = newsApi.getNews()
+
+    val activeNews: Single<String> = newsApi.getActiveNewsId().map { it.id }
+
     //endregion
 
     //region CONSTRUCTOR ---------------------------------------------------------------------------
@@ -35,18 +37,9 @@ class NewsClient(httpClient: OkHttpClient = OkHttpClient()) {
 
     //region LOCAL METHODS -------------------------------------------------------------------------
 
-    fun getNews(): Single<List<NewsItem>> {
-        return newsApi.getNews()
-    }
-
-    fun getActiveNewsId(): Single<ActiveNewsId> {
-        return newsApi.getActiveNewsId()
-    }
-
     //endregion
 
     //region INNER CLASSES -------------------------------------------------------------------------
 
     //endregion
-
 }

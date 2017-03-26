@@ -12,10 +12,10 @@ class NewsInteractorTest {
 
     @Test
     fun shouldLoadActiveNewsOnChatNotification() {
-        val chatMessageNotifications = Observable.range(0, 2).map { ChatMessageNotification() }
+        val chatMessageNotifications = Observable.range(0, 2).map { ChatMessageNotification("@rt-bot", "==>") }
         val newsProvider = object : NewsProvider {
-            override fun getActiveNews(): Single<NewsItem> {
-                return Single.just(NewsItem("abc", "title", "snippet", "link", "url"))
+            override fun getActiveNewsId(): Single<String> {
+                return Single.just("abc")
             }
 
             override fun getNewsList(): Single<List<NewsItem>> {
@@ -27,17 +27,17 @@ class NewsInteractorTest {
         val observer = newsInteractor.activeNews.test().await()
 
         observer.assertNoErrors()
-        observer.assertValueCount(2)
+        observer.assertValueCount(3)
     }
 
     @Test
     fun shouldUpdateNewsListWhenActiveNewsIsNotPresented() {
-        val chatMessageNotifications = Observable.just(ChatMessageNotification())
+        val chatMessageNotifications = Observable.just(ChatMessageNotification("@rt-bot", "==>"))
         val newsProvider = object : NewsProvider {
             var counter = 0
 
-            override fun getActiveNews(): Single<NewsItem> {
-                return Single.just(NewsItem("abc", "title", "snippet", "link", "url"))
+            override fun getActiveNewsId(): Single<String> {
+                return Single.just("abc")
             }
 
             override fun getNewsList(): Single<List<NewsItem>> {
@@ -50,7 +50,7 @@ class NewsInteractorTest {
         }
 
         val newsInteractor = NewsInteractor(chatMessageNotifications, newsProvider)
-        val observer = newsInteractor.news.test().await()
+        val observer = newsInteractor.allNews.test().await()
 
         observer.assertNoErrors()
         observer.assertValueCount(2)
@@ -58,11 +58,11 @@ class NewsInteractorTest {
 
     @Test
     fun shouldNotUpdateNewsListWhenActiveNewsIsPresented() {
-        val chatMessageNotifications = Observable.just(ChatMessageNotification())
+        val chatMessageNotifications = Observable.just(ChatMessageNotification("@rt-bot", "==>"))
         val newsProvider = object : NewsProvider {
 
-            override fun getActiveNews(): Single<NewsItem> {
-                return Single.just(NewsItem("abc", "title", "snippet", "link", "url"))
+            override fun getActiveNewsId(): Single<String> {
+                return Single.just("abc")
             }
 
             override fun getNewsList(): Single<List<NewsItem>> {
@@ -73,7 +73,7 @@ class NewsInteractorTest {
         }
 
         val newsInteractor = NewsInteractor(chatMessageNotifications, newsProvider)
-        val observer = newsInteractor.news.test().await()
+        val observer = newsInteractor.allNews.test().await()
 
         observer.assertNoErrors()
         observer.assertValueCount(1)

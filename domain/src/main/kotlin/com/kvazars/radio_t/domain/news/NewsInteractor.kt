@@ -1,7 +1,10 @@
 package com.kvazars.radio_t.domain.news
 
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by lza on 19.03.2017.
@@ -14,21 +17,45 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
 
     //region CLASS VARIABLES -----------------------------------------------------------------------
 
-    val activeNews: Observable<NewsItem> = chatMessageNotifications.flatMap { newsProvider.getActiveNews().toObservable() }.share()
+    private val activeNewsUpdateTrigger = chatMessageNotifications
+            .filter { it.authorName == "Makp9k" && it.message.startsWith("==>") }
+            .map { true }
+
+    val activeNewsIds: Observable<String> = activeNewsUpdateTrigger
+            .startWith(true)
+            .buffer(1, TimeUnit.SECONDS)
+            .switchMap { newsProvider.getActiveNewsId().toObservable() }
+            .onErrorReturnItem("")
+            .filter(String::isNotEmpty)
+            .distinctUntilChanged()
+            .share()
 
     private var newsCache: List<NewsItem>? = null
-
-    val news: Observable<List<NewsItem>> = Observable.concat(
+    val allNews: Observable<List<NewsItem>> = Observable.concat(
             newsProvider.getNewsList().toObservable(),
-            activeNews.flatMap {
+            activeNewsIds.flatMap { activeNewsId ->
                 val cache = newsCache
-                if (cache != null && cache.contains(it)) {
+                if (cache != null && cache.find { it.id == activeNewsId } != null) {
                     Observable.empty()
                 } else {
                     newsProvider.getNewsList().toObservable()
                 }
+            })
+            .doOnNext { newsCache = it }
+            .share()
+
+    val activeNews: Observable<Maybe<NewsItem>> = Observable.combineLatest(
+            activeNewsIds,
+            allNews,
+            BiFunction {id, news ->
+                val newsItem = news.find { it.id == id }
+                if (newsItem == null) {
+                    Maybe.empty<NewsItem>()
+                } else {
+                    Maybe.just(newsItem)
+                }
             }
-    ).doOnNext { newsCache = it }
+    )
 
     //endregion
 
@@ -45,14 +72,17 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
     //endregion
 }
 
-class ChatMessageNotification
+data class ChatMessageNotification(
+        val authorName: String,
+        val message: String
+)
 
-data class NewsItem(
+class NewsItem(
         val id: String,
         val title: String,
         val snippet: String,
-        val link: String,
-        val pictureUrl: String
+        val link: String?,
+        val pictureUrl: String?
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -69,7 +99,7 @@ data class NewsItem(
 }
 
 interface NewsProvider {
-    fun getActiveNews(): Single<NewsItem>
+    fun getActiveNewsId(): Single<String>
 
     fun getNewsList(): Single<List<NewsItem>>
 }

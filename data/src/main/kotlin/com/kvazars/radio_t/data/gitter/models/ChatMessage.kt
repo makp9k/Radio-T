@@ -1,5 +1,6 @@
 package com.kvazars.radio_t.data.gitter.models
 
+import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -8,6 +9,7 @@ import java.util.*
  */
 class ChatMessage {
     lateinit var id: String
+    @SerializedName("fromUser")
     lateinit var user: GitterUser
     lateinit var text: String
     lateinit var sent: String

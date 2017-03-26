@@ -13,7 +13,7 @@ interface NewsApi {
     @GET("api/v1/news")
     fun getNews(): Single<List<NewsItem>>
 
-    @GET("api/v1/news/active/id")
+    @GET("api/v1/news/active")
     fun getActiveNewsId(): Single<ActiveNewsId>
 
 }
