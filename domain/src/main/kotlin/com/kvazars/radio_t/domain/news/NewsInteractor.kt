@@ -1,16 +1,20 @@
 package com.kvazars.radio_t.domain.news
 
+import com.kvazars.radio_t.domain.news.models.ChatMessageNotification
+import com.kvazars.radio_t.domain.news.models.NewsItem
 import io.reactivex.Maybe
 import io.reactivex.Observable
-import io.reactivex.Single
+import io.reactivex.Scheduler
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 /**
  * Created by lza on 19.03.2017.
  */
 class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotification>,
-                     newsProvider: NewsProvider) {
+                     newsProvider: NewsProvider,
+                     scheduler: Scheduler = Schedulers.io()) {
     //region CONSTANTS -----------------------------------------------------------------------------
 
     //endregion
@@ -23,7 +27,7 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
 
     val activeNewsIds: Observable<String> = activeNewsUpdateTrigger
             .startWith(true)
-            .buffer(1, TimeUnit.SECONDS)
+            .buffer(1, TimeUnit.SECONDS, scheduler)
             .switchMap { newsProvider.getActiveNewsId().toObservable() }
             .onErrorReturnItem("")
             .filter(String::isNotEmpty)
@@ -72,34 +76,3 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
     //endregion
 }
 
-data class ChatMessageNotification(
-        val authorName: String,
-        val message: String
-)
-
-class NewsItem(
-        val id: String,
-        val title: String,
-        val snippet: String,
-        val link: String?,
-        val pictureUrl: String?
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other?.javaClass != javaClass) return false
-
-        other as NewsItem
-
-        return id == other.id
-    }
-
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
-}
-
-interface NewsProvider {
-    fun getActiveNewsId(): Single<String>
-
-    fun getNewsList(): Single<List<NewsItem>>
-}

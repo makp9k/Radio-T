@@ -1,9 +1,13 @@
 package com.kvazars.radio_t.domain.news
 
+import com.kvazars.radio_t.domain.news.models.ChatMessageNotification
+import com.kvazars.radio_t.domain.news.models.NewsItem
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.TestScheduler
 import org.junit.Test
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by lza on 25.03.2017.
@@ -12,19 +16,22 @@ class NewsInteractorTest {
 
     @Test
     fun shouldLoadActiveNewsOnChatNotification() {
-        val chatMessageNotifications = Observable.range(0, 2).map { ChatMessageNotification("@rt-bot", "==>") }
+        val testScheduler = TestScheduler()
+        val chatMessageNotifications = Observable.interval(1, TimeUnit.SECONDS, testScheduler).take(2).map { ChatMessageNotification("Makp9k", "==>") }
         val newsProvider = object : NewsProvider {
+            var i = 0
             override fun getActiveNewsId(): Single<String> {
-                return Single.just("abc")
+                return Single.just("abc" + ++i)
             }
 
             override fun getNewsList(): Single<List<NewsItem>> {
-                return Single.just(Collections.emptyList())
+                return Single.just(listOf(NewsItem("abc1", "", "", "", ""), NewsItem("abc2", "", "", "", ""), NewsItem("abc3", "", "", "", "")))
             }
         }
 
-        val newsInteractor = NewsInteractor(chatMessageNotifications, newsProvider)
-        val observer = newsInteractor.activeNews.test().await()
+        val newsInteractor = NewsInteractor(chatMessageNotifications, newsProvider, testScheduler)
+        val observer = newsInteractor.activeNews.test()
+        testScheduler.advanceTimeBy(3, TimeUnit.SECONDS)
 
         observer.assertNoErrors()
         observer.assertValueCount(3)
@@ -32,7 +39,7 @@ class NewsInteractorTest {
 
     @Test
     fun shouldUpdateNewsListWhenActiveNewsIsNotPresented() {
-        val chatMessageNotifications = Observable.just(ChatMessageNotification("@rt-bot", "==>"))
+        val chatMessageNotifications = Observable.just(ChatMessageNotification("Makp9k", "==>"))
         val newsProvider = object : NewsProvider {
             var counter = 0
 
