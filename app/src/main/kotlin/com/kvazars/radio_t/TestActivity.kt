@@ -7,10 +7,10 @@ import android.widget.Toast
 import com.kvazars.radio_t.data.gitter.GitterClientFacade
 import com.kvazars.radio_t.data.gitter.models.ChatMessage
 import com.kvazars.radio_t.data.news.NewsClient
-import com.kvazars.radio_t.domain.news.ChatMessageNotification
 import com.kvazars.radio_t.domain.news.NewsInteractor
-import com.kvazars.radio_t.domain.news.NewsItem
 import com.kvazars.radio_t.domain.news.NewsProvider
+import com.kvazars.radio_t.domain.news.models.ChatMessageNotification
+import com.kvazars.radio_t.domain.news.models.NewsItem
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
