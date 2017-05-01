@@ -9,42 +9,42 @@
     android:paddingTop="20dp">
 
     <ImageView
+        android:id="@+id/btn_info"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
         android:background="@drawable/white_circle_background"
         android:clickable="true"
         android:gravity="center"
         android:scaleType="centerInside"
         android:src="@drawable/ic_info"
-        android:text="i"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:backgroundTint="@color/accent" />
 
     <ImageView
+        android:id="@+id/btn_toggle_playback"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:background="@drawable/white_circle_background"
         android:clickable="true"
+        android:gravity="center"
         android:scaleType="centerInside"
         android:src="@drawable/ic_pause"
-        android:gravity="center"
-        android:text=">"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:backgroundTint="@color/accent" />
 
     <ImageView
+        android:id="@+id/btn_settings"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:background="@drawable/white_circle_background"
         android:clickable="true"
         android:gravity="center"
         android:scaleType="centerInside"
         android:src="@drawable/ic_preferences"
-        android:text="s"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:backgroundTint="@color/accent" />

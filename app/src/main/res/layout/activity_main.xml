@@ -20,5 +20,4 @@
         app:itemIconTint="@color/bottom_menu_item_color_selector"
         app:itemTextColor="@color/bottom_menu_item_color_selector"
         app:menu="@menu/main_bottom_menu" />
-
 </merge>

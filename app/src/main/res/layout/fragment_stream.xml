@@ -10,15 +10,17 @@
     android:paddingStart="@dimen/activity_horizontal_margin">
 
     <ImageView
-        android:padding="4dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
         android:minHeight="150dp"
+        android:padding="4dp"
         android:scaleType="centerInside"
         android:src="@drawable/logo_large" />
 
-    <include layout="@layout/view_online_stream_controls"/>
+    <include
+        android:id="@+id/controls"
+        layout="@layout/view_stream_controls" />
 
     <Space
         android:layout_width="match_parent"

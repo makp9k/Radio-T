@@ -1,11 +1,11 @@
-package com.kvazars.radio_t.ui.main
+package com.kvazars.radio_t.ui.stream
 
 /**
- * Created by Leo on 08.04.2017.
+ * Created by Leo on 27.04.2017.
  */
-class MainScreenPresenter(
-        private val view: MainScreenContract.View
-) : MainScreenContract.Presenter {
+class StreamScreenPresenter(
+        private val view: StreamScreenContract.View
+) : StreamScreenContract.Presenter {
     //region CONSTANTS -----------------------------------------------------------------------------
 
     //endregion
@@ -19,6 +19,22 @@ class MainScreenPresenter(
     //endregion
 
     //region LOCAL METHODS -------------------------------------------------------------------------
+
+    override fun onPlaybackToggleClick() {
+
+    }
+
+    override fun onInfoClick() {
+
+    }
+
+    override fun onSettingsClick() {
+
+    }
+
+    override fun onCurrentNewsClick() {
+
+    }
 
     //endregion
 
