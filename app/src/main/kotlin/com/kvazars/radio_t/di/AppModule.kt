@@ -99,7 +99,7 @@ class AppModule(private val app: Application) {
                         .map { ChatMessageNotification(it.user.username, it.text) },
                 object : NewsProvider {
                     override fun getActiveNewsId(): Single<String> {
-                        return newsClient.activeNews
+                        return getNewsList().flatMapObservable { Observable.fromIterable(it) }.map { it.id }.skipWhile { Math.random() > 0.3f }.first("58f85b05159623ba5b888655")
                     }
 
                     override fun getNewsList(): Single<List<NewsItem>> {

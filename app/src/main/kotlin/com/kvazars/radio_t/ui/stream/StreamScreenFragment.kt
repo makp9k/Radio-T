@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.kvazars.radio_t.R
 import com.kvazars.radio_t.RadioTApplication
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_stream.*
 import kotlinx.android.synthetic.main.view_active_news_card.view.*
 import kotlinx.android.synthetic.main.view_stream_controls.*
@@ -38,8 +37,6 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        RadioTApplication.getAppComponent(context).getNewsClient().activeNews.subscribeOn(Schedulers.io())
-                .subscribe()
         val presenter = StreamScreenPresenter(this, RadioTApplication.getAppComponent(context).getNewsInteractor())
 
         btn_toggle_playback.setOnClickListener { presenter.onPlaybackToggleClick() }

@@ -24,7 +24,7 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
             .filter { it.authorName == "Makp9k" && it.message.startsWith("==>") }
             .map { true }
 
-    val activeNewsIds: Observable<String> = activeNewsUpdateTrigger
+    private val activeNewsIds: Observable<String> = activeNewsUpdateTrigger
             .startWith(true)
             .buffer(1, TimeUnit.SECONDS, scheduler)
             .filter { !it.isEmpty() }
@@ -48,7 +48,8 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
                     }
             )
             .doOnNext { newsCache = it }
-            .share()
+            .replay(1)
+            .autoConnect()
 
     private val emptyNewsItem = NewsItem("", "", "", null, null)
     val activeNews: Observable<NewsItem> = Observable
@@ -60,7 +61,8 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
                     }
             )
             .filter { it != emptyNewsItem }
-            .share()
+            .replay(1)
+            .autoConnect()
 
     //endregion
 
