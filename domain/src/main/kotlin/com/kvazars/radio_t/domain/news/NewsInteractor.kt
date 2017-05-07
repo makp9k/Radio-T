@@ -2,7 +2,6 @@ package com.kvazars.radio_t.domain.news
 
 import com.kvazars.radio_t.domain.news.models.ChatMessageNotification
 import com.kvazars.radio_t.domain.news.models.NewsItem
-import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.functions.BiFunction
@@ -28,8 +27,9 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
     val activeNewsIds: Observable<String> = activeNewsUpdateTrigger
             .startWith(true)
             .buffer(1, TimeUnit.SECONDS, scheduler)
+            .filter { !it.isEmpty() }
             .switchMap { newsProvider.getActiveNewsId().toObservable() }
-//            .onErrorReturnItem("")
+            .onErrorReturnItem("")
             .filter(String::isNotEmpty)
             .distinctUntilChanged()
             .share()

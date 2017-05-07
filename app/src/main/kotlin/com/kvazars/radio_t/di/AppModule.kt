@@ -16,6 +16,7 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
+import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -40,14 +41,29 @@ class AppModule(private val app: Application) {
 
     @Singleton
     @Provides
-    fun provideHttpClient(): OkHttpClient {
+    @Named("regular")
+    fun provideRegularHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+                .cache(Cache(File(app.cacheDir, "http-cache"), 5 * 1024 * 1024))
+                .addInterceptor(
+                        HttpLoggingInterceptor(HttpLoggingInterceptor.Logger(::println))
+                                .setLevel(HttpLoggingInterceptor.Level.BODY)
+                )
+                .build()
+    }
+
+    @Singleton
+    @Provides
+    @Named("radio-t")
+    fun provideRadioTHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
 
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
             val spec = ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
                     .tlsVersions(TlsVersion.TLS_1_0)
                     .cipherSuites(
-                            CipherSuite.TLS_DHE_RSA_WITH_AES_256_CBC_SHA)
+                            CipherSuite.TLS_DHE_RSA_WITH_AES_256_CBC_SHA
+                    )
                     .build()
             builder.connectionSpecs(mutableListOf(spec))
         }
@@ -63,13 +79,13 @@ class AppModule(private val app: Application) {
 
     @Singleton
     @Provides
-    fun provideGitterFacade(httpClient: OkHttpClient): GitterClientFacade {
+    fun provideGitterFacade(@Named("regular") httpClient: OkHttpClient): GitterClientFacade {
         return GitterClientFacade(httpClient)
     }
 
     @Singleton
     @Provides
-    fun provideNewsClient(httpClient: OkHttpClient): NewsClient {
+    fun provideNewsClient(@Named("radio-t") httpClient: OkHttpClient): NewsClient {
         return NewsClient(httpClient)
     }
 
@@ -83,7 +99,7 @@ class AppModule(private val app: Application) {
                         .map { ChatMessageNotification(it.user.username, it.text) },
                 object : NewsProvider {
                     override fun getActiveNewsId(): Single<String> {
-                        return Single.just("590c0527159623ba5b888672")
+                        return newsClient.activeNews
                     }
 
                     override fun getNewsList(): Single<List<NewsItem>> {

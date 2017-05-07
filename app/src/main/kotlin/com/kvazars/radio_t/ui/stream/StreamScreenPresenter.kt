@@ -34,9 +34,9 @@ class StreamScreenPresenter(
                             it.snippet
                     )
                 }
-//                .subscribe({
-//                    view.setActiveNews(it)
-//                }, Throwable::printStackTrace)
+                .subscribe({
+                    view.setActiveNews(it)
+                }, Throwable::printStackTrace)
     }
 
     //endregion

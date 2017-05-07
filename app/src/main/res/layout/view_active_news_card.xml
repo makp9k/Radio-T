@@ -10,6 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
+        android:lines="3"
+        android:gravity="bottom"
+        android:ellipsize="end"
         android:text="Apple drops to fifth place in 2017 laptop rankings | Cult of Mac"
         android:textColor="@color/primary_text"
         android:textSize="18sp" />
