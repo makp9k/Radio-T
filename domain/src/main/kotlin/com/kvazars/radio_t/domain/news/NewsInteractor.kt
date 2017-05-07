@@ -29,37 +29,38 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
             .startWith(true)
             .buffer(1, TimeUnit.SECONDS, scheduler)
             .switchMap { newsProvider.getActiveNewsId().toObservable() }
-            .onErrorReturnItem("")
+//            .onErrorReturnItem("")
             .filter(String::isNotEmpty)
             .distinctUntilChanged()
             .share()
 
     private var newsCache: List<NewsItem>? = null
-    val allNews: Observable<List<NewsItem>> = Observable.concat(
-            newsProvider.getNewsList().toObservable(),
-            activeNewsIds.flatMap { activeNewsId ->
-                val cache = newsCache
-                if (cache != null && cache.find { it.id == activeNewsId } != null) {
-                    Observable.empty()
-                } else {
-                    newsProvider.getNewsList().toObservable()
-                }
-            })
+    val allNews: Observable<List<NewsItem>> = Observable
+            .concat(
+                    newsProvider.getNewsList().toObservable(),
+                    activeNewsIds.flatMap { activeNewsId ->
+                        val cache = newsCache
+                        if (cache != null && cache.find { it.id == activeNewsId } != null) {
+                            Observable.empty()
+                        } else {
+                            newsProvider.getNewsList().toObservable()
+                        }
+                    }
+            )
             .doOnNext { newsCache = it }
             .share()
 
-    val activeNews: Observable<Maybe<NewsItem>> = Observable.combineLatest(
-            activeNewsIds,
-            allNews,
-            BiFunction {id, news ->
-                val newsItem = news.find { it.id == id }
-                if (newsItem == null) {
-                    Maybe.empty<NewsItem>()
-                } else {
-                    Maybe.just(newsItem)
-                }
-            }
-    )
+    private val emptyNewsItem = NewsItem("", "", "", null, null)
+    val activeNews: Observable<NewsItem> = Observable
+            .combineLatest(
+                    activeNewsIds,
+                    allNews,
+                    BiFunction<String, List<NewsItem>, NewsItem> { id, news ->
+                        news.find { it.id == id } ?: emptyNewsItem
+                    }
+            )
+            .filter { it != emptyNewsItem }
+            .share()
 
     //endregion
 

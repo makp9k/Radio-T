@@ -12,11 +12,13 @@ interface StreamScreenContract {
         fun setPlaybackState(state: PlaybackState)
 
         data class NewsViewModel(
+                val title: String,
                 val author: String,
-                val text: String
+                val timestamp: Long,
+                val details: String
         )
 
-        fun setCurrentNews(news: NewsViewModel)
+        fun setActiveNews(news: NewsViewModel)
     }
 
     interface Presenter {
@@ -26,6 +28,6 @@ interface StreamScreenContract {
 
         fun onSettingsClick()
 
-        fun onCurrentNewsClick()
+        fun onActiveNewsClick()
     }
 }

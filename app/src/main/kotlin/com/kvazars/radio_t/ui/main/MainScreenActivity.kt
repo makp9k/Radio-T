@@ -50,7 +50,7 @@ class MainScreenActivity : AppCompatActivity(), MainScreenContract.View {
             }
 
             override fun getCount(): Int {
-                return 3
+                return 1
             }
         }
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {

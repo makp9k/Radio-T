@@ -6,6 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kvazars.radio_t.R
+import com.kvazars.radio_t.RadioTApplication
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_stream.*
+import kotlinx.android.synthetic.main.view_active_news_card.view.*
+import kotlinx.android.synthetic.main.view_stream_controls.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by Leo on 12.04.2017.
@@ -16,6 +23,9 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
     //endregion
 
     //region CLASS VARIABLES -----------------------------------------------------------------------
+
+    private val dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG)
+    private val timeFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)
 
     //endregion
 
@@ -28,7 +38,14 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val presenter = StreamScreenPresenter(this)
+        RadioTApplication.getAppComponent(context).getNewsClient().activeNews.subscribeOn(Schedulers.io())
+                .subscribe()
+        val presenter = StreamScreenPresenter(this, RadioTApplication.getAppComponent(context).getNewsInteractor())
+
+        btn_toggle_playback.setOnClickListener { presenter.onPlaybackToggleClick() }
+        btn_info.setOnClickListener { presenter.onInfoClick() }
+        btn_settings.setOnClickListener { presenter.onSettingsClick() }
+        active_news.setOnClickListener { presenter.onActiveNewsClick() }
     }
 
     //endregion
@@ -36,11 +53,22 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
     //region LOCAL METHODS -------------------------------------------------------------------------
 
     override fun setPlaybackState(state: StreamScreenContract.View.PlaybackState) {
-
+        when (state) {
+            StreamScreenContract.View.PlaybackState.BUFFERING -> btn_toggle_playback.setImageResource(R.drawable.ic_preferences)
+            StreamScreenContract.View.PlaybackState.PAUSED -> btn_toggle_playback.setImageResource(R.drawable.ic_pause)
+            StreamScreenContract.View.PlaybackState.PLAYING -> btn_toggle_playback.setImageResource(R.drawable.ic_info)
+        }
     }
 
-    override fun setCurrentNews(news: StreamScreenContract.View.NewsViewModel) {
+    override fun setActiveNews(news: StreamScreenContract.View.NewsViewModel) {
+        active_news.header.text = news.title
+        active_news.sub_header.text = formatNewsDateTime(news.timestamp)
+        active_news.details.text = news.details
+    }
 
+    private fun formatNewsDateTime(timestamp: Long): String {
+        val date = Date(timestamp)
+        return String.format(Locale.getDefault(), "%s - %s", dateFormat.format(date), timeFormat.format(date))
     }
 
     //endregion
