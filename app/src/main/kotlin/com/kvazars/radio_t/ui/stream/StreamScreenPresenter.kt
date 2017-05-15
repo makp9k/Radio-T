@@ -3,13 +3,14 @@ package com.kvazars.radio_t.ui.stream
 import com.kvazars.radio_t.domain.news.NewsInteractor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 
 /**
  * Created by Leo on 27.04.2017.
  */
 class StreamScreenPresenter(
         private val view: StreamScreenContract.View,
-        newsInteractor: NewsInteractor
+        private val newsInteractor: NewsInteractor
 ) : StreamScreenContract.Presenter {
     //region CONSTANTS -----------------------------------------------------------------------------
 
@@ -24,7 +25,6 @@ class StreamScreenPresenter(
     init {
         newsInteractor
                 .activeNews
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map {
                     StreamScreenContract.View.NewsViewModel(
@@ -34,9 +34,17 @@ class StreamScreenPresenter(
                             it.snippet
                     )
                 }
-                .subscribe({
-                    view.setActiveNews(it)
-                }, Throwable::printStackTrace)
+                .doOnSubscribe { println(it) }
+                .doOnError { view.showReconnectSnackbar() }
+                .retryWhen { t -> t.flatMap { subject } }
+                .subscribe(
+                        {
+                            view.setActiveNews(it)
+                        },
+                        {
+                            view.showReconnectSnackbar()
+                        }
+                )
     }
 
     //endregion
@@ -57,6 +65,11 @@ class StreamScreenPresenter(
 
     override fun onActiveNewsClick() {
 
+    }
+
+    private val subject: PublishSubject<Boolean> = PublishSubject.create<Boolean>()
+    override fun onReconnectClick() {
+        subject.onNext(true)
     }
 
     //endregion

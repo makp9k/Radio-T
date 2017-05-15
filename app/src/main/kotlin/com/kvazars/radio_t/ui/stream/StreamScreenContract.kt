@@ -19,6 +19,8 @@ interface StreamScreenContract {
         )
 
         fun setActiveNews(news: NewsViewModel)
+
+        fun showReconnectSnackbar()
     }
 
     interface Presenter {
@@ -29,5 +31,7 @@ interface StreamScreenContract {
         fun onSettingsClick()
 
         fun onActiveNewsClick()
+
+        fun onReconnectClick()
     }
 }

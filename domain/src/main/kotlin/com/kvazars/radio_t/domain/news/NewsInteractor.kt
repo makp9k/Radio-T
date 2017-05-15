@@ -23,6 +23,7 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
     private val activeNewsUpdateTrigger = chatMessageNotifications
             .filter { it.authorName == "Makp9k" && it.message.startsWith("==>") }
             .map { true }
+            .subscribeOn(scheduler)
 
     private val activeNewsIds: Observable<String> = activeNewsUpdateTrigger
             .startWith(true)
@@ -47,6 +48,7 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
                         }
                     }
             )
+            .subscribeOn(scheduler)
             .doOnNext { newsCache = it }
             .replay(1)
             .autoConnect()
@@ -78,4 +80,3 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
 
     //endregion
 }
-

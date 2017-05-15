@@ -1,10 +1,12 @@
 package com.kvazars.radio_t.ui.stream
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.kvazars.radio_t.R
 import com.kvazars.radio_t.RadioTApplication
 import kotlinx.android.synthetic.main.fragment_stream.*
@@ -34,15 +36,27 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
         return inflater?.inflate(R.layout.fragment_stream, container, false)
     }
 
+    private lateinit var presenter: StreamScreenPresenter
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val presenter = StreamScreenPresenter(this, RadioTApplication.getAppComponent(context).getNewsInteractor())
+        presenter = StreamScreenPresenter(this, RadioTApplication.getAppComponent(context).getNewsInteractor())
 
         btn_toggle_playback.setOnClickListener { presenter.onPlaybackToggleClick() }
         btn_info.setOnClickListener { presenter.onInfoClick() }
         btn_settings.setOnClickListener { presenter.onSettingsClick() }
         active_news.setOnClickListener { presenter.onActiveNewsClick() }
+    }
+
+    override fun showReconnectSnackbar() {
+        val v = view
+        if (v != null) {
+            Snackbar.make(coord, "Internet connection error", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Reconnect", { presenter.onReconnectClick() })
+                    .show()
+            Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show()
+        }
     }
 
     //endregion
