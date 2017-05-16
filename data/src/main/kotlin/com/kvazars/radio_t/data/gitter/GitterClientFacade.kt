@@ -34,10 +34,12 @@ class GitterClientFacade(httpClient: OkHttpClient = OkHttpClient(),
 
     private val reconnectSubject = PublishSubject.create<Boolean>()
 
-    private val accessDataObservable = reconnectSubject.startWith(true)
-            .flatMap { authHelper.getAccessData("testtestasd/Lobby").toObservable() }
-            .replay(1)
-            .autoConnect()
+    private val accessDataObservable = Observable.defer {
+        reconnectSubject.startWith(true)
+                .flatMap { authHelper.getAccessData("testtestasd/Lobby").toObservable() }
+                .replay(1)
+                .autoConnect()
+    }
 
     //endregion
 
@@ -89,9 +91,9 @@ class GitterClientFacade(httpClient: OkHttpClient = OkHttpClient(),
     private fun <T> applyRetry(): ObservableTransformer<in T, out T>? {
         return ObservableTransformer {
             it.retryWhen {
-                it.zipWith(Observable.rangeLong(1, 10000).startWithArray(1, 1, 1)
+                it.zipWith(Observable.rangeLong(1, 3).startWithArray(1, 1, 1)
                         .map {
-                            Math.min(Math.pow(2.0, it * 1.0).toLong(), 15)
+                            Math.pow(2.0, it * 1.0).toLong()
                         },
                         BiFunction<Throwable, Long, Long> { e, i -> e.printStackTrace(); i })
                         .flatMap {

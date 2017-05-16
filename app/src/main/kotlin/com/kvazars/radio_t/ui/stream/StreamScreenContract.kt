@@ -24,6 +24,8 @@ interface StreamScreenContract {
     }
 
     interface Presenter {
+        fun onDestroy()
+
         fun onPlaybackToggleClick()
 
         fun onInfoClick()

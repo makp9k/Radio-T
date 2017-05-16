@@ -49,14 +49,9 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
         active_news.setOnClickListener { presenter.onActiveNewsClick() }
     }
 
-    override fun showReconnectSnackbar() {
-        val v = view
-        if (v != null) {
-            Snackbar.make(coord, "Internet connection error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Reconnect", { presenter.onReconnectClick() })
-                    .show()
-            Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show()
-        }
+    override fun onDestroy() {
+        presenter.onDestroy()
+        super.onDestroy()
     }
 
     //endregion
@@ -75,6 +70,16 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
         active_news.header.text = news.title
         active_news.sub_header.text = formatNewsDateTime(news.timestamp)
         active_news.details.text = news.details
+    }
+
+    override fun showReconnectSnackbar() {
+        val v = view
+        if (v != null) {
+            Snackbar.make(coord, "Internet connection error", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Reconnect", { presenter.onReconnectClick() })
+                    .show()
+            Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun formatNewsDateTime(timestamp: Long): String {

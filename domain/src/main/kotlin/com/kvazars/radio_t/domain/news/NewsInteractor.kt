@@ -3,9 +3,11 @@ package com.kvazars.radio_t.domain.news
 import com.kvazars.radio_t.domain.news.models.ChatMessageNotification
 import com.kvazars.radio_t.domain.news.models.NewsItem
 import io.reactivex.Observable
+import io.reactivex.ObservableTransformer
 import io.reactivex.Scheduler
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 /**
@@ -13,7 +15,7 @@ import java.util.concurrent.TimeUnit
  */
 class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotification>,
                      newsProvider: NewsProvider,
-                     scheduler: Scheduler = Schedulers.io()) {
+                     private val scheduler: Scheduler = Schedulers.io()) {
     //region CONSTANTS -----------------------------------------------------------------------------
 
     //endregion
@@ -25,15 +27,18 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
             .map { true }
             .subscribeOn(scheduler)
 
+    private val reconnectTrigger = PublishSubject.create<Boolean>()
+
     private val activeNewsIds: Observable<String> = activeNewsUpdateTrigger
             .startWith(true)
             .buffer(1, TimeUnit.SECONDS, scheduler)
             .filter { !it.isEmpty() }
             .switchMap { newsProvider.getActiveNewsId().toObservable() }
-            .onErrorReturnItem("")
             .filter(String::isNotEmpty)
             .distinctUntilChanged()
             .share()
+
+    val errorNotifications: PublishSubject<Throwable> = PublishSubject.create<Throwable>()
 
     private var newsCache: List<NewsItem>? = null
     val allNews: Observable<List<NewsItem>> = Observable
@@ -50,6 +55,8 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
             )
             .subscribeOn(scheduler)
             .doOnNext { newsCache = it }
+            .doOnError { errorNotifications.onNext(it) }
+            .compose<List<NewsItem>>(applyRetry())
             .replay(1)
             .autoConnect()
 
@@ -63,6 +70,8 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
                     }
             )
             .filter { it != emptyNewsItem }
+            .doOnError { errorNotifications.onNext(it) }
+            .compose<NewsItem>(applyRetry())
             .replay(1)
             .autoConnect()
 
@@ -73,6 +82,26 @@ class NewsInteractor(chatMessageNotifications: Observable<ChatMessageNotificatio
     //endregion
 
     //region LOCAL METHODS -------------------------------------------------------------------------
+
+    fun reconnect() {
+        reconnectTrigger.onNext(true)
+    }
+
+    private fun <T> applyRetry(): ObservableTransformer<in T, out T>? {
+        return ObservableTransformer {
+            it.retryWhen {
+                Observable.merge(it.zipWith(Observable.rangeLong(1, 3),
+                        BiFunction<Throwable, Long, Long> { e, i -> e.printStackTrace(); i }
+                )
+                        .flatMap {
+                            Observable.timer(it, TimeUnit.SECONDS, scheduler)
+                        },
+                        it.zipWith(reconnectTrigger, BiFunction<Throwable, Boolean, Boolean> { e, i -> e.printStackTrace(); i })
+                )
+                        .doOnNext { println("RETRY!") }
+            }
+        }
+    }
 
     //endregion
 

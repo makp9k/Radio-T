@@ -2,6 +2,7 @@ package com.kvazars.radio_t.ui.stream
 
 import com.kvazars.radio_t.domain.news.NewsInteractor
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
@@ -22,34 +23,48 @@ class StreamScreenPresenter(
 
     //region CONSTRUCTOR ---------------------------------------------------------------------------
 
+    private val disposableBag = CompositeDisposable()
+
     init {
-        newsInteractor
-                .activeNews
-                .observeOn(AndroidSchedulers.mainThread())
-                .map {
-                    StreamScreenContract.View.NewsViewModel(
-                            it.title,
-                            it.id,
-                            System.currentTimeMillis(),
-                            it.snippet
-                    )
-                }
-                .doOnSubscribe { println(it) }
-                .doOnError { view.showReconnectSnackbar() }
-                .retryWhen { t -> t.flatMap { subject } }
-                .subscribe(
-                        {
-                            view.setActiveNews(it)
-                        },
-                        {
+        disposableBag.add(
+                newsInteractor
+                        .activeNews
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map {
+                            StreamScreenContract.View.NewsViewModel(
+                                    it.title,
+                                    it.id,
+                                    System.currentTimeMillis(),
+                                    it.snippet
+                            )
+                        }
+                        .subscribe(
+                                {
+                                    view.setActiveNews(it)
+                                },
+                                {
+                                    view.showReconnectSnackbar()
+                                }
+                        )
+        )
+
+        disposableBag.add(
+                newsInteractor
+                        .errorNotifications
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
                             view.showReconnectSnackbar()
                         }
-                )
+        )
     }
 
     //endregion
 
     //region LOCAL METHODS -------------------------------------------------------------------------
+
+    override fun onDestroy() {
+        disposableBag.dispose()
+    }
 
     override fun onPlaybackToggleClick() {
         view.setPlaybackState(if (Math.random() > 0.5f) StreamScreenContract.View.PlaybackState.BUFFERING else StreamScreenContract.View.PlaybackState.PLAYING)
@@ -67,9 +82,8 @@ class StreamScreenPresenter(
 
     }
 
-    private val subject: PublishSubject<Boolean> = PublishSubject.create<Boolean>()
     override fun onReconnectClick() {
-        subject.onNext(true)
+        newsInteractor.reconnect()
     }
 
     //endregion
