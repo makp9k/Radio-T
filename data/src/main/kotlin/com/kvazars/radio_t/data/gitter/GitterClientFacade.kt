@@ -91,13 +91,16 @@ class GitterClientFacade(httpClient: OkHttpClient = OkHttpClient(),
     private fun <T> applyRetry(): ObservableTransformer<in T, out T>? {
         return ObservableTransformer {
             it.retryWhen {
-                it.zipWith(Observable.rangeLong(1, 3).startWithArray(1, 1, 1)
-                        .map {
-                            Math.pow(2.0, it * 1.0).toLong()
-                        },
-                        BiFunction<Throwable, Long, Long> { e, i -> e.printStackTrace(); i })
+                it.zipWith(Observable.rangeLong(1, 3).startWithArray(1, 1, 1),
+//                        .map {
+//                            Math.pow(1.0, it * 1.0).toLong()
+//                        },
+                        BiFunction<Throwable, Long, Pair<Throwable, Long>> { e, i -> Pair(e, i) })
                         .flatMap {
-                            Observable.timer(it, TimeUnit.SECONDS, scheduler)
+                            when (it.second) {
+                                3L -> Observable.error(it.first)
+                                else -> Observable.timer(it.second, TimeUnit.SECONDS, scheduler)
+                            }
                         }
             }
         }

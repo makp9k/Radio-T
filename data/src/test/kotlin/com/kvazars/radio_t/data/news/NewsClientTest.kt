@@ -1,5 +1,7 @@
 package com.kvazars.radio_t.data.news
 
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Test
@@ -30,6 +32,21 @@ class NewsClientTest {
 
         observer.assertNoErrors()
         observer.assertComplete()
+    }
+
+    @Test
+    fun test() {
+        val errors = Observable.range(0, 10)
+
+        errors
+                .zipWith(
+                        Observable.range(0, 4),
+                        BiFunction<Int, Int, Pair<Int, Int>> { error, i -> Pair(error, i) }
+                )
+                .flatMap { if (it.second != 4) Observable.just(it.second) else Observable.error(RuntimeException("${it.first}")) }
+                .doOnError { println(it) }
+                .doOnNext { println(it) }
+                .test()
     }
 
 }

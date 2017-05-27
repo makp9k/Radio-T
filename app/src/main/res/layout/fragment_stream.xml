@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="5"
-    android:background="@color/white"
-    android:gravity="bottom"
-    android:orientation="vertical"
-    android:id="@+id/coord"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/coord"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_weight="5"
+              android:background="@color/white"
+              android:gravity="bottom"
+              android:orientation="vertical"
+              android:paddingEnd="@dimen/activity_horizontal_margin"
+              android:paddingStart="@dimen/activity_horizontal_margin">
 
     <ImageView
         android:layout_width="match_parent"
@@ -17,23 +17,23 @@
         android:minHeight="150dp"
         android:padding="4dp"
         android:scaleType="centerInside"
-        android:src="@drawable/logo_large" />
+        android:src="@drawable/logo_large"/>
 
     <include
         android:id="@+id/controls"
-        layout="@layout/view_stream_controls" />
+        layout="@layout/view_stream_controls"/>
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
 
     <include
         android:id="@+id/active_news"
-        layout="@layout/view_active_news_card" />
+        layout="@layout/view_active_news_card"/>
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="@dimen/activity_vertical_margin" />
+        android:layout_height="@dimen/activity_vertical_margin"/>
 
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>
