@@ -50,6 +50,8 @@ dependencies {
     compile "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
+    compile "com.android.support:customtabs:$supportLibrary_version"
+
     compile project(":domain")
     compile project(":data")
 }

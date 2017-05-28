@@ -1,6 +1,7 @@
 package com.kvazars.radio_t.ui.stream
 
 import com.kvazars.radio_t.domain.news.NewsInteractor
+import com.kvazars.radio_t.domain.news.models.NewsItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -10,13 +11,15 @@ import io.reactivex.subjects.PublishSubject
  */
 class StreamScreenPresenter(
         private val view: StreamScreenContract.View,
-        private val newsInteractor: NewsInteractor
+        newsInteractor: NewsInteractor
 ) : StreamScreenContract.Presenter {
     //region CONSTANTS -----------------------------------------------------------------------------
 
     //endregion
 
     //region CLASS VARIABLES -----------------------------------------------------------------------
+
+    private var activeNews: NewsItem? = null
 
     //endregion
 
@@ -28,6 +31,7 @@ class StreamScreenPresenter(
         disposableBag.add(
                 newsInteractor
                         .activeNews
+                        .doOnNext { activeNews = it }
                         .map {
                             StreamScreenContract.View.NewsViewModel(
                                     it.title,
@@ -63,11 +67,11 @@ class StreamScreenPresenter(
 
     }
 
-    override fun onActiveNewsClick() {
-
+    override fun onReadMoreClick() {
+        activeNews?.link?.let { view.openNewsUrl(it) }
     }
 
-    var reconnectSubject = PublishSubject.create<Boolean>()
+    var reconnectSubject = PublishSubject.create<Boolean>()!!
     override fun onReconnectClick() {
         reconnectSubject.onNext(true)
     }

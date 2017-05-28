@@ -9,7 +9,6 @@ import io.reactivex.ObservableTransformer
 import io.reactivex.Scheduler
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
@@ -32,14 +31,15 @@ class GitterClientFacade(httpClient: OkHttpClient = OkHttpClient(),
     private val streamingClient = GitterReadonlyStreamingClient(httpClient, scheduler)
     private val restClient = GitterReadonlyRestClient(httpClient)
 
-    private val reconnectSubject = PublishSubject.create<Boolean>()
-
-    private val accessDataObservable = Observable.defer {
-        reconnectSubject.startWith(true)
-                .flatMap { authHelper.getAccessData("testtestasd/Lobby").toObservable() }
-                .replay(1)
-                .autoConnect()
-    }
+    private val accessDataObservable = Observable
+            .defer {
+                authHelper
+                        .getAccessData("testtestasd/Lobby")
+                        .toObservable()
+                        .replay(1)
+                        .autoConnect()
+            }
+            .share()
 
     //endregion
 
@@ -80,10 +80,6 @@ class GitterClientFacade(httpClient: OkHttpClient = OkHttpClient(),
                 }
     }
 
-    fun reconnect() {
-        reconnectSubject.onNext(true)
-    }
-
     private fun getLastMessages(accessToken: String, roomId: String): Observable<ChatMessage> {
         return restClient.getLastMessages(accessToken, roomId).toObservable().flatMapIterable { it }
     }
@@ -92,9 +88,6 @@ class GitterClientFacade(httpClient: OkHttpClient = OkHttpClient(),
         return ObservableTransformer {
             it.retryWhen {
                 it.zipWith(Observable.rangeLong(1, 3).startWithArray(1, 1, 1),
-//                        .map {
-//                            Math.pow(1.0, it * 1.0).toLong()
-//                        },
                         BiFunction<Throwable, Long, Pair<Throwable, Long>> { e, i -> Pair(e, i) })
                         .flatMap {
                             when (it.second) {

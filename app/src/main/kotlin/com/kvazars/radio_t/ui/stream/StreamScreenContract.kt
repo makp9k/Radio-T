@@ -20,6 +20,8 @@ interface StreamScreenContract {
 
         fun setActiveNews(news: NewsViewModel)
 
+        fun openNewsUrl(url: String)
+
         fun showReconnectSnackbar()
     }
 
@@ -32,7 +34,7 @@ interface StreamScreenContract {
 
         fun onSettingsClick()
 
-        fun onActiveNewsClick()
+        fun onReadMoreClick()
 
         fun onReconnectClick()
     }

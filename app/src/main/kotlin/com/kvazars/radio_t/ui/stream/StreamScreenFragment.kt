@@ -1,8 +1,11 @@
 package com.kvazars.radio_t.ui.stream
 
+import android.net.Uri
 import android.os.Bundle
+import android.support.customtabs.CustomTabsIntent
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +13,13 @@ import android.widget.Toast
 import com.kvazars.radio_t.R
 import com.kvazars.radio_t.RadioTApplication
 import kotlinx.android.synthetic.main.fragment_stream.*
+import kotlinx.android.synthetic.main.view_active_news_card.*
 import kotlinx.android.synthetic.main.view_active_news_card.view.*
 import kotlinx.android.synthetic.main.view_stream_controls.*
 import java.text.SimpleDateFormat
 import java.util.*
+
+
 
 /**
  * Created by Leo on 12.04.2017.
@@ -45,8 +51,7 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
 
         btn_toggle_playback.setOnClickListener { presenter.onPlaybackToggleClick() }
         btn_info.setOnClickListener { presenter.onInfoClick() }
-        btn_settings.setOnClickListener { presenter.onSettingsClick() }
-        active_news.setOnClickListener { presenter.onActiveNewsClick() }
+        btn_more.setOnClickListener { presenter.onReadMoreClick() }
     }
 
     override fun onDestroy() {
@@ -80,6 +85,14 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
                     .show()
             Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun openNewsUrl(url: String) {
+        CustomTabsIntent.Builder()
+                .setToolbarColor(ContextCompat.getColor(context, R.color.primary))
+                .setShowTitle(true)
+                .build()
+                .launchUrl(context, Uri.parse(url))
     }
 
     private fun formatNewsDateTime(timestamp: Long): String {
