@@ -1,5 +1,6 @@
 package com.kvazars.radio_t.di
 
+import com.kvazars.radio_t.data.gitter.GitterClientFacade
 import com.kvazars.radio_t.data.news.NewsClient
 import com.kvazars.radio_t.domain.news.NewsInteractor
 import dagger.Component
@@ -13,4 +14,5 @@ import javax.inject.Singleton
 interface AppComponent {
     fun getNewsInteractor(): NewsInteractor
     fun getNewsClient(): NewsClient
+    fun getGitterClient(): GitterClientFacade
 }
