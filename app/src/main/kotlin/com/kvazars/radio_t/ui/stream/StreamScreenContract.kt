@@ -15,7 +15,8 @@ interface StreamScreenContract {
                 val title: String,
                 val author: String,
                 val timestamp: Long,
-                val details: String
+                val details: String,
+                val pictureUrl: String?
         )
 
         fun setActiveNews(news: NewsViewModel)
