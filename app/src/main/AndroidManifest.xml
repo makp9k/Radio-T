@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.kvazars.radio_t">
+          package="com.kvazars.radiot">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 

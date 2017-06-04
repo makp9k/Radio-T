@@ -1,0 +1,11 @@
+package com.kvazars.radiot.data.gitter.rest.models
+
+/**
+ * Created by lza on 11.03.2017.
+ */
+data class ChatMessageResponseModel (
+            val id: String,
+            val text: String,
+            val sent: String,
+            val fromUser: UserResponseModel
+)
