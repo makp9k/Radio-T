@@ -37,13 +37,17 @@ class StreamScreenPresenter(
                                     it.title,
                                     it.id,
                                     System.currentTimeMillis(),
-                                    it.snippet
+                                    it.snippet,
+                                    it.pictureUrl
                             )
                         }
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnError { view.showReconnectSnackbar() }
                         .retryWhen { it.flatMap { reconnectSubject } }
-                        .subscribe { view.setActiveNews(it) }
+                        .subscribe(
+                                { view.setActiveNews(it) },
+                                { it.printStackTrace() }
+                        )
         )
     }
 

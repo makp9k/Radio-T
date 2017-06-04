@@ -32,16 +32,6 @@ class GitterClientFacadeTest {
 
         observer.assertNoErrors()
     }
-
-    @Test
-    fun reconnect() {
-        val scheduler = TestScheduler()
-        val gitterClientFacade = GitterClientFacade(mockHttpClient, scheduler)
-
-        scheduler.advanceTimeBy(30, TimeUnit.SECONDS)
-        gitterClientFacade.reconnect()
-    }
-
 }
 
 private class MockedGitterServerInterceptor : Interceptor {

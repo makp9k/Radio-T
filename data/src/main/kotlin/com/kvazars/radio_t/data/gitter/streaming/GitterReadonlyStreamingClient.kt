@@ -112,7 +112,10 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient,
             Observable
                     .interval(30, TimeUnit.SECONDS, scheduler)
                     .takeUntil { _: Long -> isClosed }
-                    .subscribe { webSocket?.send("[{\"channel\":\"/api/v1/ping2\",\"data\":{\"reason\":\"ping\"},\"id\":\"$it\",\"clientId\":\"$clientId\"}]") }
+                    .subscribe(
+                            { webSocket?.send("[{\"channel\":\"/api/v1/ping2\",\"data\":{\"reason\":\"ping\"},\"id\":\"$it\",\"clientId\":\"$clientId\"}]") },
+                            { it.printStackTrace() }
+                    )
         }
 
         override fun onFailure(webSocket: WebSocket?, t: Throwable?, response: Response?) {

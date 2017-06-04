@@ -9,7 +9,8 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.kvazars.radio_t.R
 import com.kvazars.radio_t.RadioTApplication
 import kotlinx.android.synthetic.main.fragment_stream.*
@@ -74,6 +75,18 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
         active_news.header.text = news.title
         active_news.sub_header.text = formatNewsDateTime(news.timestamp)
         active_news.details.text = news.details
+        if (news.pictureUrl != null) {
+            Glide
+                    .with(this)
+                    .load(news.pictureUrl)
+                    .apply(RequestOptions
+                            .fitCenterTransform()
+                    )
+                    .into(active_news.news_image)
+            active_news.news_image.visibility = View.VISIBLE
+        } else {
+            active_news.news_image.visibility = View.GONE
+        }
     }
 
     override fun showReconnectSnackbar() {
@@ -82,7 +95,6 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
             Snackbar.make(coord, "Internet connection error", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Reconnect", { presenter.onReconnectClick() })
                     .show()
-            Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show()
         }
     }
 

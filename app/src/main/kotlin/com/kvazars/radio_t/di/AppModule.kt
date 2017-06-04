@@ -99,7 +99,7 @@ class AppModule(private val app: Application) {
                         .map { ChatMessageNotification(it.user.username, it.text) },
                 object : NewsProvider {
                     override fun getActiveNewsId(): Single<String> {
-                        return Single.just("59154311159623ba5b88867f")
+                        return Single.just("5925d5c6b3ee44f9817c5978")
                     }
 
                     override fun getNewsList(): Single<List<NewsItem>> {
