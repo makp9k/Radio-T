@@ -6,6 +6,7 @@ import com.kvazars.radiot.domain.util.Optional
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Leo on 27.04.2017.
@@ -35,6 +36,7 @@ class StreamScreenPresenter(
 //                        .flatMapIterable{it}
                         .activeNews
                         .doOnNext { activeNews = it }
+                    .delay(3, TimeUnit.SECONDS)
                         .map {
                             val newsItem = it.value
                             if (newsItem != null) {
