@@ -1,5 +1,6 @@
 package com.kvazars.radiot.ui.stream
 
+import android.animation.LayoutTransition
 import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
@@ -52,6 +53,10 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
         btn_toggle_playback.setOnClickListener { presenter.onPlaybackToggleClick() }
         btn_info.setOnClickListener { presenter.onInfoClick() }
         btn_more.setOnClickListener { presenter.onReadMoreClick() }
+
+        (active_news as ViewGroup).layoutTransition = LayoutTransition().apply {
+            setAnimateParentHierarchy(false)
+        }
     }
 
     override fun onDestroy() {
