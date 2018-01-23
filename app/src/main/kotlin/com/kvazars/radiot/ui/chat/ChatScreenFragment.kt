@@ -28,6 +28,8 @@ class ChatScreenFragment : Fragment(), ChatScreenContract.View {
 
     private val markdownSpannableBuilder = MarkdownSpannableBuilder()
 
+    private lateinit var presenter: ChatScreenPresenter
+
     //endregion
 
     //region LIFE CYCLE ----------------------------------------------------------------------------
@@ -35,8 +37,6 @@ class ChatScreenFragment : Fragment(), ChatScreenContract.View {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_chat, container, false)
     }
-
-    private lateinit var presenter: ChatScreenPresenter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

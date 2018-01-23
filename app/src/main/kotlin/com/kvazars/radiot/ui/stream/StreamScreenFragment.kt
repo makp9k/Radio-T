@@ -35,6 +35,8 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
     private val dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG)
     private val timeFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)
 
+    private lateinit var presenter: StreamScreenPresenter
+
     //endregion
 
     //region LIFE CYCLE ----------------------------------------------------------------------------
@@ -42,8 +44,6 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_stream, container, false)
     }
-
-    private lateinit var presenter: StreamScreenPresenter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

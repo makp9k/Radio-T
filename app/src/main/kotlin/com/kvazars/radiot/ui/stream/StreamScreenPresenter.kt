@@ -23,11 +23,11 @@ class StreamScreenPresenter(
 
     private var activeNews: Optional<NewsItem> = Optional.empty
 
+    private val disposableBag = CompositeDisposable()
+
     //endregion
 
     //region CONSTRUCTOR ---------------------------------------------------------------------------
-
-    private val disposableBag = CompositeDisposable()
 
     init {
         disposableBag.add(

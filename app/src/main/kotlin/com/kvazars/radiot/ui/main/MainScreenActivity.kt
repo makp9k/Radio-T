@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import com.kvazars.radiot.R
 import com.kvazars.radiot.ui.chat.ChatScreenFragment
+import com.kvazars.radiot.ui.news.NewsScreenFragment
 import com.kvazars.radiot.ui.stream.StreamScreenFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.properties.Delegates
@@ -21,8 +22,9 @@ class MainScreenActivity : AppCompatActivity(), MainScreenContract.View {
     //region CLASS VARIABLES -----------------------------------------------------------------------
 
     private val fragmentStream: Fragment by lazy { StreamScreenFragment() }
+    private val fragmentNews: Fragment by lazy { NewsScreenFragment() }
     private val fragmentChat: Fragment by lazy { ChatScreenFragment() }
-    private var currentFragment: Fragment by Delegates.notNull<Fragment>()
+    private var currentFragment: Fragment by Delegates.notNull()
 
     //endregion
 
@@ -44,6 +46,7 @@ class MainScreenActivity : AppCompatActivity(), MainScreenContract.View {
 
         supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragmentStream)
+                .add(R.id.fragment_container, fragmentNews)
                 .add(R.id.fragment_container, fragmentChat)
                 .hide(fragmentChat)
                 .commit()
@@ -58,6 +61,7 @@ class MainScreenActivity : AppCompatActivity(), MainScreenContract.View {
             when (it.itemId) {
                 R.id.action_stream -> showFragment(fragmentStream)
                 R.id.action_news -> {
+                    showFragment(fragmentNews)
                 }
                 R.id.action_chat -> showFragment(fragmentChat)
                 else -> {
