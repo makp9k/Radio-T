@@ -51,7 +51,7 @@
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/material_component_cards_top_and_bottom_padding"
         android:paddingBottom="@dimen/material_component_cards_top_and_bottom_padding"
-        app:behavior_peekHeight="50dp"
+        app:behavior_peekHeight="150dp"
         app:layout_anchorGravity="bottom|end"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
