@@ -2,10 +2,11 @@ package com.kvazars.radiot
 
 import android.app.Application
 import android.content.Context
+import com.kvazars.radiot.data.DataModule
 import com.kvazars.radiot.di.AppComponent
-import com.kvazars.radiot.di.AppModule
 import com.kvazars.radiot.di.DaggerAppComponent
 import io.reactivex.plugins.RxJavaPlugins
+import java.io.File
 
 /**
  * Created by Leo on 01.05.2017.
@@ -26,7 +27,10 @@ class RadioTApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
+        appComponent = DaggerAppComponent
+                .builder()
+                .dataModule(DataModule(File(cacheDir, "http-cache")))
+                .build()
 
         RxJavaPlugins.setErrorHandler { it.printStackTrace() }
     }
