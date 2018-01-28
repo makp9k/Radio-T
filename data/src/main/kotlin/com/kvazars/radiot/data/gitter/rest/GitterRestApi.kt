@@ -1,6 +1,6 @@
 package com.kvazars.radiot.data.gitter.rest
 
-import com.kvazars.radiot.data.gitter.models.ChatMessage
+import com.kvazars.radiot.data.gitter.models.GitterChatMessage
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -22,6 +22,6 @@ interface GitterRestApi {
             @Query("aroundId") aroundId: String?,
             @Query("limit") limit: Int?,
             @Query("q") query: String?
-    ): Single<List<ChatMessage>>
+    ): Single<List<GitterChatMessage>>
 
 }

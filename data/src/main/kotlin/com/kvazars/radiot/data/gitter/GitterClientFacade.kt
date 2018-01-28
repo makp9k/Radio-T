@@ -1,11 +1,13 @@
 package com.kvazars.radiot.data.gitter
 
 import com.kvazars.radiot.data.gitter.auth.GitterAuthHelper
-import com.kvazars.radiot.data.gitter.models.ChatEvent
-import com.kvazars.radiot.data.gitter.models.ChatMessage
-import com.kvazars.radiot.data.gitter.models.ChatMessageAdd
+import com.kvazars.radiot.data.gitter.models.GitterChatMessage
 import com.kvazars.radiot.data.gitter.rest.GitterReadonlyRestClient
 import com.kvazars.radiot.data.gitter.streaming.GitterReadonlyStreamingClient
+import com.kvazars.radiot.domain.chat.ChatDataProvider
+import com.kvazars.radiot.domain.chat.models.ChatEvent
+import com.kvazars.radiot.domain.chat.models.ChatMessage
+import com.kvazars.radiot.domain.chat.models.ChatMessageAdd
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.Scheduler
@@ -21,7 +23,7 @@ import java.util.concurrent.TimeUnit
 class GitterClientFacade(
     httpClient: OkHttpClient = OkHttpClient(),
     private val scheduler: Scheduler = Schedulers.io()
-) {
+) : ChatDataProvider {
     //region CONSTANTS -----------------------------------------------------------------------------
 
     //endregion
@@ -55,6 +57,7 @@ class GitterClientFacade(
                         streamingClient.connect(accessData)
                             .startWith(
                                 getLastMessages(accessData.accessToken, accessData.roomId)
+                                    .map { it.asChatMessage() }
                                     .map { ChatMessageAdd(it) }
 
                             )
@@ -66,34 +69,42 @@ class GitterClientFacade(
             .refCount()
             .doOnError { println(it.toString() + "!@!@!@!@") }
 
+    override val chatEventStream: Observable<ChatEvent>
+        get() = stream
+
     //endregion
 
     //region LOCAL METHODS -------------------------------------------------------------------------
 
-    fun getMessagesBefore(messageId: String): Single<List<ChatMessage>> {
+    override fun getMessagesBefore(messageId: String): Single<List<ChatMessage>> {
         return accessDataObservable
             .singleOrError()
             .subscribeOn(scheduler)
             .flatMap {
                 restClient.getMessagesBefore(it.accessToken, it.roomId, messageId)
-                    .flatMapObservable { Observable.fromIterable(it) }
+                    .flatMapObservable { Observable.fromIterable(it).map { it.asChatMessage() } }
                     .toList()
             }
     }
 
-    fun getMessagesAfter(messageId: String): Single<List<ChatMessage>> {
+    override fun getMessagesAfter(messageId: String): Single<List<ChatMessage>> {
         return accessDataObservable
             .singleOrError()
             .subscribeOn(scheduler)
             .flatMap {
                 restClient.getMessagesAfter(it.accessToken, it.roomId, messageId)
-                    .flatMapObservable { Observable.fromIterable(it) }
+                    .flatMapObservable {
+                        Observable.fromIterable(it)
+                            .map { it.asChatMessage() }
+                    }
                     .toList()
             }
     }
 
-    private fun getLastMessages(accessToken: String, roomId: String): Observable<ChatMessage> {
-        return restClient.getLastMessages(accessToken, roomId).toObservable().flatMapIterable { it }
+    private fun getLastMessages(accessToken: String, roomId: String): Observable<GitterChatMessage> {
+        return restClient.getLastMessages(accessToken, roomId)
+            .toObservable()
+            .flatMapIterable { it }
     }
 
     private fun <T> applyRetry(): ObservableTransformer<in T, out T>? {

@@ -1,6 +1,6 @@
 package com.kvazars.radiot.data.gitter.rest
 
-import com.kvazars.radiot.data.gitter.models.ChatMessage
+import com.kvazars.radiot.data.gitter.models.GitterChatMessage
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -34,15 +34,15 @@ class GitterReadonlyRestClient(httpClient: OkHttpClient) {
 
     //region LOCAL METHODS -------------------------------------------------------------------------
 
-    fun getLastMessages(accessToken: String, roomId: String): Single<List<ChatMessage>> {
+    fun getLastMessages(accessToken: String, roomId: String): Single<List<GitterChatMessage>> {
         return gitterApi.getChatMessages(accessToken, roomId, null, null, null, null, 100, null)
     }
 
-    fun getMessagesBefore(accessToken: String, roomId: String, messageId: String): Single<List<ChatMessage>> {
+    fun getMessagesBefore(accessToken: String, roomId: String, messageId: String): Single<List<GitterChatMessage>> {
         return gitterApi.getChatMessages(accessToken, roomId, null, messageId, null, null, 100, null)
     }
 
-    fun getMessagesAfter(accessToken: String, roomId: String, messageId: String): Single<List<ChatMessage>> {
+    fun getMessagesAfter(accessToken: String, roomId: String, messageId: String): Single<List<GitterChatMessage>> {
         return gitterApi.getChatMessages(accessToken, roomId, null, null, messageId, null, 100, null)
     }
 

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.kvazars.radiot.R
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -27,9 +26,6 @@ class ChatMessagesAdapter(context: Context) : RecyclerView.Adapter<ChatMessagesA
 
     private var items: List<ChatScreenContract.View.ChatMessageModel> = listOf()
 
-    private val dateFormatFull = SimpleDateFormat("dd MMM, HH:mm", Locale.getDefault())
-    private val dateFormatShort = SimpleDateFormat("HH:mm", Locale.getDefault())
-
     //endregion
 
     //region CONSTRUCTOR ---------------------------------------------------------------------------
@@ -42,7 +38,7 @@ class ChatMessagesAdapter(context: Context) : RecyclerView.Adapter<ChatMessagesA
         val chatMessageModel = items[position]
 
         holder?.author?.text = chatMessageModel.author
-        holder?.time?.text =  getChatMessageDateTime(chatMessageModel)
+        holder?.time?.text =  chatMessageModel.sent
         holder?.message?.text = chatMessageModel.message
     }
 
@@ -52,12 +48,6 @@ class ChatMessagesAdapter(context: Context) : RecyclerView.Adapter<ChatMessagesA
     }
 
     override fun getItemCount() = items.count()
-
-    private fun getChatMessageDateTime(chatMessageModel: ChatScreenContract.View.ChatMessageModel): String {
-        val date = Date()
-        date.time = chatMessageModel.timestamp
-        return dateFormatFull.format(date)
-    }
 
     fun setMessages(messages: Collection<ChatScreenContract.View.ChatMessageModel>) {
         val oldItems = items

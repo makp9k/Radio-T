@@ -1,14 +1,15 @@
 package com.kvazars.radiot.ui.chat
 
 import com.kvazars.radiot.data.gitter.GitterClientFacade
-import com.kvazars.radiot.data.gitter.models.ChatEvent
-import com.kvazars.radiot.data.gitter.models.ChatMessage
-import com.kvazars.radiot.data.gitter.models.ChatMessageAdd
-import com.kvazars.radiot.data.gitter.models.ChatMessageRemove
+import com.kvazars.radiot.domain.chat.models.ChatEvent
+import com.kvazars.radiot.domain.chat.models.ChatMessage
+import com.kvazars.radiot.domain.chat.models.ChatMessageAdd
+import com.kvazars.radiot.domain.chat.models.ChatMessageRemove
 import com.kvazars.radiot.utils.save
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import org.threeten.bp.format.DateTimeFormatterBuilder
 import java.util.*
 
 /**
@@ -28,10 +29,14 @@ class ChatScreenPresenter(
 
     //region CONSTRUCTOR ---------------------------------------------------------------------------
 
+    private val dateFormat = DateTimeFormatterBuilder()
+        .appendPattern("dd MMM, HH:mm")
+        .toFormatter()
+
     private val disposableBag = CompositeDisposable()
 
     private val messages = Collections.synchronizedSet(
-        TreeSet<ChatScreenContract.View.ChatMessageModel> { o1, o2 -> o2.timestamp.compareTo(o1.timestamp) }
+        TreeSet<ChatScreenContract.View.ChatMessageModel> { o1, o2 -> o2.sent.compareTo(o1.sent) }
     )
 
     init {
@@ -64,13 +69,12 @@ class ChatScreenPresenter(
                         .doOnNext { println(it) }
                         .toList()
                 }
-//                .doOnSuccess {
-//                    messages.addAll(it)
-//                }
+                .doOnSuccess {
+                    messages.addAll(it)
+                }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
-                        messages.addAll(it)
                         view.showChatMessages(messages)
                     },
                     {
@@ -104,7 +108,7 @@ class ChatScreenPresenter(
         chatMessage.id,
         chatMessage.user.displayName,
         view.buildFormattedMessageText(chatMessage.text),
-        chatMessage.timestamp
+        dateFormat.format(chatMessage.sent)
     )
 
     override fun onDestroy() {

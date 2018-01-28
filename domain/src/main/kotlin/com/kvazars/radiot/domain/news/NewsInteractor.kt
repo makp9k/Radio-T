@@ -1,6 +1,7 @@
 package com.kvazars.radiot.domain.news
 
-import com.kvazars.radiot.domain.news.models.ChatMessageNotification
+import com.kvazars.radiot.domain.chat.ChatDataProvider
+import com.kvazars.radiot.domain.chat.models.ChatMessageAdd
 import com.kvazars.radiot.domain.news.models.NewsItem
 import com.kvazars.radiot.domain.news.usecase.GetActiveNewsUseCase
 import com.kvazars.radiot.domain.news.usecase.GetAllNewsUseCase
@@ -8,14 +9,13 @@ import com.kvazars.radiot.domain.util.Optional
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
-
 import java.util.concurrent.TimeUnit
 
 /**
  * Created by lza on 19.03.2017.
  */
 class NewsInteractor(
-    chatMessageNotifications: Observable<ChatMessageNotification>,
+    chatDataProvider: ChatDataProvider,
     newsProvider: NewsProvider,
     scheduler: Scheduler = Schedulers.io()
 ) {
@@ -25,8 +25,11 @@ class NewsInteractor(
 
     //region CLASS VARIABLES -----------------------------------------------------------------------
 
-    private val activeNewsUpdateTrigger = chatMessageNotifications
-        .filter { it.authorName == "rt-bot" && it.message.startsWith("==>") }
+    private val activeNewsUpdateTrigger = chatDataProvider.chatEventStream
+        .filter { it is ChatMessageAdd }
+        .cast(ChatMessageAdd::class.java)
+        .map { it.chatMessage }
+        .filter { it.user.username == "rt-bot" && it.text.startsWith("==>") }
         .map { true }
         .subscribeOn(scheduler)
 

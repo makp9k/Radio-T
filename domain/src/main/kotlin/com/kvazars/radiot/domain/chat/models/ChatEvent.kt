@@ -1,4 +1,4 @@
-package com.kvazars.radiot.data.gitter.models
+package com.kvazars.radiot.domain.chat.models
 
 /**
  * Created by Collider on 09.07.2017.

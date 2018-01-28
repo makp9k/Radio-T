@@ -3,8 +3,12 @@ package com.kvazars.radiot.data.gitter.streaming
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.kvazars.radiot.data.gitter.auth.models.GitterChatAccessData
-import com.kvazars.radiot.data.gitter.models.*
+import com.kvazars.radiot.data.gitter.models.GitterChatMessage
 import com.kvazars.radiot.data.gitter.streaming.models.HandshakeResponse
+import com.kvazars.radiot.domain.chat.models.ChatEvent
+import com.kvazars.radiot.domain.chat.models.ChatMessageAdd
+import com.kvazars.radiot.domain.chat.models.ChatMessageRemove
+import com.kvazars.radiot.domain.chat.models.Connect
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
@@ -144,8 +148,8 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient,
                         val model = data.get("model")
                         val operation = data.get("operation").asString
                         when (operation) {
-                            "create" -> emitter?.onNext(ChatMessageAdd(gson.fromJson(model, ChatMessage::class.java)))
-                            "update" -> emitter?.onNext(ChatMessageAdd(gson.fromJson(model, ChatMessage::class.java)))
+                            "create" -> emitter?.onNext(ChatMessageAdd(gson.fromJson(model, GitterChatMessage::class.java).asChatMessage()))
+                            "update" -> emitter?.onNext(ChatMessageAdd(gson.fromJson(model, GitterChatMessage::class.java).asChatMessage()))
                             "remove" -> emitter?.onNext(ChatMessageRemove(model.asJsonObject.get("id").asString))
                         }
                     }

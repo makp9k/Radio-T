@@ -11,5 +11,7 @@ data class NewsItem(
         val snippet: String,
         val link: String,
         @SerializedName("pic")
-        val pictureUrl: String
+        val pictureUrl: String,
+        val active: Boolean,
+        val ts: String
 )
