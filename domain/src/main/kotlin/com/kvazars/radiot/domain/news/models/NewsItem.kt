@@ -6,7 +6,8 @@ class NewsItem(
         val id: String,
         val title: String,
         val snippet: String,
-        val link: String?,
+        val domain: String,
+        val link: String,
         val pictureUrl: String?,
         val active: Boolean,
         val time: ZonedDateTime

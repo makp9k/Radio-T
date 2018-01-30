@@ -13,6 +13,7 @@ interface ChatScreenContract {
                 val id: String,
                 val author: String,
                 val message: CharSequence,
+                val timestamp: Long,
                 val sent: String
         )
     }

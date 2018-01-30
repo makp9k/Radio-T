@@ -5,7 +5,7 @@ import com.kvazars.radiot.domain.chat.models.ChatEvent
 import com.kvazars.radiot.domain.chat.models.ChatMessage
 import com.kvazars.radiot.domain.chat.models.ChatMessageAdd
 import com.kvazars.radiot.domain.chat.models.ChatMessageRemove
-import com.kvazars.radiot.utils.save
+import com.kvazars.radiot.utils.addTo
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -36,7 +36,7 @@ class ChatScreenPresenter(
     private val disposableBag = CompositeDisposable()
 
     private val messages = Collections.synchronizedSet(
-        TreeSet<ChatScreenContract.View.ChatMessageModel> { o1, o2 -> o2.sent.compareTo(o1.sent) }
+        TreeSet<ChatScreenContract.View.ChatMessageModel> { o1, o2 -> o2.timestamp.compareTo(o1.timestamp) }
     )
 
     init {
@@ -52,7 +52,7 @@ class ChatScreenPresenter(
                 {
                     it.printStackTrace()
                 }
-            ).save(disposableBag)
+            ).addTo(disposableBag)
     }
 
     //endregion
@@ -81,7 +81,7 @@ class ChatScreenPresenter(
                         it.printStackTrace()
                     }
                 )
-                .save(disposableBag)
+                .addTo(disposableBag)
         }
     }
 
@@ -108,6 +108,7 @@ class ChatScreenPresenter(
         chatMessage.id,
         chatMessage.user.displayName,
         view.buildFormattedMessageText(chatMessage.text),
+        chatMessage.sent.toInstant().epochSecond,
         dateFormat.format(chatMessage.sent)
     )
 

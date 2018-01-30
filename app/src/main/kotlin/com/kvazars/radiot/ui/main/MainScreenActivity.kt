@@ -17,13 +17,19 @@ import kotlin.properties.Delegates
 class MainScreenActivity : AppCompatActivity(), MainScreenContract.View {
     //region CONSTANTS -----------------------------------------------------------------------------
 
+    companion object {
+        private const val STREAM_FRAGMENT_TAG = "stream"
+        private const val NEWS_FRAGMENT_TAG = "news"
+        private const val CHAT_FRAGMENT_TAG = "chat"
+    }
+
     //endregion
 
     //region CLASS VARIABLES -----------------------------------------------------------------------
 
-    private val fragmentStream: Fragment by lazy { StreamScreenFragment() }
-    private val fragmentNews: Fragment by lazy { NewsScreenFragment() }
-    private val fragmentChat: Fragment by lazy { ChatScreenFragment() }
+    private lateinit var fragmentStream: Fragment
+    private lateinit var fragmentNews: Fragment
+    private lateinit var fragmentChat: Fragment
     private var currentFragment: Fragment by Delegates.notNull()
 
     //endregion
@@ -35,21 +41,39 @@ class MainScreenActivity : AppCompatActivity(), MainScreenContract.View {
 
         setContentView(R.layout.activity_main)
 
-        addAllFragments()
+        if (savedInstanceState == null) {
+            addAllFragments()
+        } else {
+            findAllFragments()
+        }
         initBottomNavigation()
 
         MainScreenPresenter(this)
     }
 
     private fun addAllFragments() {
+        fragmentStream = StreamScreenFragment()
+        fragmentNews = NewsScreenFragment()
+        fragmentChat = ChatScreenFragment()
+
         currentFragment = fragmentStream
 
         supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragmentStream)
-                .add(R.id.fragment_container, fragmentNews)
-                .add(R.id.fragment_container, fragmentChat)
+                .add(R.id.fragment_container, fragmentStream, STREAM_FRAGMENT_TAG)
+                .add(R.id.fragment_container, fragmentNews, NEWS_FRAGMENT_TAG)
+                .add(R.id.fragment_container, fragmentChat, CHAT_FRAGMENT_TAG)
+                .hide(fragmentNews)
                 .hide(fragmentChat)
                 .commit()
+    }
+
+    private fun findAllFragments() {
+        fragmentStream = supportFragmentManager.findFragmentByTag(STREAM_FRAGMENT_TAG)
+        fragmentNews = supportFragmentManager.findFragmentByTag(NEWS_FRAGMENT_TAG)
+        fragmentChat = supportFragmentManager.findFragmentByTag(CHAT_FRAGMENT_TAG)
+        if (!fragmentStream.isHidden) currentFragment = fragmentStream
+        else if (!fragmentNews.isHidden) currentFragment = fragmentNews
+        else if (!fragmentChat.isHidden) currentFragment = fragmentChat
     }
 
     //endregion

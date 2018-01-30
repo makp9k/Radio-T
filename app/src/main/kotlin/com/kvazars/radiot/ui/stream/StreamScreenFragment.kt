@@ -105,11 +105,13 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
     }
 
     override fun openNewsUrl(url: String) {
-        CustomTabsIntent.Builder()
-            .setToolbarColor(ContextCompat.getColor(context!!, R.color.primary))
-            .setShowTitle(true)
-            .build()
-            .launchUrl(context, Uri.parse(url))
+        context?.let {
+            CustomTabsIntent.Builder()
+                    .setToolbarColor(ContextCompat.getColor(it, R.color.primary))
+                    .setShowTitle(true)
+                    .build()
+                    .launchUrl(context, Uri.parse(url))
+        }
     }
 
     private fun formatNewsDateTime(timestamp: Long): String {

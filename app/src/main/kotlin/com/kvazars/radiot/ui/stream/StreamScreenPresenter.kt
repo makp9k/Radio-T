@@ -42,14 +42,13 @@ class StreamScreenPresenter(
                             if (newsItem != null) {
                                 StreamScreenContract.View.NewsViewModel(
                                         newsItem.title,
-                                        newsItem.id,
                                         System.currentTimeMillis(),
                                         newsItem.snippet,
                                         newsItem.pictureUrl
                                 )
                             } else {
                                 StreamScreenContract.View.NewsViewModel(
-                                        "Empty", "Empty",
+                                        "Empty",
                                         System.currentTimeMillis(),
                                         "Empty", null
                                 )

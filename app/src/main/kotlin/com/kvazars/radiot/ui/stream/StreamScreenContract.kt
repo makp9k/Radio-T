@@ -13,7 +13,6 @@ interface StreamScreenContract {
 
         data class NewsViewModel(
                 val title: String,
-                val author: String,
                 val timestamp: Long,
                 val details: String,
                 val pictureUrl: String?

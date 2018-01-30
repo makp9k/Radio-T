@@ -105,11 +105,12 @@ class MarkdownSpannableBuilder {
 
         override fun visit(text: Text?) {
             text?.let {
+                val start = builder.length
                 builder.append(text.literal)
 
                 urlRegex.findAll(text.literal).forEach {
                     if (URLUtil.isValidUrl(it.value)) {
-                        builder.setSpan(URLSpan(it.value), it.range.start, it.range.endInclusive + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        builder.setSpan(URLSpan(it.value), start + it.range.start, start + it.range.endInclusive + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 }
             }
@@ -122,6 +123,16 @@ class MarkdownSpannableBuilder {
 
         override fun visit(emphasis: Emphasis?) {
             wrapSpan(StyleSpan(Typeface.ITALIC), emphasis)
+        }
+
+        override fun visit(hardLineBreak: HardLineBreak?) {
+            builder.append('\n')
+            super.visit(hardLineBreak)
+        }
+
+        override fun visit(thematicBreak: ThematicBreak?) {
+            builder.append('\n')
+            super.visit(thematicBreak)
         }
 
         override fun visit(softLineBreak: SoftLineBreak?) {
@@ -140,11 +151,15 @@ class MarkdownSpannableBuilder {
         }
 
         override fun visit(code: Code?) {
-            super.visit(code)
+            code?.let {
+                visit(Text(code.literal))
+            }
         }
 
         override fun visit(fencedCodeBlock: FencedCodeBlock?) {
-            super.visit(fencedCodeBlock)
+            fencedCodeBlock?.let {
+                visit(Text(fencedCodeBlock.literal))
+            }
         }
 
         override fun visit(heading: Heading?) {
@@ -170,16 +185,16 @@ class MarkdownSpannableBuilder {
             }
         }
 
-        override fun visit(thematicBreak: ThematicBreak?) {
-            super.visit(thematicBreak)
-        }
-
         override fun visit(htmlInline: HtmlInline?) {
-            super.visit(htmlInline)
+            htmlInline?.let {
+                visit(Text(htmlInline.literal))
+            }
         }
 
         override fun visit(htmlBlock: HtmlBlock?) {
-            super.visit(htmlBlock)
+            htmlBlock?.let {
+                visit(Text(htmlBlock.literal))
+            }
         }
 
         override fun visit(image: Image?) {
@@ -189,7 +204,9 @@ class MarkdownSpannableBuilder {
         }
 
         override fun visit(indentedCodeBlock: IndentedCodeBlock?) {
-            super.visit(indentedCodeBlock)
+            indentedCodeBlock?.let {
+                visit(Text(indentedCodeBlock.literal))
+            }
         }
 
         override fun visit(link: Link?) {

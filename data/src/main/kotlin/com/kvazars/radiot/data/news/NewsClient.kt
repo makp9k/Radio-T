@@ -67,6 +67,7 @@ class NewsClient(httpClient: OkHttpClient = OkHttpClient()) : NewsProvider {
             newsItem.id,
             newsItem.title,
             newsItem.snippet,
+            newsItem.domain,
             newsItem.link,
             newsItem.pictureUrl,
             newsItem.active,

@@ -41,8 +41,6 @@ class ChatScreenFragment : Fragment(), ChatScreenContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = ChatScreenPresenter(this, RadioTApplication.getAppComponent(context!!).getGitterClient())
-
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
         linearLayoutManager.stackFromEnd = true
         recycler_view.layoutManager = linearLayoutManager
@@ -57,9 +55,10 @@ class ChatScreenFragment : Fragment(), ChatScreenContract.View {
                         presenter.loadPrevious()
                     }
                 }
-
             }
         })
+
+        presenter = ChatScreenPresenter(this, RadioTApplication.getAppComponent(context!!).getGitterClient())
     }
 
     override fun onHiddenChanged(hidden: Boolean) {

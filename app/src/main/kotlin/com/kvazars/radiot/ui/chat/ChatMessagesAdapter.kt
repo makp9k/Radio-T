@@ -79,7 +79,7 @@ class ChatMessagesAdapter(context: Context) : RecyclerView.Adapter<ChatMessagesA
 
     class ChatMessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val author: TextView = view.findViewById(R.id.author)
-        val time: TextView = view.findViewById(R.id.time)
+        val time: TextView = view.findViewById(R.id.footer)
         val message: TextView = view.findViewById(R.id.message)
 
         init {

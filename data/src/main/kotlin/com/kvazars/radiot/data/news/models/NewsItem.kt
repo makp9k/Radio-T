@@ -9,6 +9,7 @@ data class NewsItem(
         val id: String,
         val title: String,
         val snippet: String,
+        val domain: String,
         val link: String,
         @SerializedName("pic")
         val pictureUrl: String,
