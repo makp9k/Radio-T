@@ -9,6 +9,8 @@ interface ChatScreenContract {
 
         fun showChatMessages(messages: Collection<ChatMessageModel>)
 
+        fun showLoadingIndicator()
+
         data class ChatMessageModel(
                 val id: String,
                 val author: String,
@@ -19,6 +21,8 @@ interface ChatScreenContract {
     }
 
     interface Presenter {
+        fun init()
+
         fun loadPrevious()
 
         fun onDestroy()

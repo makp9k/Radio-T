@@ -1,6 +1,6 @@
 package com.kvazars.radiot.domain.news
 
-import com.kvazars.radiot.domain.chat.ChatDataProvider
+import com.kvazars.radiot.domain.chat.models.ChatEvent
 import com.kvazars.radiot.domain.chat.models.ChatMessageAdd
 import com.kvazars.radiot.domain.news.models.NewsItem
 import com.kvazars.radiot.domain.news.usecase.GetActiveNewsUseCase
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
  * Created by lza on 19.03.2017.
  */
 class NewsInteractor(
-    chatDataProvider: ChatDataProvider,
+    chatEventStream: Observable<ChatEvent>,
     newsProvider: NewsProvider,
     scheduler: Scheduler = Schedulers.io()
 ) {
@@ -25,7 +25,7 @@ class NewsInteractor(
 
     //region CLASS VARIABLES -----------------------------------------------------------------------
 
-    private val activeNewsUpdateTrigger = chatDataProvider.chatEventStream
+    private val activeNewsUpdateTrigger = chatEventStream
         .filter { it is ChatMessageAdd }
         .cast(ChatMessageAdd::class.java)
         .map { it.chatMessage }

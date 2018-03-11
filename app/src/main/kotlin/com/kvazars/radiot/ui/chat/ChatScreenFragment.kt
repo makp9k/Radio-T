@@ -20,10 +20,15 @@ import kotlinx.android.synthetic.main.fragment_chat.*
 class ChatScreenFragment : Fragment(), ChatScreenContract.View {
     //region CONSTANTS -----------------------------------------------------------------------------
 
+    companion object {
+        const val AUTO_SCROLL_ENABLED = "autoScrollEnabled"
+    }
+
     //endregion
 
     //region CLASS VARIABLES -----------------------------------------------------------------------
 
+    private lateinit var linearLayoutManager: LinearLayoutManager
     private var autoScrollEnabled: Boolean = true
 
     private val markdownSpannableBuilder = MarkdownSpannableBuilder()
@@ -41,7 +46,7 @@ class ChatScreenFragment : Fragment(), ChatScreenContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
+        linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         linearLayoutManager.stackFromEnd = true
         recycler_view.layoutManager = linearLayoutManager
         recycler_view.adapter = ChatMessagesAdapter(context!!)
@@ -58,7 +63,21 @@ class ChatScreenFragment : Fragment(), ChatScreenContract.View {
             }
         })
 
-        presenter = ChatScreenPresenter(this, RadioTApplication.getAppComponent(context!!).getGitterClient())
+        presenter = ChatScreenPresenter(this, RadioTApplication.getAppComponent(context!!).getChatInteractor())
+
+        showLoadingIndicator()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(AUTO_SCROLL_ENABLED, autoScrollEnabled)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        autoScrollEnabled = savedInstanceState?.getBoolean(AUTO_SCROLL_ENABLED) ?: true
+
+        presenter.init()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -77,13 +96,14 @@ class ChatScreenFragment : Fragment(), ChatScreenContract.View {
     private fun tryAutoScroll(animate: Boolean = true) {
         if (autoScrollEnabled) {
             val rv = recycler_view
-            if (rv.adapter.itemCount > 0) {
-                if (animate) {
-                    rv.smoothScrollToPosition(0)
-                } else {
-                    rv.scrollToPosition(0)
-                }
 
+            val itemCount = rv.adapter.itemCount
+            if (itemCount > 0) {
+                if (animate) {
+                    rv.smoothScrollToPosition(itemCount)
+                } else {
+                    rv.scrollToPosition(itemCount)
+                }
             }
         }
     }
@@ -97,23 +117,18 @@ class ChatScreenFragment : Fragment(), ChatScreenContract.View {
 
     //region LOCAL METHODS -------------------------------------------------------------------------
 
-    private var setChatMessagesRunnable: Runnable? = null
-
     override fun showChatMessages(messages: Collection<ChatScreenContract.View.ChatMessageModel>) {
-        if (setChatMessagesRunnable != null) {
-            view?.removeCallbacks(setChatMessagesRunnable)
-        }
-
-        setChatMessagesRunnable = Runnable {
-            (recycler_view.adapter as ChatMessagesAdapter).setMessages(messages)
-            tryAutoScroll()
-        }
-
-        view?.post(setChatMessagesRunnable)
+        (recycler_view.adapter as ChatMessagesAdapter).setMessages(messages)
+        loading_indicator.visibility = View.GONE
+        tryAutoScroll()
     }
 
     override fun buildFormattedMessageText(rawMessage: String): CharSequence {
         return markdownSpannableBuilder.build(rawMessage, context!!)
+    }
+
+    override fun showLoadingIndicator() {
+        loading_indicator.visibility = View.VISIBLE
     }
 
     //endregion

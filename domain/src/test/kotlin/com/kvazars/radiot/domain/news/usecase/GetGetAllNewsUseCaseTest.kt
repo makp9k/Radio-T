@@ -4,6 +4,7 @@ import com.kvazars.radiot.domain.news.models.NewsItem
 import io.reactivex.Observable
 import io.reactivex.Single
 import org.junit.Test
+import org.threeten.bp.ZonedDateTime
 
 /**
  * Created by lza on 25.05.2017.
@@ -14,9 +15,9 @@ class GetGetAllNewsUseCaseTest {
     fun givenAllIdsInTheSameList_shouldEmitOnce() {
         val activeNewsIds = Observable.just("id_1", "id_2")
         val newsList = Single.just(listOf(
-                NewsItem("id_1", "title_1", "snippet_1", null, null),
-                NewsItem("id_2", "title_2", "snippet_2", null, null),
-                NewsItem("id_3", "title_3", "snippet_3", null, null)
+                NewsItem("id_1", "title_1", "snippet_1", "", "", null, false, ZonedDateTime.now()),
+                NewsItem("id_2", "title_2", "snippet_2", "", "", null, false, ZonedDateTime.now()),
+                NewsItem("id_3", "title_3", "snippet_3", "", "", null, false, ZonedDateTime.now())
         ))
 
         val test = GetAllNewsUseCase(
@@ -36,14 +37,14 @@ class GetGetAllNewsUseCaseTest {
             attempt++
             when (attempt) {
                 1 -> Single.just(listOf(
-                        NewsItem("id_1", "title_1", "snippet_1", null, null),
-                        NewsItem("id_2", "title_2", "snippet_2", null, null),
-                        NewsItem("id_3", "title_3", "snippet_3", null, null)
+                    NewsItem("id_1", "title_1", "snippet_1", "", "", null, false, ZonedDateTime.now()),
+                    NewsItem("id_2", "title_2", "snippet_2", "", "", null, false, ZonedDateTime.now()),
+                    NewsItem("id_3", "title_3", "snippet_3", "", "", null, false, ZonedDateTime.now())
                 ) )
                 else -> Single.just(listOf(
-                        NewsItem("id_4", "title_4", "snippet_4", null, null),
-                        NewsItem("id_5", "title_5", "snippet_5", null, null),
-                        NewsItem("id_6", "title_6", "snippet_6", null, null)
+                    NewsItem("id_4", "title_1", "snippet_1", "", "", null, false, ZonedDateTime.now()),
+                    NewsItem("id_5", "title_2", "snippet_2", "", "", null, false, ZonedDateTime.now()),
+                    NewsItem("id_6", "title_3", "snippet_3", "", "", null, false, ZonedDateTime.now())
                 ) )
             }
         }

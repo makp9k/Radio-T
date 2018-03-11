@@ -1,23 +1,19 @@
 package com.kvazars.radiot.ui.chat
 
-import com.kvazars.radiot.data.gitter.GitterClientFacade
-import com.kvazars.radiot.domain.chat.models.ChatEvent
+import com.kvazars.radiot.domain.chat.ChatInteractor
 import com.kvazars.radiot.domain.chat.models.ChatMessage
-import com.kvazars.radiot.domain.chat.models.ChatMessageAdd
-import com.kvazars.radiot.domain.chat.models.ChatMessageRemove
-import com.kvazars.radiot.utils.addTo
-import io.reactivex.Observable
+import com.kvazars.radiot.domain.util.addTo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.format.DateTimeFormatterBuilder
-import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Leo on 27.04.2017.
  */
 class ChatScreenPresenter(
     private val view: ChatScreenContract.View,
-    private val gitterClient: GitterClientFacade
+    private val chatInteractor: ChatInteractor
 ) : ChatScreenContract.Presenter {
     //region CONSTANTS -----------------------------------------------------------------------------
 
@@ -35,72 +31,47 @@ class ChatScreenPresenter(
 
     private val disposableBag = CompositeDisposable()
 
-    private val messages = Collections.synchronizedSet(
-        TreeSet<ChatScreenContract.View.ChatMessageModel> { o1, o2 -> o2.timestamp.compareTo(o1.timestamp) }
-    )
-
-    init {
-        gitterClient
-            .stream
-            .doOnNext { processStreamEvent(it) }
-            .doOnNext { println(it) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    view.showChatMessages(messages.toList())
-                },
-                {
-                    it.printStackTrace()
-                }
-            ).addTo(disposableBag)
-    }
+    private val messages = mutableListOf<ChatScreenContract.View.ChatMessageModel>()
 
     //endregion
 
     //region LOCAL METHODS -------------------------------------------------------------------------
 
+    override fun init() {
+        view.showLoadingIndicator()
+
+        chatInteractor.messages.forEach {
+            messages.add(mapChatMessage(it))
+        }
+        view.showChatMessages(messages)
+
+        chatInteractor
+            .events
+            .doOnNext { processChatEvent(it) }
+            .debounce(100L, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { view.showChatMessages(messages) },
+                { it.printStackTrace() }
+            )
+            .addTo(disposableBag)
+    }
+
     override fun loadPrevious() {
-        if (messages.isNotEmpty()) {
-            gitterClient.getMessagesBefore(messages.last().id)
-                .flatMap {
-                    Observable
-                        .fromIterable(it)
-                        .map { mapChatMessage(it) }
-                        .doOnNext { println(it) }
-                        .toList()
-                }
-                .doOnSuccess {
-                    messages.addAll(it)
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        view.showChatMessages(messages)
-                    },
-                    {
-                        it.printStackTrace()
-                    }
-                )
-                .addTo(disposableBag)
-        }
+        view.showLoadingIndicator()
+        chatInteractor.requestEarlierMessages()
     }
 
-    private fun processStreamEvent(event: ChatEvent) {
+    private fun processChatEvent(event: ChatInteractor.Event) {
         when (event) {
-            is ChatMessageAdd -> {
-                removeMessageById(event.chatMessage.id)
-
-                val message = mapChatMessage(event.chatMessage)
-                messages.add(message)
+            is ChatInteractor.Event.Add -> {
+                messages.add(event.position, mapChatMessage(event.message))
             }
-            is ChatMessageRemove -> removeMessageById(event.chatMessageId)
-        }
-    }
-
-    private fun removeMessageById(id: String) {
-        val existingMessage = messages.find { (_id) -> _id == id }
-        if (existingMessage != null) {
-            messages.remove(existingMessage)
+            is ChatInteractor.Event.Remove -> {
+                messages.removeAt(event.position)
+            }
+            is ChatInteractor.Event.Update -> {
+            }
         }
     }
 

@@ -1,8 +1,7 @@
 package com.kvazars.radiot.di
 
 import com.kvazars.radiot.data.DataModule
-import com.kvazars.radiot.data.gitter.GitterClientFacade
-import com.kvazars.radiot.data.news.NewsClient
+import com.kvazars.radiot.domain.chat.ChatInteractor
 import com.kvazars.radiot.domain.news.NewsInteractor
 import dagger.Component
 import javax.inject.Singleton
@@ -15,8 +14,7 @@ import javax.inject.Singleton
 @Component(modules = [AppModule::class, DataModule::class])
 interface AppComponent {
     fun getNewsInteractor(): NewsInteractor
-    fun getNewsClient(): NewsClient
-    fun getGitterClient(): GitterClientFacade
+    fun getChatInteractor(): ChatInteractor
 
     @Component.Builder
     interface Builder {

@@ -1,4 +1,4 @@
-package com.kvazars.radiot.utils
+package com.kvazars.radiot.domain.util
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

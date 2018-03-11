@@ -2,6 +2,7 @@ package com.kvazars.radiot.di
 
 import com.kvazars.radiot.data.gitter.GitterClientFacade
 import com.kvazars.radiot.data.news.NewsClient
+import com.kvazars.radiot.domain.chat.ChatInteractor
 import com.kvazars.radiot.domain.news.NewsInteractor
 import dagger.Module
 import dagger.Provides
@@ -34,8 +35,18 @@ class AppModule {
         newsClient: NewsClient
     ): NewsInteractor {
         return NewsInteractor(
-            gitterClientFacade,
+            gitterClientFacade.chatEventStream,
             newsClient
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideChatInteractor(
+        gitterClientFacade: GitterClientFacade
+    ): ChatInteractor {
+        return ChatInteractor(
+            gitterClientFacade
         )
     }
 

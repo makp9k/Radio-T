@@ -1,11 +1,15 @@
 package com.kvazars.radiot.domain.news
 
-import com.kvazars.radiot.domain.news.models.ChatMessageNotification
+import com.kvazars.radiot.domain.chat.models.ChatEvent
+import com.kvazars.radiot.domain.chat.models.ChatMessage
+import com.kvazars.radiot.domain.chat.models.ChatMessageAdd
+import com.kvazars.radiot.domain.chat.models.ChatUser
 import com.kvazars.radiot.domain.news.models.NewsItem
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.TestScheduler
 import org.junit.Test
+import org.threeten.bp.ZonedDateTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -17,7 +21,13 @@ class NewsInteractorTest {
     @Test
     fun shouldLoadActiveNewsOnChatNotification() {
         val testScheduler = TestScheduler()
-        val chatMessageNotifications = Observable.interval(1, TimeUnit.SECONDS, testScheduler).take(2).map { ChatMessageNotification("Makp9k", "==>") }
+        val chatMessageNotifications = Observable
+            .interval(1, TimeUnit.SECONDS, testScheduler)
+            .map<ChatEvent> {
+                ChatMessageAdd(
+                    ChatMessage("id_" + it + 1, ChatUser("rt-bot", "rt-bot", ""), "==>", ZonedDateTime.now())
+                )
+            }
         val newsProvider = object : NewsProvider {
             var i = 0
             override fun getActiveNewsId(): Single<String> {
@@ -25,7 +35,12 @@ class NewsInteractorTest {
             }
 
             override fun getNewsList(): Single<List<NewsItem>> {
-                return Single.just(listOf(NewsItem("abc1", "", "", "", ""), NewsItem("abc2", "", "", "", ""), NewsItem("abc3", "", "", "", "")))
+                return Single.just(
+                    listOf(
+                        NewsItem("abc1", "title_1", "snippet_1", "", "", null, false, ZonedDateTime.now()),
+                        NewsItem("abc2", "title_2", "snippet_2", "", "", null, false, ZonedDateTime.now()),
+                        NewsItem("abc3", "title_3", "snippet_3", "", "", null, false, ZonedDateTime.now())
+                    ))
             }
         }
 
@@ -39,7 +54,11 @@ class NewsInteractorTest {
 
     @Test
     fun shouldUpdateNewsListWhenActiveNewsIsNotPresented() {
-        val chatMessageNotifications = Observable.just(ChatMessageNotification("Makp9k", "==>"))
+        val chatMessageNotifications = Observable.just<ChatEvent>(
+            ChatMessageAdd(
+                ChatMessage("id_1", ChatUser("rt-bot", "rt-bot", ""), "==>", ZonedDateTime.now())
+            )
+        )
         val newsProvider = object : NewsProvider {
             var counter = 0
 
@@ -51,7 +70,7 @@ class NewsInteractorTest {
                 if (counter++ == 0) return Single.just(Collections.emptyList<NewsItem>())
 
                 return Single.just(Arrays.asList(
-                        NewsItem("abc", "title", "snippet", "link", "url")
+                    NewsItem("abc", "title_1", "snippet_1", "", "", null, false, ZonedDateTime.now())
                 ))
             }
         }
@@ -65,7 +84,11 @@ class NewsInteractorTest {
 
     @Test
     fun shouldNotUpdateNewsListWhenActiveNewsIsPresented() {
-        val chatMessageNotifications = Observable.just(ChatMessageNotification("@rt-bot", "==>"))
+        val chatMessageNotifications = Observable.just<ChatEvent>(
+            ChatMessageAdd(
+                ChatMessage("id_1", ChatUser("rt-bot", "rt-bot", ""), "==>", ZonedDateTime.now())
+            )
+        )
         val newsProvider = object : NewsProvider {
 
             override fun getActiveNewsId(): Single<String> {
@@ -74,7 +97,7 @@ class NewsInteractorTest {
 
             override fun getNewsList(): Single<List<NewsItem>> {
                 return Single.just(Arrays.asList(
-                        NewsItem("abc", "title", "snippet", "link", "url")
+                    NewsItem("abc", "title_1", "snippet_1", "", "", null, false, ZonedDateTime.now())
                 ))
             }
         }

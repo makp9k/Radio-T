@@ -1,8 +1,8 @@
 package com.kvazars.radiot.ui.news
 
 import com.kvazars.radiot.domain.news.NewsInteractor
+import com.kvazars.radiot.domain.util.addTo
 import com.kvazars.radiot.ui.shared.NewsItemView
-import com.kvazars.radiot.utils.addTo
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.format.DateTimeFormatterBuilder
