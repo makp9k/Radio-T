@@ -42,7 +42,7 @@ class GitterClientFacade(
         .defer {
             authHelper
                 .getAccessData("radio-t/chat")
-//                        .getAccessData("testtestasd/Lobby")
+//                .getAccessData("testtestasd/Lobby")
                 .toObservable()
         }
         .replay(1)

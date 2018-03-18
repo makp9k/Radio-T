@@ -3,6 +3,7 @@ package com.kvazars.radiot.di
 import com.kvazars.radiot.data.DataModule
 import com.kvazars.radiot.domain.chat.ChatInteractor
 import com.kvazars.radiot.domain.news.NewsInteractor
+import com.kvazars.radiot.domain.player.PodcastStreamPlayer
 import dagger.Component
 import javax.inject.Singleton
 
@@ -15,6 +16,7 @@ import javax.inject.Singleton
 interface AppComponent {
     fun getNewsInteractor(): NewsInteractor
     fun getChatInteractor(): ChatInteractor
+    fun streamPlayer(): PodcastStreamPlayer
 
     @Component.Builder
     interface Builder {

@@ -1,7 +1,9 @@
 package com.kvazars.radiot.data.gitter.streaming
 
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
+import com.kvazars.data.BuildConfig
 import com.kvazars.radiot.data.gitter.auth.models.GitterChatAccessData
 import com.kvazars.radiot.data.gitter.models.GitterChatMessage
 import com.kvazars.radiot.data.gitter.streaming.models.HandshakeResponse
@@ -24,8 +26,10 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by lza on 24.02.2017.
  */
-class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient,
-                                    private val scheduler: Scheduler) {
+class GitterReadonlyStreamingClient(
+    private val httpClient: OkHttpClient,
+    private val scheduler: Scheduler
+) {
 
     //region CONSTANTS -----------------------------------------------------------------------------
 
@@ -34,12 +38,12 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient,
     //region CLASS VARIABLES -----------------------------------------------------------------------
 
     private val gitterApi = Retrofit.Builder()
-            .client(httpClient)
-            .baseUrl("https://ws.gitter.im/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-            .create(WebsocketGitterApi::class.java)
+        .client(httpClient)
+        .baseUrl("https://ws.gitter.im/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .build()
+        .create(WebsocketGitterApi::class.java)
 
     //endregion
 
@@ -51,45 +55,49 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient,
 
     fun connect(accessData: GitterChatAccessData): Observable<ChatEvent> {
         return handshake(createHandshakePayload(accessData.accessToken))
-                .flatMap {
-                    val request = Request.Builder().url("wss://ws.gitter.im/bayeux").build()
+            .flatMap {
+                val request = Request.Builder().url("wss://ws.gitter.im/bayeux").build()
 
-                    val webSocketOnSubscribe = WebSocketOnSubscribe(it.clientId, accessData.roomId, scheduler)
-                    httpClient.newWebSocket(request, webSocketOnSubscribe)
+                val webSocketOnSubscribe = WebSocketOnSubscribe(it.clientId, accessData.roomId, scheduler)
+                httpClient.newWebSocket(request, webSocketOnSubscribe)
 
-                    Observable.create(webSocketOnSubscribe)
-                }
+                Observable.create(webSocketOnSubscribe)
+            }
     }
 
     private fun handshake(payload: String): Observable<HandshakeResponse> {
         return gitterApi
-                .handshake(RequestBody.create(MediaType.parse("text/plain"), payload))
-                .toObservable()
-                .flatMapIterable { it }
+            .handshake(RequestBody.create(MediaType.parse("text/plain"), payload))
+            .toObservable()
+            .flatMapIterable { it }
     }
 
     private fun createHandshakePayload(accessToken: String): String {
-        val uniqueClientId = Math.floor(1e5 * Math.random())
-        return "message=" + URLEncoder.encode("[{\"channel\":\"/meta/handshake\"," +
-                "\"id\":\"1\",\"ext\":{\"token\":\"$accessToken\"," +
-                "\"version\":\"b23011\",\"connType\":\"online\",\"client\":\"web\"," +
-                "\"uniqueClientId\":\"$uniqueClientId\", \"realtimeLibrary\":\"halley\"},\"version\":\"1.0\"," +
-                "\"supportedConnectionTypes\":[\"websocket\",\"long-polling\"]}]", "UTF-8")
+        val uniqueClientId = Math.floor(1e5 * Math.random()).toInt()
+        return "message=" + URLEncoder.encode(
+            "[{\"channel\":\"/meta/handshake\"," +
+                    "\"id\":\"1\",\"ext\":{\"token\":\"$accessToken\"," +
+                    "\"version\":1,\"connType\":\"online\",\"client\":\"web\"," +
+                    "\"uniqueClientId\":$uniqueClientId, \"realtimeLibrary\":\"halley\"},\"version\":\"1.0\"," +
+                    "\"supportedConnectionTypes\":[\"websocket\",\"long-polling\"]}]", "UTF-8"
+        )
     }
 
     //endregion
 
     //region INNER CLASSES -------------------------------------------------------------------------
 
-    private class WebSocketOnSubscribe(private val clientId: String,
-                                       private val roomId: String,
-                                       private val scheduler: Scheduler) : WebSocketListener(), ObservableOnSubscribe<ChatEvent> {
+    private class WebSocketOnSubscribe(
+        private val clientId: String,
+        private val roomId: String,
+        private val scheduler: Scheduler
+    ) : WebSocketListener(), ObservableOnSubscribe<ChatEvent> {
 
         var emitter: ObservableEmitter<ChatEvent>? = null
         var socket: WebSocket? = null
         var isClosed = true
 
-        val gson = GsonBuilder().create()
+        val gson: Gson = GsonBuilder().create()
         val messageChannel = "/api/v1/rooms/$roomId/chatMessages"
 
         override fun subscribe(e: ObservableEmitter<ChatEvent>) {
@@ -114,28 +122,35 @@ class GitterReadonlyStreamingClient(private val httpClient: OkHttpClient,
             sendConnectMessage()
 
             Observable
-                    .interval(30, TimeUnit.SECONDS, scheduler)
-                    .takeUntil { _: Long -> isClosed }
-                    .subscribe(
-                            { webSocket?.send("[{\"channel\":\"/api/v1/ping2\",\"data\":{\"reason\":\"ping\"},\"id\":\"$it\",\"clientId\":\"$clientId\"}]") },
-                            { it.printStackTrace() }
-                    )
+                .interval(30, TimeUnit.SECONDS, scheduler)
+                .takeUntil { _: Long -> isClosed }
+                .subscribe(
+                    { webSocket?.send("[{\"channel\":\"/api/v1/ping2\",\"data\":{\"reason\":\"ping\"},\"id\":\"$it\",\"clientId\":\"$clientId\"}]") },
+                    { it.printStackTrace() }
+                )
 
             emitter?.onNext(Connect())
         }
 
         override fun onFailure(webSocket: WebSocket?, t: Throwable?, response: Response?) {
-            println(response?.message())
+            if (BuildConfig.DEBUG) {
+                println(response?.message())
+            }
             emitter?.onError(t!!)
         }
 
         override fun onClosed(webSocket: WebSocket?, code: Int, reason: String?) {
-            println(reason)
+            if (BuildConfig.DEBUG) {
+                println(reason)
+            }
             emitter?.onComplete()
         }
 
         override fun onMessage(webSocket: WebSocket?, text: String?) {
-            println(text)
+            if (BuildConfig.DEBUG) {
+                println(text)
+            }
+
             if (text != null) {
                 val json = gson.fromJson(text, JsonArray::class.java).get(0).asJsonObject
 

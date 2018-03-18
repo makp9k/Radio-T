@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.kvazars.radiot.R
@@ -48,7 +49,12 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = StreamScreenPresenter(this, RadioTApplication.getAppComponent(context!!).getNewsInteractor())
+        val appComponent = RadioTApplication.getAppComponent(context!!)
+        presenter = StreamScreenPresenter(
+            this,
+            appComponent.getNewsInteractor(),
+            appComponent.streamPlayer()
+        )
 
         btn_toggle_playback.setOnClickListener { presenter.onPlaybackToggleClick() }
         btn_info.setOnClickListener { presenter.onInfoClick() }
@@ -70,9 +76,13 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
 
     override fun setPlaybackState(state: StreamScreenContract.View.PlaybackState) {
         when (state) {
-            StreamScreenContract.View.PlaybackState.BUFFERING -> btn_toggle_playback.setImageResource(R.drawable.ic_preferences)
-            StreamScreenContract.View.PlaybackState.PAUSED -> btn_toggle_playback.setImageResource(R.drawable.ic_pause)
-            StreamScreenContract.View.PlaybackState.PLAYING -> btn_toggle_playback.setImageResource(R.drawable.ic_info)
+            StreamScreenContract.View.PlaybackState.BUFFERING -> btn_toggle_playback.setImageResource(R.drawable.ic_buffering)
+            StreamScreenContract.View.PlaybackState.STOPPED -> btn_toggle_playback.setImageResource(R.drawable.ic_play)
+            StreamScreenContract.View.PlaybackState.PLAYING -> btn_toggle_playback.setImageResource(R.drawable.ic_stop)
+            StreamScreenContract.View.PlaybackState.ERROR -> {
+                Toast.makeText(context, "Stream playback error occurred", Toast.LENGTH_SHORT).show()
+                btn_toggle_playback.setImageResource(R.drawable.ic_stop)
+            }
         }
     }
 

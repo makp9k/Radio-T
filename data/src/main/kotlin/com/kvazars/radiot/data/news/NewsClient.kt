@@ -52,7 +52,7 @@ class NewsClient(httpClient: OkHttpClient = OkHttpClient()) : NewsProvider {
     //region LOCAL METHODS -------------------------------------------------------------------------
 
     override fun getActiveNewsId(): Single<String> {
-//                        return Single.just("5a6789720107ccc2a6b3b6ff")
+//        return Single.just("5aad676a0107ccc2a6b3b776")
         return activeNews
     }
 

@@ -6,7 +6,7 @@ package com.kvazars.radiot.ui.stream
 interface StreamScreenContract {
     interface View {
         enum class PlaybackState {
-            BUFFERING, PAUSED, PLAYING
+            BUFFERING, STOPPED, PLAYING, ERROR
         }
 
         fun setPlaybackState(state: PlaybackState)

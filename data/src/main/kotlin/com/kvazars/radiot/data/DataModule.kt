@@ -1,24 +1,22 @@
 package com.kvazars.radiot.data
 
+import android.content.Context
 import android.os.Build
 import com.kvazars.radiot.data.gitter.GitterClientFacade
 import com.kvazars.radiot.data.news.NewsClient
+import com.kvazars.radiot.data.player.ExoStreamPlayer
+import com.kvazars.radiot.domain.player.PodcastStreamPlayer
 import dagger.Module
 import dagger.Provides
 import okhttp3.*
-import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import javax.inject.Singleton
 
 @Module
-class DataModule(httpCacheDir: File) {
+class DataModule(private val context: Context, httpCacheDir: File) {
 
     private val regularHttpClient: OkHttpClient = OkHttpClient.Builder()
             .cache(Cache(httpCacheDir, 5 * 1024 * 1024))
-            .addInterceptor(
-                    HttpLoggingInterceptor(HttpLoggingInterceptor.Logger(::println))
-                            .setLevel(HttpLoggingInterceptor.Level.BODY)
-            )
             .build()
 
     private val radioTHttpClient: OkHttpClient
@@ -38,10 +36,6 @@ class DataModule(httpCacheDir: File) {
 
         radioTHttpClient =  builder
                 .cache(Cache(httpCacheDir, 5 * 1024 * 1024))
-                .addInterceptor(
-                        HttpLoggingInterceptor(HttpLoggingInterceptor.Logger(::println))
-                                .setLevel(HttpLoggingInterceptor.Level.BODY)
-                )
                 .build()
     }
 
@@ -55,5 +49,11 @@ class DataModule(httpCacheDir: File) {
     @Provides
     fun provideNewsClient(): NewsClient {
         return NewsClient(radioTHttpClient)
+    }
+
+    @Singleton
+    @Provides
+    fun provideStreamPlayer(): PodcastStreamPlayer {
+        return ExoStreamPlayer(context, regularHttpClient)
     }
 }
