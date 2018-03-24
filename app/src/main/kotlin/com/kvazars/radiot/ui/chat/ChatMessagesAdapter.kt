@@ -34,15 +34,15 @@ class ChatMessagesAdapter(context: Context) : RecyclerView.Adapter<ChatMessagesA
 
     //region LOCAL METHODS -------------------------------------------------------------------------
 
-    override fun onBindViewHolder(holder: ChatMessageViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ChatMessageViewHolder, position: Int) {
         val chatMessageModel = items[position]
 
-        holder?.author?.text = chatMessageModel.author
-        holder?.time?.text =  chatMessageModel.sent
-        holder?.message?.text = chatMessageModel.message
+        holder.author.text = chatMessageModel.author
+        holder.time.text =  chatMessageModel.sent
+        holder.message.text = chatMessageModel.message
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChatMessageViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatMessageViewHolder {
         val view = layoutInflater.inflate(R.layout.view_chat_message_item, parent, false)
         return ChatMessageViewHolder(view)
     }

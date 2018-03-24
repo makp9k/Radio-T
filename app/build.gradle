@@ -44,7 +44,7 @@ kapt {
 dependencies {
     implementation "com.android.support:appcompat-v7:$supportLibrary_version"
     implementation "com.android.support:design:$supportLibrary_version"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta4'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta6'
     implementation "com.android.support:palette-v7:$supportLibrary_version"
     testImplementation 'junit:junit:4.12'
 
