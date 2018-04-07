@@ -1,6 +1,5 @@
 package com.kvazars.radiot.ui.stream
 
-import android.animation.LayoutTransition
 import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
@@ -11,16 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.kvazars.radiot.R
 import com.kvazars.radiot.RadioTApplication
+import com.kvazars.radiot.ui.shared.NewsItemView
 import kotlinx.android.synthetic.main.fragment_stream.*
-import kotlinx.android.synthetic.main.view_active_news_card.*
-import kotlinx.android.synthetic.main.view_active_news_card.view.*
 import kotlinx.android.synthetic.main.view_stream_controls.*
 import java.text.SimpleDateFormat
-import java.util.*
 
 
 /**
@@ -42,7 +37,11 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
 
     //region LIFE CYCLE ----------------------------------------------------------------------------
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_stream, container, false)
     }
 
@@ -58,11 +57,7 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
 
         btn_toggle_playback.setOnClickListener { presenter.onPlaybackToggleClick() }
         btn_info.setOnClickListener { presenter.onInfoClick() }
-        btn_more.setOnClickListener { presenter.onReadMoreClick() }
-
-        (active_news as ViewGroup).layoutTransition = LayoutTransition().apply {
-            setAnimateParentHierarchy(false)
-        }
+        active_news_card.setOnClickListener { presenter.onActiveNewsClick() }
     }
 
     override fun onDestroy() {
@@ -76,9 +71,15 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
 
     override fun setPlaybackState(state: StreamScreenContract.View.PlaybackState) {
         when (state) {
-            StreamScreenContract.View.PlaybackState.BUFFERING -> btn_toggle_playback.setImageResource(R.drawable.ic_buffering)
-            StreamScreenContract.View.PlaybackState.STOPPED -> btn_toggle_playback.setImageResource(R.drawable.ic_play)
-            StreamScreenContract.View.PlaybackState.PLAYING -> btn_toggle_playback.setImageResource(R.drawable.ic_stop)
+            StreamScreenContract.View.PlaybackState.BUFFERING -> btn_toggle_playback.setImageResource(
+                R.drawable.ic_buffering
+            )
+            StreamScreenContract.View.PlaybackState.STOPPED -> btn_toggle_playback.setImageResource(
+                R.drawable.ic_play
+            )
+            StreamScreenContract.View.PlaybackState.PLAYING -> btn_toggle_playback.setImageResource(
+                R.drawable.ic_stop
+            )
             StreamScreenContract.View.PlaybackState.ERROR -> {
                 Toast.makeText(context, "Stream playback error occurred", Toast.LENGTH_SHORT).show()
                 btn_toggle_playback.setImageResource(R.drawable.ic_stop)
@@ -86,22 +87,22 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
         }
     }
 
-    override fun setActiveNews(news: StreamScreenContract.View.NewsViewModel) {
-        active_news.header.text = news.title
-        active_news.sub_header.text = formatNewsDateTime(news.timestamp)
-        active_news.details.text = news.details
-        if (news.pictureUrl != null) {
-            Glide
-                .with(this)
-                .load(news.pictureUrl)
-                .apply(
-                    RequestOptions
-                        .fitCenterTransform()
+    override fun setActiveNews(news: StreamScreenContract.View.NewsViewModel?) {
+        if (news != null) {
+            active_news_card.visibility = View.VISIBLE
+            empty_news_card.visibility = View.GONE
+            active_news_card.bindWithModel(
+                NewsItemView.NewsViewModel(
+                    news.title,
+                    news.footer,
+                    news.details,
+                    news.link,
+                    news.pictureUrl
                 )
-                .into(active_news.news_image)
-            active_news.news_image.visibility = View.VISIBLE
+            )
         } else {
-            active_news.news_image.visibility = View.GONE
+            active_news_card.visibility = View.GONE
+            empty_news_card.visibility = View.VISIBLE
         }
     }
 
@@ -117,16 +118,11 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
     override fun openNewsUrl(url: String) {
         context?.let {
             CustomTabsIntent.Builder()
-                    .setToolbarColor(ContextCompat.getColor(it, R.color.primary))
-                    .setShowTitle(true)
-                    .build()
-                    .launchUrl(context, Uri.parse(url))
+                .setToolbarColor(ContextCompat.getColor(it, R.color.primary))
+                .setShowTitle(true)
+                .build()
+                .launchUrl(context, Uri.parse(url))
         }
-    }
-
-    private fun formatNewsDateTime(timestamp: Long): String {
-        val date = Date(timestamp)
-        return String.format(Locale.getDefault(), "%s - %s", dateFormat.format(date), timeFormat.format(date))
     }
 
     //endregion

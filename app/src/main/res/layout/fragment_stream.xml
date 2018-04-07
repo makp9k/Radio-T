@@ -12,8 +12,8 @@
         android:layout_marginBottom="150dp"
         android:layout_weight="5"
         android:orientation="vertical"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:paddingStart="@dimen/activity_horizontal_margin">
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin">
 
         <ImageView
             android:layout_width="match_parent"
@@ -41,24 +41,39 @@
         android:background="@drawable/news_card_shadow"
         app:layout_anchor="@+id/bottom_sheet" />
 
-    <FrameLayout
+    <android.support.v4.widget.NestedScrollView
         android:id="@id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="4dp"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/material_component_cards_top_and_bottom_padding"
-        android:paddingBottom="@dimen/material_component_cards_top_and_bottom_padding"
         app:behavior_peekHeight="150dp"
         app:layout_anchorGravity="bottom|end"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
-        <include
-            android:id="@+id/active_news"
-            layout="@layout/view_active_news_card" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    </FrameLayout>
+            <com.kvazars.radiot.ui.shared.NewsItemView
+                android:id="@+id/active_news_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/empty_news_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_all_inclusive"
+            android:drawablePadding="16dp"
+            android:gravity="center"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:text="No active news"
+            android:textColor="@color/material_light_black"
+            android:textSize="18sp" />
+
+        </FrameLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

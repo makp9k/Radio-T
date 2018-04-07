@@ -12,13 +12,14 @@ interface StreamScreenContract {
         fun setPlaybackState(state: PlaybackState)
 
         data class NewsViewModel(
-                val title: String,
-                val timestamp: Long,
-                val details: String,
-                val pictureUrl: String?
+            val title: String,
+            val footer: String,
+            val details: String,
+            val link: String,
+            val pictureUrl: String?
         )
 
-        fun setActiveNews(news: NewsViewModel)
+        fun setActiveNews(news: NewsViewModel?)
 
         fun openNewsUrl(url: String)
 
@@ -34,7 +35,7 @@ interface StreamScreenContract {
 
         fun onSettingsClick()
 
-        fun onReadMoreClick()
+        fun onActiveNewsClick()
 
         fun onReconnectClick()
     }

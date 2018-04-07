@@ -9,6 +9,7 @@ import android.support.constraint.ConstraintSet
 import android.support.v7.graphics.Palette
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.URLUtil
 import android.widget.ImageView
 import com.bumptech.glide.load.DataSource
@@ -51,7 +52,10 @@ class NewsItemView @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((resources.displayMetrics.density * 240).toInt(), MeasureSpec.EXACTLY))
+        if (MeasureSpec.getMode(heightMeasureSpec) != MeasureSpec.EXACTLY) {
+            description.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
     fun bindWithModel(model: NewsViewModel) {

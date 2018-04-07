@@ -1,5 +1,6 @@
 package com.kvazars.radiot.ui.news.views
 
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.epoxy.EpoxyAttribute
@@ -14,8 +15,6 @@ abstract class EpoxyNewsModel : EpoxyModelWithHolder<EpoxyNewsModel.Holder>() {
     var newsModel: NewsItemView.NewsViewModel? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: View.OnClickListener? = null
-
-    private val lp = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
     override fun bind(holder: Holder) {
         newsModel?.let {
@@ -33,7 +32,12 @@ abstract class EpoxyNewsModel : EpoxyModelWithHolder<EpoxyNewsModel.Holder>() {
     override fun getDefaultLayout() = 0
 
     override fun buildView(parent: ViewGroup?): View {
-        return NewsItemView(parent!!.context).apply {
+        val context = parent!!.context
+        val lp = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240F, context.resources.displayMetrics).toInt()
+        )
+        return NewsItemView(context).apply {
             layoutParams = lp
         }
     }

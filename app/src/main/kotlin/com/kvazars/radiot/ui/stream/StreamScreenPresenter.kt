@@ -8,6 +8,7 @@ import com.kvazars.radiot.domain.util.addTo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import org.threeten.bp.format.DateTimeFormatterBuilder
 
 /**
  * Created by Leo on 27.04.2017.
@@ -26,6 +27,9 @@ class StreamScreenPresenter(
     private var activeNews: Optional<NewsItem> = Optional.empty
 
     private val disposableBag = CompositeDisposable()
+    private val dateFormat = DateTimeFormatterBuilder()
+        .appendPattern("dd MMM, HH:mm")
+        .toFormatter()
 
     //endregion
 
@@ -38,25 +42,30 @@ class StreamScreenPresenter(
             .map {
                 val newsItem = it.value
                 if (newsItem != null) {
-                    StreamScreenContract.View.NewsViewModel(
-                        newsItem.title,
-                        System.currentTimeMillis(),
-                        newsItem.snippet,
-                        newsItem.pictureUrl
+                    Optional(
+                        StreamScreenContract.View.NewsViewModel(
+                            newsItem.title,
+                            "${newsItem.domain} - ${newsItem.time.format(dateFormat)}",
+                            newsItem.snippet,
+                            newsItem.link,
+                            newsItem.pictureUrl
+                        )
                     )
                 } else {
-                    StreamScreenContract.View.NewsViewModel(
-                        "Empty",
-                        System.currentTimeMillis(),
-                        "Empty", null
-                    )
+                    Optional.empty
                 }
             }
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError { view.showReconnectSnackbar() }
             .retryWhen { it.flatMap { reconnectSubject } }
             .subscribe(
-                { view.setActiveNews(it) },
+                {
+                    if (it.value != null) {
+                        view.setActiveNews(it.value)
+                    } else {
+                        view.setActiveNews(null)
+                    }
+                },
                 { it.printStackTrace() }
             )
             .addTo(disposableBag)
@@ -72,12 +81,10 @@ class StreamScreenPresenter(
                 }
             )
             .addTo(disposableBag)
-
-        onPlaybackToggleClick()
     }
 
     private fun handlePlayerStatus(status: PodcastStreamPlayer.Status) {
-        when(status) {
+        when (status) {
             PodcastStreamPlayer.Status.PLAYING ->
                 view.setPlaybackState(StreamScreenContract.View.PlaybackState.PLAYING)
 
@@ -117,7 +124,7 @@ class StreamScreenPresenter(
 
     }
 
-    override fun onReadMoreClick() {
+    override fun onActiveNewsClick() {
         activeNews.value?.link?.let { view.openNewsUrl(it) }
     }
 
