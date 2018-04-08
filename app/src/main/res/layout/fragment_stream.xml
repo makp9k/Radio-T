@@ -42,7 +42,7 @@
         app:layout_anchor="@+id/bottom_sheet" />
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@id/bottom_sheet"
+        android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -58,19 +58,20 @@
             <com.kvazars.radiot.ui.shared.NewsItemView
                 android:id="@+id/active_news_card"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/empty_news_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_all_inclusive"
-            android:drawablePadding="16dp"
-            android:gravity="center"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:text="No active news"
-            android:textColor="@color/material_light_black"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/empty_news_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_all_inclusive"
+                android:drawablePadding="16dp"
+                android:gravity="center"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="No active news"
+                android:textColor="@color/material_light_black"
+                android:textSize="18sp" />
 
         </FrameLayout>
 
