@@ -77,7 +77,7 @@ class ChatScreenPresenter(
 
     private fun mapChatMessage(chatMessage: ChatMessage) = ChatScreenContract.View.ChatMessageModel(
         chatMessage.id,
-        chatMessage.user.displayName,
+        "${chatMessage.user.displayName} @${chatMessage.user.username}",
         view.buildFormattedMessageText(chatMessage.text),
         chatMessage.sent.toInstant().epochSecond,
         dateFormat.format(chatMessage.sent)
