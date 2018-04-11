@@ -62,7 +62,7 @@
                 android:visibility="gone" />
 
             <TextView
-                android:id="@+id/empty_news_card"
+                android:id="@+id/no_active_news_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableTop="@drawable/ic_all_inclusive"
@@ -71,7 +71,18 @@
                 android:padding="@dimen/activity_horizontal_margin"
                 android:text="No active news"
                 android:textColor="@color/material_light_black"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone"  />
+
+            <TextView
+                android:id="@+id/offline_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="Запись подкаста производится по субботам, в 23:00мск."
+                android:textColor="@color/material_light_black"
+                android:textSize="14sp"/>
 
         </FrameLayout>
 

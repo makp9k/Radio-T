@@ -5,7 +5,9 @@ import android.os.Build
 import com.kvazars.radiot.data.gitter.GitterClientFacade
 import com.kvazars.radiot.data.news.NewsClient
 import com.kvazars.radiot.data.player.ExoStreamPlayer
+import com.kvazars.radiot.data.stream.HttpStreamInfoProvider
 import com.kvazars.radiot.domain.player.PodcastStreamPlayer
+import com.kvazars.radiot.domain.stream.StreamInfoProvider
 import dagger.Module
 import dagger.Provides
 import okhttp3.*
@@ -55,5 +57,11 @@ class DataModule(private val context: Context, httpCacheDir: File) {
     @Provides
     fun provideStreamPlayer(): PodcastStreamPlayer {
         return ExoStreamPlayer(context, regularHttpClient)
+    }
+
+    @Singleton
+    @Provides
+    fun provideStreamInfoProvider(): StreamInfoProvider {
+        return HttpStreamInfoProvider(regularHttpClient)
     }
 }

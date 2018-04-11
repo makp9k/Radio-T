@@ -3,6 +3,7 @@ package com.kvazars.radiot.ui.stream
 import com.kvazars.radiot.domain.news.NewsInteractor
 import com.kvazars.radiot.domain.news.models.NewsItem
 import com.kvazars.radiot.domain.player.PodcastStreamPlayer
+import com.kvazars.radiot.domain.stream.StreamInteractor
 import com.kvazars.radiot.domain.util.Optional
 import com.kvazars.radiot.domain.util.addTo
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,8 +17,10 @@ import org.threeten.bp.format.DateTimeFormatterBuilder
 class StreamScreenPresenter(
     private val view: StreamScreenContract.View,
     newsInteractor: NewsInteractor,
+    streamInteractor: StreamInteractor,
     private val streamPlayer: PodcastStreamPlayer
 ) : StreamScreenContract.Presenter {
+
     //region CONSTANTS -----------------------------------------------------------------------------
 
     //endregion
@@ -39,32 +42,15 @@ class StreamScreenPresenter(
         newsInteractor
             .activeNews
             .doOnNext { activeNews = it }
-            .map {
-                val newsItem = it.value
-                if (newsItem != null) {
-                    Optional(
-                        StreamScreenContract.View.NewsViewModel(
-                            newsItem.title,
-                            "${newsItem.domain} - ${newsItem.time.format(dateFormat)}",
-                            newsItem.snippet,
-                            newsItem.link,
-                            newsItem.pictureUrl
-                        )
-                    )
-                } else {
-                    Optional.empty
-                }
-            }
+            .map(::mapNewsViewModel)
+            .flatMap ({ streamInteractor.getStreamState().toObservable() }, { news, streamState -> Pair(news, streamState) })
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError { view.showReconnectSnackbar() }
             .retryWhen { it.flatMap { reconnectSubject } }
             .subscribe(
                 {
-                    if (it.value != null) {
-                        view.setActiveNews(it.value)
-                    } else {
-                        view.setActiveNews(null)
-                    }
+                    val (news, streamState) = it
+                    handleNewsStatus(news, streamState)
                 },
                 { it.printStackTrace() }
             )
@@ -81,6 +67,14 @@ class StreamScreenPresenter(
                 }
             )
             .addTo(disposableBag)
+    }
+
+    //endregion
+
+    //region LOCAL METHODS -------------------------------------------------------------------------
+
+    override fun onDestroy() {
+        disposableBag.dispose()
     }
 
     private fun handlePlayerStatus(status: PodcastStreamPlayer.Status) {
@@ -100,12 +94,40 @@ class StreamScreenPresenter(
         }
     }
 
-    //endregion
+    private fun mapNewsViewModel(news:Optional<NewsItem>): Optional<StreamScreenContract.View.NewsViewModel> {
+        val newsItem = news.value
+        return if (newsItem != null) {
+            Optional(
+                StreamScreenContract.View.NewsViewModel(
+                    newsItem.title,
+                    "${newsItem.domain} - ${newsItem.time.format(dateFormat)}",
+                    newsItem.snippet,
+                    newsItem.link,
+                    newsItem.pictureUrl
+                )
+            )
+        } else {
+            Optional.empty
+        }
+    }
 
-    //region LOCAL METHODS -------------------------------------------------------------------------
-
-    override fun onDestroy() {
-        disposableBag.dispose()
+    private fun handleNewsStatus(
+        news: Optional<StreamScreenContract.View.NewsViewModel>,
+        streamState: StreamInteractor.StreamState
+    ) {
+        when (streamState) {
+            is StreamInteractor.StreamState.Live -> {
+                val activeNews = news.value
+                if (activeNews != null) {
+                    view.setActiveNews(activeNews)
+                } else {
+                    view.showNoActiveNewsCard()
+                }
+            }
+            is StreamInteractor.StreamState.Offline -> {
+                view.showOfflineCard(streamState.airDate)
+            }
+        }
     }
 
     override fun onPlaybackToggleClick() {
@@ -117,7 +139,7 @@ class StreamScreenPresenter(
     }
 
     override fun onInfoClick() {
-
+        view.openUrl("https://radio-t.com/info/")
     }
 
     override fun onSettingsClick() {
@@ -125,7 +147,7 @@ class StreamScreenPresenter(
     }
 
     override fun onActiveNewsClick() {
-        activeNews.value?.link?.let { view.openNewsUrl(it) }
+        activeNews.value?.link?.let { view.openUrl(it) }
     }
 
     var reconnectSubject = PublishSubject.create<Boolean>()!!

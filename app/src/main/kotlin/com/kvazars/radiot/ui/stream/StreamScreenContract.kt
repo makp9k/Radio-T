@@ -1,5 +1,7 @@
 package com.kvazars.radiot.ui.stream
 
+import org.threeten.bp.ZonedDateTime
+
 /**
  * Created by Leo on 08.04.2017.
  */
@@ -19,9 +21,15 @@ interface StreamScreenContract {
             val pictureUrl: String?
         )
 
-        fun setActiveNews(news: NewsViewModel?)
+        fun setActiveNews(news: NewsViewModel)
 
-        fun openNewsUrl(url: String)
+        fun showActiveNewsCard()
+
+        fun showNoActiveNewsCard()
+
+        fun showOfflineCard(airDate: ZonedDateTime)
+
+        fun openUrl(url: String)
 
         fun showReconnectSnackbar()
     }

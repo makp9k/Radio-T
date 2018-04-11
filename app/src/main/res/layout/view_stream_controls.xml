@@ -30,7 +30,7 @@
         android:clickable="true"
         android:gravity="center"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_pause"
+        android:src="@drawable/ic_play"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:backgroundTint="@color/accent" />

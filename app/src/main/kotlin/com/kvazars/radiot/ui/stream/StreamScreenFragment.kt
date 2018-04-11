@@ -15,21 +15,20 @@ import com.kvazars.radiot.RadioTApplication
 import com.kvazars.radiot.ui.shared.NewsItemView
 import kotlinx.android.synthetic.main.fragment_stream.*
 import kotlinx.android.synthetic.main.view_stream_controls.*
-import java.text.SimpleDateFormat
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.format.DateTimeFormatter
 
 
 /**
  * Created by Leo on 12.04.2017.
  */
 class StreamScreenFragment : Fragment(), StreamScreenContract.View {
+
     //region CONSTANTS -----------------------------------------------------------------------------
 
     //endregion
 
     //region CLASS VARIABLES -----------------------------------------------------------------------
-
-    private val dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG)
-    private val timeFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)
 
     private lateinit var presenter: StreamScreenPresenter
 
@@ -52,6 +51,7 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
         presenter = StreamScreenPresenter(
             this,
             appComponent.getNewsInteractor(),
+            appComponent.getStreamInteractor(),
             appComponent.streamPlayer()
         )
 
@@ -87,23 +87,39 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
         }
     }
 
-    override fun setActiveNews(news: StreamScreenContract.View.NewsViewModel?) {
-        if (news != null) {
-            active_news_card.visibility = View.VISIBLE
-            empty_news_card.visibility = View.GONE
-            active_news_card.bindWithModel(
-                NewsItemView.NewsViewModel(
-                    news.title,
-                    news.footer,
-                    news.details,
-                    news.link,
-                    news.pictureUrl
-                )
+    override fun setActiveNews(news: StreamScreenContract.View.NewsViewModel) {
+        active_news_card.bindWithModel(
+            NewsItemView.NewsViewModel(
+                news.title,
+                news.footer,
+                news.details,
+                news.link,
+                news.pictureUrl
             )
-        } else {
-            active_news_card.visibility = View.GONE
-            empty_news_card.visibility = View.VISIBLE
-        }
+        )
+    }
+
+    override fun showActiveNewsCard() {
+        hideAllCards()
+        active_news_card.visibility = View.VISIBLE
+    }
+
+    override fun showNoActiveNewsCard() {
+        hideAllCards()
+        no_active_news_card.visibility = View.VISIBLE
+    }
+
+    override fun showOfflineCard(airDate: ZonedDateTime) {
+        hideAllCards()
+        offline_card.visibility = View.VISIBLE
+        offline_card.setText("Запись подкаста производится по субботам, в 23:00мск.\n\n${airDate.format(
+            DateTimeFormatter.ISO_OFFSET_DATE_TIME)}")
+    }
+
+    private fun hideAllCards() {
+        active_news_card.visibility = View.GONE
+        no_active_news_card.visibility = View.GONE
+        offline_card.visibility = View.GONE
     }
 
     override fun showReconnectSnackbar() {
@@ -115,7 +131,7 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
         }
     }
 
-    override fun openNewsUrl(url: String) {
+    override fun openUrl(url: String) {
         context?.let {
             CustomTabsIntent.Builder()
                 .setToolbarColor(ContextCompat.getColor(it, R.color.primary))

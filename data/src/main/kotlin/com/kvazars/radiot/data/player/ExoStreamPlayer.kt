@@ -62,7 +62,7 @@ class ExoStreamPlayer(
 
         val audioUri = Uri.parse(streamUrl)
         val dataSourceFactory = OkHttpDataSourceFactory(
-            OkHttpClient(),
+            okHttpClient,
             "Radio-T Android App",
             null
         )
