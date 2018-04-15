@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <bitmap
+            android:src="@drawable/bgr"
+            android:tileMode="repeat"
+            android:alpha="0.25" />
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <gradient android:type="radial"
+                android:startColor="#FFFFFFFF"
+                android:centerColor="#88FFFFFF"
+                android:endColor="#004f7383"
+                android:centerY="50%"
+                android:gradientRadius="110%"/>
+        </shape>
+    </item>
+</layer-list>

@@ -16,7 +16,6 @@ import com.kvazars.radiot.ui.shared.NewsItemView
 import kotlinx.android.synthetic.main.fragment_stream.*
 import kotlinx.android.synthetic.main.view_stream_controls.*
 import org.threeten.bp.ZonedDateTime
-import org.threeten.bp.format.DateTimeFormatter
 
 
 /**
@@ -112,8 +111,6 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
     override fun showOfflineCard(airDate: ZonedDateTime) {
         hideAllCards()
         offline_card.visibility = View.VISIBLE
-        offline_card.setText("Запись подкаста производится по субботам, в 23:00мск.\n\n${airDate.format(
-            DateTimeFormatter.ISO_OFFSET_DATE_TIME)}")
     }
 
     private fun hideAllCards() {
