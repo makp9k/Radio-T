@@ -27,14 +27,20 @@ class StreamInteractor(
                     StreamState.Live()
                 } else {
                     StreamState.Offline(
-                        ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
-                            .with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
-                            .truncatedTo(ChronoUnit.DAYS)
-                            .withHour(23)
+                        getNextAirDate()
                     )
                 }
             }
             .subscribeOn(scheduler)
+    }
+
+    fun getNextAirDate(): ZonedDateTime {
+        return ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
+            .with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
+            .truncatedTo(ChronoUnit.DAYS)
+            .withHour(23)
+//        return ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
+//            .plusSeconds(10)
     }
 
 }

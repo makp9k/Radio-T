@@ -9,6 +9,8 @@ import com.kvazars.radiot.di.AppComponent
 import com.kvazars.radiot.di.DaggerAppComponent
 import com.kvazars.radiot.domain.player.PodcastStreamPlayer
 import com.kvazars.radiot.services.BackgroundPlayerService
+import com.kvazars.radiot.services.NotificationService
+import com.kvazars.radiot.ui.main.MainScreenActivity
 import io.reactivex.plugins.RxJavaPlugins
 import java.io.File
 
@@ -57,6 +59,8 @@ class RadioTApplication : Application() {
                 },
                 { it.printStackTrace() }
             )
+
+        NotificationService.setupAlarm(this)
     }
 
     private fun startBackgroundPlayerService() {
@@ -77,6 +81,14 @@ class RadioTApplication : Application() {
     companion object {
         fun getAppComponent(context: Context): AppComponent {
             return (context.applicationContext as RadioTApplication).appComponent
+        }
+
+        fun getAppLaunchIntent(context: Context): Intent {
+            val intent = Intent(context, MainScreenActivity::class.java)
+            intent.action = Intent.ACTION_MAIN
+            intent.addCategory(Intent.CATEGORY_LAUNCHER)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            return intent
         }
     }
 
