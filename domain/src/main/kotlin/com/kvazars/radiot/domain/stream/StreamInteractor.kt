@@ -35,12 +35,25 @@ class StreamInteractor(
     }
 
     fun getNextAirDate(): ZonedDateTime {
-        return ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
-            .with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
+        val closestAirDate = ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
             .truncatedTo(ChronoUnit.DAYS)
-            .withHour(23)
-//        return ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
-//            .plusSeconds(10)
+            .withHour(9)
+            .with(TemporalAdjusters.nextOrSame(DayOfWeek.WEDNESDAY))
+
+        return if (closestAirDate.isBefore(ZonedDateTime.now())) {
+            closestAirDate.plusWeeks(1)
+        } else {
+            closestAirDate
+        }
+//        val closestAirDate = ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
+//            .truncatedTo(ChronoUnit.DAYS)
+//            .withHour(23)
+//
+//        return if (closestAirDate.isBefore(ZonedDateTime.now())) {
+//            closestAirDate.plusDays(1)
+//        } else {
+//            closestAirDate
+//        }
     }
 
 }
