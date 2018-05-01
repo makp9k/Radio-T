@@ -11,7 +11,7 @@ import android.view.ViewTreeObserver
 import com.kvazars.radiot.R
 import com.kvazars.radiot.RadioTApplication
 import com.kvazars.radiot.ui.chat.views.MarkdownSpannableBuilder
-import kotlinx.android.synthetic.main.fragment_chat.*
+import kotlinx.android.synthetic.main.screen_chat.*
 
 
 /**
@@ -40,7 +40,7 @@ class ChatScreenFragment : Fragment(), ChatScreenContract.View {
     //region LIFE CYCLE ----------------------------------------------------------------------------
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        return inflater.inflate(R.layout.screen_chat, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

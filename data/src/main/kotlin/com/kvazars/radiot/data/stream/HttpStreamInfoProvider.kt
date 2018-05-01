@@ -8,10 +8,13 @@ import okhttp3.Request
 class HttpStreamInfoProvider(private val httpClient: OkHttpClient) : StreamInfoProvider {
     override fun isOnAir(): Single<Boolean> {
         return Single.defer {
-            val request = Request.Builder().url("http://stream.radio-t.com/").head().build()
+            val request = Request.Builder()
+                .url("http://stream.radio-t.com/")
+                .head()
+                .build()
             val call = httpClient.newCall(request)
             val response = call.execute()
-            Single.just(response.isSuccessful)
+            Single.just(response.code() != 404)
         }.onErrorReturn { false }
     }
 }

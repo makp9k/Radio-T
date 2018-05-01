@@ -37,6 +37,7 @@ class RadioTApplication : Application() {
 
         appComponent = DaggerAppComponent
             .builder()
+            .application(this)
             .dataModule(DataModule(this, File(cacheDir, "http-cache")))
             .build()
 

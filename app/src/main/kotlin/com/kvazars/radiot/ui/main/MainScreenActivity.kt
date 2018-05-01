@@ -8,7 +8,7 @@ import com.kvazars.radiot.R
 import com.kvazars.radiot.ui.chat.ChatScreenFragment
 import com.kvazars.radiot.ui.news.NewsScreenFragment
 import com.kvazars.radiot.ui.stream.StreamScreenFragment
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.screen_main.*
 import kotlin.properties.Delegates
 
 /**
@@ -39,7 +39,7 @@ class MainScreenActivity : AppCompatActivity(), MainScreenContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.screen_main)
 
         if (savedInstanceState == null) {
             addAllFragments()
@@ -49,31 +49,6 @@ class MainScreenActivity : AppCompatActivity(), MainScreenContract.View {
         initBottomNavigation()
 
         MainScreenPresenter(this)
-    }
-
-    private fun addAllFragments() {
-        fragmentStream = StreamScreenFragment()
-        fragmentNews = NewsScreenFragment()
-        fragmentChat = ChatScreenFragment()
-
-        currentFragment = fragmentStream
-
-        supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragmentStream, STREAM_FRAGMENT_TAG)
-                .add(R.id.fragment_container, fragmentNews, NEWS_FRAGMENT_TAG)
-                .add(R.id.fragment_container, fragmentChat, CHAT_FRAGMENT_TAG)
-                .hide(fragmentNews)
-                .hide(fragmentChat)
-                .commit()
-    }
-
-    private fun findAllFragments() {
-        fragmentStream = supportFragmentManager.findFragmentByTag(STREAM_FRAGMENT_TAG)
-        fragmentNews = supportFragmentManager.findFragmentByTag(NEWS_FRAGMENT_TAG)
-        fragmentChat = supportFragmentManager.findFragmentByTag(CHAT_FRAGMENT_TAG)
-        if (!fragmentStream.isHidden) currentFragment = fragmentStream
-        else if (!fragmentNews.isHidden) currentFragment = fragmentNews
-        else if (!fragmentChat.isHidden) currentFragment = fragmentChat
     }
 
     //endregion
@@ -93,6 +68,31 @@ class MainScreenActivity : AppCompatActivity(), MainScreenContract.View {
             }
             true
         }
+    }
+
+    private fun addAllFragments() {
+        fragmentStream = StreamScreenFragment()
+        fragmentNews = NewsScreenFragment()
+        fragmentChat = ChatScreenFragment()
+
+        currentFragment = fragmentStream
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, fragmentStream, STREAM_FRAGMENT_TAG)
+            .add(R.id.fragment_container, fragmentNews, NEWS_FRAGMENT_TAG)
+            .add(R.id.fragment_container, fragmentChat, CHAT_FRAGMENT_TAG)
+            .hide(fragmentNews)
+            .hide(fragmentChat)
+            .commit()
+    }
+
+    private fun findAllFragments() {
+        fragmentStream = supportFragmentManager.findFragmentByTag(STREAM_FRAGMENT_TAG)
+        fragmentNews = supportFragmentManager.findFragmentByTag(NEWS_FRAGMENT_TAG)
+        fragmentChat = supportFragmentManager.findFragmentByTag(CHAT_FRAGMENT_TAG)
+        if (!fragmentStream.isHidden) currentFragment = fragmentStream
+        else if (!fragmentNews.isHidden) currentFragment = fragmentNews
+        else if (!fragmentChat.isHidden) currentFragment = fragmentChat
     }
 
     private fun showFragment(fragment: Fragment) {

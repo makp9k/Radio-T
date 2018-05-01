@@ -5,7 +5,7 @@ buildscript {
     ext.minSdk_version = 16
     ext.targetSdk_version = ext.compileSdk_version
 
-    ext.kotlin_version = '1.2.31'
+    ext.kotlin_version = '1.2.41'
     ext.rxJava_version = '2.1.1'
     ext.supportLibrary_version = '27.1.1'
     ext.dagger_version = '2.14.1'

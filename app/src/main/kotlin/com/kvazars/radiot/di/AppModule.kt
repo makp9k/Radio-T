@@ -1,9 +1,13 @@
 package com.kvazars.radiot.di
 
+import android.app.Application
+import android.preference.PreferenceManager
 import com.kvazars.radiot.data.gitter.GitterClientFacade
 import com.kvazars.radiot.data.news.NewsClient
+import com.kvazars.radiot.data.preferences.PersistentApplicationPreferences
 import com.kvazars.radiot.domain.chat.ChatInteractor
 import com.kvazars.radiot.domain.news.NewsInteractor
+import com.kvazars.radiot.domain.preferences.ApplicationPreferences
 import com.kvazars.radiot.domain.stream.StreamInfoProvider
 import com.kvazars.radiot.domain.stream.StreamInteractor
 import dagger.Module
@@ -62,6 +66,17 @@ object AppModule {
     ): StreamInteractor {
         return StreamInteractor(
             httpStreamInfoProvider
+        )
+    }
+
+    @Singleton
+    @Provides
+    @JvmStatic
+    fun provideApplicationPreferences(
+        application: Application
+    ): ApplicationPreferences {
+        return PersistentApplicationPreferences(
+            PreferenceManager.getDefaultSharedPreferences(application)
         )
     }
 

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.kvazars.radiot.R
 import com.kvazars.radiot.RadioTApplication
+import com.kvazars.radiot.ui.settings.SettingsScreenActivity
 import com.kvazars.radiot.ui.shared.NewsItemView
 import kotlinx.android.synthetic.main.fragment_stream.*
 import kotlinx.android.synthetic.main.view_stream_controls.*
@@ -54,6 +55,7 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
             appComponent.streamPlayer()
         )
 
+        btn_settings.setOnClickListener { context?.let { startActivity(SettingsScreenActivity.createLaunchIntent(it)) } }
         btn_toggle_playback.setOnClickListener { presenter.onPlaybackToggleClick() }
         btn_info.setOnClickListener { presenter.onInfoClick() }
         active_news_card.setOnClickListener { presenter.onActiveNewsClick() }
