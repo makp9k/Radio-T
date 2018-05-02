@@ -1,5 +1,7 @@
 package com.kvazars.radiot.domain.preferences
 
+typealias Observer<T> = (preference: Preference<T>, value: T) -> Unit
+
 interface Preference<T> {
     fun get(): T
 
@@ -8,10 +10,6 @@ interface Preference<T> {
     fun observe(observer: Observer<T>): Connection<T>
 
     fun disconnect(observer: Observer<T>)
-
-    interface Observer<T> {
-        fun call(preference: Preference<T>, value: T)
-    }
 
     class Connection<T>(private val preference: Preference<T>, private val observer: Observer<T>) {
         fun dispose() {

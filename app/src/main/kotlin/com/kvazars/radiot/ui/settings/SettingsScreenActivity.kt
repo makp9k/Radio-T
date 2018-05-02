@@ -2,12 +2,13 @@ package com.kvazars.radiot.ui.settings
 
 import android.content.Context
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import android.widget.CompoundButton
 import com.kvazars.radiot.R
 import com.kvazars.radiot.RadioTApplication
+import com.kvazars.radiot.databinding.ScreenSettingsBinding
 import kotlinx.android.synthetic.main.screen_settings.*
 
 /**
@@ -38,23 +39,21 @@ class SettingsScreenActivity : AppCompatActivity(), SettingsScreenContract.View 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.screen_settings)
+        val appComponent = RadioTApplication.getAppComponent(this)
+        presenter = SettingsScreenPresenter(appComponent.appPreferences())
+
+        val binding = DataBindingUtil.setContentView<ScreenSettingsBinding>(this, R.layout.screen_settings)
+        binding.model = presenter
 
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
         }
+    }
 
-        val appComponent = RadioTApplication.getAppComponent(this)
-        presenter = SettingsScreenPresenter(this, appComponent.appPreferences())
-
-        notification_switch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
-            presenter.onNotificationsEnabledChanged(isChecked)
-        })
-
-        tracking_switch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
-            presenter.onTrackingEnabledChecked(isChecked)
-        })
+    override fun onDestroy() {
+        presenter.dispose()
+        super.onDestroy()
     }
 
     //endregion
@@ -67,14 +66,6 @@ class SettingsScreenActivity : AppCompatActivity(), SettingsScreenContract.View 
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun setNotificationsEnabledSwitchChecked(checked: Boolean) {
-        notification_switch.isChecked = checked
-    }
-
-    override fun setTrackingEnabledSwitchChecked(checked: Boolean) {
-        tracking_switch.isChecked = checked
     }
 
     //endregion

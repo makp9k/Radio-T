@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 open class BasePreference<T>(defaultValue: T) : Preference<T> {
 
-    private val observers = CopyOnWriteArraySet<Preference.Observer<T>>()
+    private val observers = CopyOnWriteArraySet<Observer<T>>()
 
     protected val value = AtomicReference<T>(defaultValue)
 
@@ -21,17 +21,17 @@ open class BasePreference<T>(defaultValue: T) : Preference<T> {
         }
     }
 
-    override fun observe(observer: Preference.Observer<T>): Preference.Connection<T> {
+    override fun observe(observer: Observer<T>): Preference.Connection<T> {
         observers += observer
-        observer.call(this, get())
+        observer(this, get())
         return Preference.Connection(this, observer)
     }
 
-    override fun disconnect(observer: Preference.Observer<T>) {
+    override fun disconnect(observer: Observer<T>) {
         observers -= observer
     }
 
     private fun notifyObservers(value: T) {
-        observers.forEach { it.call(this, value) }
+        observers.forEach { it(this, value) }
     }
 }

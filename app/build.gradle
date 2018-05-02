@@ -35,6 +35,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 kapt {
@@ -75,4 +79,6 @@ dependencies {
 
     implementation project(":domain")
     implementation project(":data")
+
+    kapt "com.android.databinding:compiler:3.2.0-alpha10"
 }
