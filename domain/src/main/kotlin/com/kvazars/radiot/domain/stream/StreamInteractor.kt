@@ -37,23 +37,14 @@ class StreamInteractor(
     fun getNextAirDate(): ZonedDateTime {
         val closestAirDate = ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
             .truncatedTo(ChronoUnit.DAYS)
-            .withHour(9)
-            .with(TemporalAdjusters.nextOrSame(DayOfWeek.WEDNESDAY))
+            .withHour(23)
+            .with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
 
         return if (closestAirDate.isBefore(ZonedDateTime.now())) {
             closestAirDate.plusWeeks(1)
         } else {
             closestAirDate
         }
-//        val closestAirDate = ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
-//            .truncatedTo(ChronoUnit.DAYS)
-//            .withHour(23)
-//
-//        return if (closestAirDate.isBefore(ZonedDateTime.now())) {
-//            closestAirDate.plusDays(1)
-//        } else {
-//            closestAirDate
-//        }
     }
 
 }

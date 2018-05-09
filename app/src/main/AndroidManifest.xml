@@ -14,6 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="${HOCKEYAPP_APP_ID}" />
+
         <activity android:name=".ui.main.MainScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

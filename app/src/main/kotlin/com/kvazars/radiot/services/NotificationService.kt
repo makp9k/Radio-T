@@ -42,6 +42,11 @@ class NotificationService {
         override fun onReceive(context: Context, intent: Intent?) {
             NotificationService.setupAlarm(context)
 
+            val appPreferences = RadioTApplication.getAppComponent(context).appPreferences()
+            if (!appPreferences.notificationsEnabled.get()) {
+                return
+            }
+
             val notification = NotificationCompat.Builder(context, NotificationUtils.NotificationChannelInfo.PRIMARY.id)
                 .setContentTitle("Radio-T Alarm")
                 .setContentText("Show is about to start")
@@ -50,6 +55,7 @@ class NotificationService {
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build()
+
             NotificationUtils.notify(context, 1, notification)
         }
 

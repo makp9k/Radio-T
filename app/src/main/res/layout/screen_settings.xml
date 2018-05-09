@@ -23,37 +23,37 @@
             android:minHeight="?attr/actionBarSize"
             app:title="Settings" />
 
-        <!--<com.kvazars.radiot.ui.settings.views.SettingsSwitchView-->
-        <!--android:id="@+id/notification_switch"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:isChecked="@={model.notificationsEnabled}"-->
-        <!--app:ssw_description="Notifies when the show is about to start"-->
-        <!--app:ssw_title="On Air notifications" />-->
-
-        <!--<com.kvazars.radiot.ui.settings.views.SettingsSwitchView-->
-        <!--android:id="@+id/tracking_switch"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:isChecked="@={model.trackingEnabled}"-->
-        <!--app:ssw_description="Sends app usage statistics"-->
-        <!--app:ssw_title="Tracking" />-->
-
-        <android.support.v7.widget.SwitchCompat
+        <com.kvazars.radiot.ui.settings.views.SettingsSwitchView
+            android:id="@+id/notification_switch"
             android:layout_width="match_parent"
-            android:textColor="@color/primary_text"
-            android:padding="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
-            android:text="On Air notifications"
-            android:checked="@={model.notificationsEnabled}" />
+            app:checked="@={model.notificationsEnabled}"
+            app:ssw_description="Notifies when the show is about to start"
+            app:ssw_title="On Air notifications" />
 
-        <android.support.v7.widget.SwitchCompat
-            android:textColor="@color/primary_text"
+        <com.kvazars.radiot.ui.settings.views.SettingsSwitchView
+            android:id="@+id/tracking_switch"
             android:layout_width="match_parent"
-            android:padding="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
-            android:text="Tracking"
-            android:checked="@={model.trackingEnabled}" />
+            app:checked="@={model.trackingEnabled}"
+            app:ssw_description="Sends app usage statistics"
+            app:ssw_title="Tracking" />
+
+        <!--<android.support.v7.widget.SwitchCompat-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:textColor="@color/primary_text"-->
+        <!--android:padding="@dimen/activity_horizontal_margin"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="On Air notifications"-->
+        <!--android:checked="@={model.notificationsEnabled}" />-->
+
+        <!--<android.support.v7.widget.SwitchCompat-->
+        <!--android:textColor="@color/primary_text"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:padding="@dimen/activity_horizontal_margin"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Tracking"-->
+        <!--android:checked="@={model.trackingEnabled}" />-->
 
     </LinearLayout>
 </layout>

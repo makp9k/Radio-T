@@ -1,6 +1,10 @@
 package com.kvazars.radiot.ui.settings.views
 
 import android.content.Context
+import android.databinding.BindingAdapter
+import android.databinding.InverseBindingListener
+import android.databinding.InverseBindingMethod
+import android.databinding.InverseBindingMethods
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.SwitchCompat
 import android.util.AttributeSet
@@ -10,9 +14,23 @@ import android.widget.CompoundButton
 import android.widget.TextView
 import com.kvazars.radiot.R
 
+@InverseBindingMethods(
+    InverseBindingMethod(type = SettingsSwitchView::class, attribute = "checked")
+)
 class SettingsSwitchView : ConstraintLayout {
 
-    constructor(context: Context?): super(context)
+    companion object {
+        @BindingAdapter(value = ["checkedAttrChanged"], requireAll = false)
+        fun setListener(view: SettingsSwitchView, bindingListener: InverseBindingListener) {
+            view.setOnCheckedChangeListener(
+                CompoundButton.OnCheckedChangeListener { _, _ ->
+                    bindingListener.onChange()
+                }
+            )
+        }
+    }
+
+    constructor(context: Context?) : super(context)
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
         initWithAttrs(attrs)
@@ -23,7 +41,7 @@ class SettingsSwitchView : ConstraintLayout {
     }
 
     private val switch: SwitchCompat
-    var isChecked: Boolean
+    var checked: Boolean
         get() = switch.isChecked
         set(value) {
             switch.isChecked = value

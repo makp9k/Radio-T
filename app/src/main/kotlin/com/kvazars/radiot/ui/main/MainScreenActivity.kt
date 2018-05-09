@@ -3,8 +3,8 @@ package com.kvazars.radiot.ui.main
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
-import android.support.v7.app.AppCompatActivity
 import com.kvazars.radiot.R
+import com.kvazars.radiot.ui.base.BaseActivity
 import com.kvazars.radiot.ui.chat.ChatScreenFragment
 import com.kvazars.radiot.ui.news.NewsScreenFragment
 import com.kvazars.radiot.ui.stream.StreamScreenFragment
@@ -14,7 +14,7 @@ import kotlin.properties.Delegates
 /**
  * Created by Leo on 08.04.2017.
  */
-class MainScreenActivity : AppCompatActivity(), MainScreenContract.View {
+class MainScreenActivity : BaseActivity(), MainScreenContract.View {
     //region CONSTANTS -----------------------------------------------------------------------------
 
     companion object {
