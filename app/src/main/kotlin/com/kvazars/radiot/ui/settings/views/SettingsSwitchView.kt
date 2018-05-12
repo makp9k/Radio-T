@@ -20,6 +20,7 @@ import com.kvazars.radiot.R
 class SettingsSwitchView : ConstraintLayout {
 
     companion object {
+        @JvmStatic
         @BindingAdapter(value = ["checkedAttrChanged"], requireAll = false)
         fun setListener(view: SettingsSwitchView, bindingListener: InverseBindingListener) {
             view.setOnCheckedChangeListener(
