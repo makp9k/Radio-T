@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="150dp"
         android:layout_weight="4"
-        android:background="@drawable/bgrnd"
+        android:background="@drawable/radio_t_pattern_background"
         android:orientation="vertical"
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin">
@@ -47,34 +47,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:elevation="4dp"
-        app:behavior_peekHeight="150dp"
+        app:behavior_peekHeight="@dimen/screen_stream_card_peek_height"
         app:layout_anchorGravity="bottom|end"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/screen_stream_card_peek_height">
 
             <com.kvazars.radiot.ui.shared.NewsItemView
                 android:id="@+id/active_news_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="150dp"
+                android:minHeight="@dimen/screen_stream_card_peek_height"
                 android:visibility="gone" />
 
             <TextView
                 android:id="@+id/no_active_news_card"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_height="@dimen/screen_stream_card_peek_height"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="32dp"
                 android:drawableTop="@drawable/ic_all_inclusive"
-                android:drawablePadding="16dp"
                 android:gravity="center"
-                android:minHeight="150dp"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:text="No active news"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="@string/stream_no_active_news"
                 android:textColor="@color/material_light_black"
                 android:textSize="18sp"
                 android:visibility="gone" />
@@ -82,13 +81,13 @@
             <TextView
                 android:id="@+id/offline_card"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/screen_stream_card_peek_height"
                 android:gravity="center"
-                android:minHeight="150dp"
                 android:padding="24dp"
-                android:text="Запись подкаста производится по субботам\nв 23:00 мск."
+                android:lineSpacingExtra="8dp"
+                android:text="@string/stream_air_date"
                 android:textColor="@color/material_light_black"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
         </FrameLayout>
 

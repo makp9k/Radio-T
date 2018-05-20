@@ -1,0 +1,18 @@
+<resources>
+    <string name="menu_stream">Эфир</string>
+    <string name="menu_news">Новости</string>
+    <string name="menu_chat">Чат</string>
+    <string name="settings">Настройки</string>
+    <string name="settings_on_air_notifications_title">Уведомление об эфире</string>
+    <string name="settings_on_air_notifications_desc">По субботам в 23:00 (мск)</string>
+    <string name="settings_rate_app_title">Оцените это приложение</string>
+    <string name="settings_rate_app_desc">Если нравится это приложение, пожалуйста, оцените его в Google Play</string>
+    <string name="settings_sources_title">Исходники</string>
+    <string name="settings_sources_desc">Репозиторий Github</string>
+    <string name="stream_no_active_news">Тема не выбрана</string>
+    <string name="stream_air_date">В эфире каждую субботу\nв 23:00 по Москве</string>
+    <string name="internet_connection_error">Проблема с интернет соединением</string>
+    <string name="reconnect">Повторить</string>
+    <string name="stream_playback_error">Ошибка воспроизведения</string>
+    <string name="app_version">Версия приложения</string>
+</resources>

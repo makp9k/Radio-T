@@ -107,6 +107,14 @@ class MainScreenActivity : BaseActivity(), MainScreenContract.View {
         currentFragment = fragment
     }
 
+    override fun onBackPressed() {
+        if (bottom_navigation_menu.selectedItemId != R.id.action_stream) {
+            bottom_navigation_menu.selectedItemId = R.id.action_stream
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     //endregion
 
     //region INNER CLASSES -------------------------------------------------------------------------

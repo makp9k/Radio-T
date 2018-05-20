@@ -11,12 +11,12 @@ android {
         minSdkVersion 16
         targetSdkVersion rootProject.ext.targetSdk_version
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         manifestPlaceholders = [HOCKEYAPP_APP_ID: "1dc216c2fc0f4a93a749e143135a0843"]
 
-        resConfigs 'en'
+        resConfigs 'en', 'ru'
     }
 
     buildTypes {

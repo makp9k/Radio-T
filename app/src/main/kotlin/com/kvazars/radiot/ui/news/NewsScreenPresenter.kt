@@ -5,6 +5,7 @@ import com.kvazars.radiot.domain.util.addTo
 import com.kvazars.radiot.ui.shared.NewsItemView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatterBuilder
 
 /**
@@ -37,7 +38,7 @@ class NewsScreenPresenter(
                             .map {
                                 NewsItemView.NewsViewModel(
                                         it.title,
-                                    "${it.domain} - ${it.time.format(dateFormat)}",
+                                    "${it.domain} - ${it.time.withZoneSameInstant(ZoneId.systemDefault()).format(dateFormat)}",
                                         it.snippet,
                                         it.link,
                                         it.pictureUrl

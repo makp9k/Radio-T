@@ -1,6 +1,19 @@
 <resources>
     <string name="app_name">Radio-T</string>
-    <string name="menu_online">Online</string>
+    <string name="menu_stream">Stream</string>
     <string name="menu_news">News</string>
     <string name="menu_chat">Chat</string>
+    <string name="settings">Settings</string>
+    <string name="settings_on_air_notifications_title">On Air notifications</string>
+    <string name="settings_on_air_notifications_desc">Weekly notifications saturdays 23:00 (msk)</string>
+    <string name="settings_rate_app_title">Rate this app</string>
+    <string name="settings_rate_app_desc">If you enjoy using this app, would you mind taking a moment to rate it?</string>
+    <string name="settings_sources_title">Source code</string>
+    <string name="settings_sources_desc">Github repository</string>
+    <string name="stream_no_active_news">No active news</string>
+    <string name="stream_air_date">Every saturday at 23:00 (msk).</string>
+    <string name="internet_connection_error">Internet connection error</string>
+    <string name="reconnect">Reconnect</string>
+    <string name="stream_playback_error">Stream playback error occurred</string>
+    <string name="app_version">App version</string>
 </resources>

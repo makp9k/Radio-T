@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <bitmap
-            android:src="@drawable/bgr"
+            android:src="@drawable/radio_t_pattern"
             android:tileMode="repeat"
             android:alpha="0.25" />
     </item>

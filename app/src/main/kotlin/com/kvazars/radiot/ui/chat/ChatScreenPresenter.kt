@@ -5,6 +5,7 @@ import com.kvazars.radiot.domain.chat.models.ChatMessage
 import com.kvazars.radiot.domain.util.addTo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatterBuilder
 import java.util.concurrent.TimeUnit
 
@@ -80,7 +81,7 @@ class ChatScreenPresenter(
         "${chatMessage.user.displayName} @${chatMessage.user.username}",
         view.buildFormattedMessageText(chatMessage.text),
         chatMessage.sent.toInstant().epochSecond,
-        dateFormat.format(chatMessage.sent)
+        chatMessage.sent.withZoneSameInstant(ZoneId.systemDefault()).format(dateFormat)
     )
 
     override fun onDestroy() {

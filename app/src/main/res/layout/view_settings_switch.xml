@@ -9,24 +9,22 @@
 
     <TextView
         android:id="@+id/title"
+        style="@style/SettingsItemTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/primary_text"
-        android:textSize="16sp"
-        android:text="Title"
         app:layout_constraintBottom_toTopOf="@id/description"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Title" />
 
     <TextView
         android:id="@+id/description"
+        style="@style/SettingsItemSubtitle"
         android:layout_width="0dp"
-        android:textSize="14sp"
-        android:textColor="@color/secondary_text"
         android:layout_height="wrap_content"
-        android:text="Description"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title" />
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:text="Description" />
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/switch_btn"

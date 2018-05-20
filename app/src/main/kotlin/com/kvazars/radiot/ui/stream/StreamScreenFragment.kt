@@ -14,7 +14,7 @@ import com.kvazars.radiot.R
 import com.kvazars.radiot.RadioTApplication
 import com.kvazars.radiot.ui.settings.SettingsScreenActivity
 import com.kvazars.radiot.ui.shared.NewsItemView
-import kotlinx.android.synthetic.main.fragment_stream.*
+import kotlinx.android.synthetic.main.screen_stream.*
 import kotlinx.android.synthetic.main.view_stream_controls.*
 import org.threeten.bp.ZonedDateTime
 
@@ -41,7 +41,7 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_stream, container, false)
+        return inflater.inflate(R.layout.screen_stream, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,7 +82,7 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
                 R.drawable.ic_stop
             )
             StreamScreenContract.View.PlaybackState.ERROR -> {
-                Toast.makeText(context, "Stream playback error occurred", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.stream_playback_error, Toast.LENGTH_SHORT).show()
                 btn_toggle_playback.setImageResource(R.drawable.ic_stop)
             }
         }
@@ -124,8 +124,8 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
     override fun showReconnectSnackbar() {
         val v = view
         if (v != null) {
-            Snackbar.make(coord, "Internet connection error", Snackbar.LENGTH_INDEFINITE)
-                .setAction("Reconnect", { presenter.onReconnectClick() })
+            Snackbar.make(coord, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.reconnect, { presenter.onReconnectClick() })
                 .show()
         }
     }

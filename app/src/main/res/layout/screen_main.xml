@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/white"
-        app:elevation="12dp"
         app:itemBackground="?attr/selectableItemBackgroundBorderless"
         app:itemIconTint="@color/bottom_menu_item_color_selector"
         app:itemTextColor="@color/bottom_menu_item_color_selector"

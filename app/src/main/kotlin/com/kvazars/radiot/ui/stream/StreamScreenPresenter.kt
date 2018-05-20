@@ -9,6 +9,7 @@ import com.kvazars.radiot.domain.util.addTo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatterBuilder
 
 /**
@@ -100,7 +101,7 @@ class StreamScreenPresenter(
             Optional(
                 StreamScreenContract.View.NewsViewModel(
                     newsItem.title,
-                    "${newsItem.domain} - ${newsItem.time.format(dateFormat)}",
+                    "${newsItem.domain} - ${newsItem.time.withZoneSameInstant(ZoneId.systemDefault()).format(dateFormat)}",
                     newsItem.snippet,
                     newsItem.link,
                     newsItem.pictureUrl
@@ -120,6 +121,7 @@ class StreamScreenPresenter(
                 val activeNews = news.value
                 if (activeNews != null) {
                     view.setActiveNews(activeNews)
+                    view.showActiveNewsCard()
                 } else {
                     view.showNoActiveNewsCard()
                 }

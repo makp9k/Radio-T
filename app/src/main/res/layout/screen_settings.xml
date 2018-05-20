@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -21,39 +21,84 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            app:title="Settings" />
+            app:title="@string/settings" />
 
         <com.kvazars.radiot.ui.settings.views.SettingsSwitchView
             android:id="@+id/notification_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:checked="@={model.notificationsEnabled}"
-            app:ssw_description="Notifies when the show is about to start"
-            app:ssw_title="On Air notifications" />
+            app:ssw_description="@string/settings_on_air_notifications_desc"
+            app:ssw_title="@string/settings_on_air_notifications_title" />
 
-        <com.kvazars.radiot.ui.settings.views.SettingsSwitchView
-            android:id="@+id/tracking_switch"
+        <View
+            style="@style/SettingsItemDivider"/>
+
+        <LinearLayout
+            android:id="@+id/rate_app_btn"
+            style="@style/SettingsItemLinearLayoutContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:checked="@={model.trackingEnabled}"
-            app:ssw_description="Sends app usage statistics"
-            app:ssw_title="Tracking" />
+            android:layout_height="wrap_content">
 
-        <!--<android.support.v7.widget.SwitchCompat-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:textColor="@color/primary_text"-->
-        <!--android:padding="@dimen/activity_horizontal_margin"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="On Air notifications"-->
-        <!--android:checked="@={model.notificationsEnabled}" />-->
+            <TextView
+                style="@style/SettingsItemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_rate_app_title" />
 
-        <!--<android.support.v7.widget.SwitchCompat-->
-        <!--android:textColor="@color/primary_text"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:padding="@dimen/activity_horizontal_margin"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Tracking"-->
-        <!--android:checked="@={model.trackingEnabled}" />-->
+            <TextView
+                style="@style/SettingsItemSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_rate_app_desc" />
+
+        </LinearLayout>
+
+        <View
+            style="@style/SettingsItemDivider"/>
+
+        <LinearLayout
+            android:id="@+id/source_code_btn"
+            style="@style/SettingsItemLinearLayoutContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/SettingsItemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_sources_title" />
+
+            <TextView
+                style="@style/SettingsItemSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_sources_desc" />
+
+        </LinearLayout>
+
+        <View
+            style="@style/SettingsItemDivider"/>
+
+        <LinearLayout
+            style="@style/SettingsItemLinearLayoutContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/SettingsItemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_version" />
+
+            <TextView
+                android:id="@+id/app_version"
+                style="@style/SettingsItemSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="0.0.1" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </layout>

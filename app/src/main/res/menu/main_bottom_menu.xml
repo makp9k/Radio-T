@@ -5,7 +5,7 @@
         android:id="@+id/action_stream"
         android:enabled="true"
         android:icon="@drawable/ic_online"
-        android:title="@string/menu_online"
+        android:title="@string/menu_stream"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_news"
