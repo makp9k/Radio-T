@@ -76,13 +76,13 @@ class NewsScreenFragment : Fragment(), NewsScreenContract.View, EpoxyRecyclerVie
         }
     }
 
-    override fun openNewsUrl(url: String) {
+    override fun openNewsUrl(link: String) {
         context?.let {
             CustomTabsIntent.Builder()
                     .setToolbarColor(ContextCompat.getColor(it, R.color.primary))
                     .setShowTitle(true)
                     .build()
-                    .launchUrl(context, Uri.parse(url))
+                    .launchUrl(context, Uri.parse(link))
         }
     }
 
