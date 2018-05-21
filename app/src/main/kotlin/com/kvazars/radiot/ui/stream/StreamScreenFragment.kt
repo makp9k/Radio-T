@@ -14,6 +14,7 @@ import com.kvazars.radiot.R
 import com.kvazars.radiot.RadioTApplication
 import com.kvazars.radiot.ui.settings.SettingsScreenActivity
 import com.kvazars.radiot.ui.shared.NewsItemView
+import com.kvazars.radiot.ui.stream.views.RadiotPatternBackgroundDrawable
 import kotlinx.android.synthetic.main.screen_stream.*
 import kotlinx.android.synthetic.main.view_stream_controls.*
 import org.threeten.bp.ZonedDateTime
@@ -54,6 +55,8 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
             appComponent.getStreamInteractor(),
             appComponent.streamPlayer()
         )
+
+        controls_container.background = RadiotPatternBackgroundDrawable(context!!)
 
         btn_settings.setOnClickListener { context?.let { startActivity(SettingsScreenActivity.createLaunchIntent(it)) } }
         btn_toggle_playback.setOnClickListener { presenter.onPlaybackToggleClick() }

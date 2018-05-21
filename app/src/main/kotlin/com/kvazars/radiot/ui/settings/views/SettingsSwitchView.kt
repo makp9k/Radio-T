@@ -52,7 +52,7 @@ class SettingsSwitchView : ConstraintLayout {
         View.inflate(context, R.layout.view_settings_switch, this)
 
         val outValue = TypedValue()
-        context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+        context.theme.resolveAttribute(R.attr.selectableItemBackground, outValue, true)
         setBackgroundResource(outValue.resourceId)
 
         val horizontalPadding = context.resources.getDimensionPixelSize(R.dimen.material_layout_keylines_screen_edge_margin)

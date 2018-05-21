@@ -7,11 +7,11 @@
     android:background="@color/white">
 
     <LinearLayout
+        android:id="@+id/controls_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="150dp"
         android:layout_weight="4"
-        android:background="@drawable/radio_t_pattern_background"
         android:orientation="vertical"
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin">

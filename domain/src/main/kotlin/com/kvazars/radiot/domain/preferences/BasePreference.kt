@@ -16,7 +16,7 @@ open class BasePreference<T>(defaultValue: T) : Preference<T> {
     override fun set(value: T) {
         val oldValue = this.value.get()
         this.value.set(value)
-        if (oldValue !== value) {
+        if (oldValue != value) {
             notifyObservers(value)
         }
     }

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kvazars.radiot.data.DataModule
 import com.kvazars.radiot.di.AppComponent
 import com.kvazars.radiot.di.DaggerAppComponent
@@ -34,6 +35,8 @@ class RadioTApplication : Application() {
     @SuppressWarnings("CheckReturnValue")
     override fun onCreate() {
         super.onCreate()
+
+        AndroidThreeTen.init(this)
 
         appComponent = DaggerAppComponent
             .builder()
