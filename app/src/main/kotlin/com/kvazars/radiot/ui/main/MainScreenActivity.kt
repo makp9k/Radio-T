@@ -1,9 +1,11 @@
 package com.kvazars.radiot.ui.main
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import com.kvazars.radiot.R
+import com.kvazars.radiot.RadioTApplication
 import com.kvazars.radiot.ui.base.BaseActivity
 import com.kvazars.radiot.ui.chat.ChatScreenFragment
 import com.kvazars.radiot.ui.news.NewsScreenFragment
@@ -32,6 +34,8 @@ class MainScreenActivity : BaseActivity(), MainScreenContract.View {
     private lateinit var fragmentChat: Fragment
     private var currentFragment: Fragment by Delegates.notNull()
 
+    private lateinit var presenter: MainScreenPresenter
+
     //endregion
 
     //region LIFE CYCLE ----------------------------------------------------------------------------
@@ -48,12 +52,19 @@ class MainScreenActivity : BaseActivity(), MainScreenContract.View {
         }
         initBottomNavigation()
 
-        MainScreenPresenter(this)
+        val appComponent = RadioTApplication.getAppComponent(this)
+        presenter = MainScreenPresenter(this, appComponent.getNewsInteractor())
     }
 
     //endregion
 
     //region LOCAL METHODS -------------------------------------------------------------------------
+
+    override fun showReconnectSnackbar() {
+        Snackbar.make(fragment_container, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE)
+            .setAction(R.string.reconnect, { presenter.onReconnectClick() })
+            .show()
+    }
 
     private fun initBottomNavigation() {
         bottom_navigation_menu.setOnNavigationItemSelectedListener {
@@ -99,10 +110,10 @@ class MainScreenActivity : BaseActivity(), MainScreenContract.View {
         if (fragment == currentFragment) return
 
         supportFragmentManager.beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .show(fragment)
-                .hide(currentFragment)
-                .commit()
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .show(fragment)
+            .hide(currentFragment)
+            .commit()
 
         currentFragment = fragment
     }

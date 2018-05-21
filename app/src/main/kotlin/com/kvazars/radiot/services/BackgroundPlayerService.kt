@@ -48,6 +48,8 @@ class BackgroundPlayerService : Service() {
                 { it.printStackTrace() }
             )
             .addTo(disposableBag)
+
+        startForeground(NOTIFICATION_ID, createNotification(Optional.empty))
     }
 
     override fun onDestroy() {

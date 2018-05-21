@@ -3,7 +3,6 @@ package com.kvazars.radiot.ui.stream
 import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -122,15 +121,6 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
         active_news_card.visibility = View.GONE
         no_active_news_card.visibility = View.GONE
         offline_card.visibility = View.GONE
-    }
-
-    override fun showReconnectSnackbar() {
-        val v = view
-        if (v != null) {
-            Snackbar.make(coord, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.reconnect, { presenter.onReconnectClick() })
-                .show()
-        }
     }
 
     override fun openUrl(url: String) {

@@ -8,7 +8,6 @@ import com.kvazars.radiot.domain.util.Optional
 import com.kvazars.radiot.domain.util.addTo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatterBuilder
 
@@ -46,8 +45,6 @@ class StreamScreenPresenter(
             .map(::mapNewsViewModel)
             .flatMap ({ streamInteractor.getStreamState().toObservable() }, { news, streamState -> Pair(news, streamState) })
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnError { view.showReconnectSnackbar() }
-            .retryWhen { it.flatMap { reconnectSubject } }
             .subscribe(
                 {
                     val (news, streamState) = it
@@ -150,11 +147,6 @@ class StreamScreenPresenter(
 
     override fun onActiveNewsClick() {
         activeNews.value?.link?.let { view.openUrl(it) }
-    }
-
-    var reconnectSubject = PublishSubject.create<Boolean>()!!
-    override fun onReconnectClick() {
-        reconnectSubject.onNext(true)
     }
 
     //endregion

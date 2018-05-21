@@ -30,8 +30,6 @@ interface StreamScreenContract {
         fun showOfflineCard(airDate: ZonedDateTime)
 
         fun openUrl(url: String)
-
-        fun showReconnectSnackbar()
     }
 
     interface Presenter {
@@ -44,7 +42,5 @@ interface StreamScreenContract {
         fun onSettingsClick()
 
         fun onActiveNewsClick()
-
-        fun onReconnectClick()
     }
 }
