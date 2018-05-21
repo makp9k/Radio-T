@@ -48,8 +48,8 @@ class NotificationService {
             }
 
             val notification = NotificationCompat.Builder(context, NotificationUtils.NotificationChannelInfo.PRIMARY.id)
-                .setContentTitle("Radio-T Alarm")
-                .setContentText("Show is about to start")
+                .setContentTitle(context.getString(R.string.alarm_notification_title))
+                .setContentText(context.getString(R.string.alarm_notification_text))
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(getLaunchAppPendingIntent(context))
                 .setAutoCancel(true)

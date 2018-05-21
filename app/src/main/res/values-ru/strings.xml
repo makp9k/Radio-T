@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">Радио-Т</string>
     <string name="menu_stream">Эфир</string>
     <string name="menu_news">Новости</string>
     <string name="menu_chat">Чат</string>
@@ -15,4 +16,6 @@
     <string name="reconnect">Повторить</string>
     <string name="stream_playback_error">Ошибка воспроизведения</string>
     <string name="app_version">Версия приложения</string>
+    <string name="alarm_notification_title">Радио-Т</string>
+    <string name="alarm_notification_text">В эфире</string>
 </resources>

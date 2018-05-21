@@ -16,4 +16,6 @@
     <string name="reconnect">Reconnect</string>
     <string name="stream_playback_error">Stream playback error occurred</string>
     <string name="app_version">App version</string>
+    <string name="alarm_notification_title">Radio-T</string>
+    <string name="alarm_notification_text">On the air</string>
 </resources>

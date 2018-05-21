@@ -1,11 +1,12 @@
 package com.kvazars.radiot.services
 
-import android.app.*
+import android.app.Notification
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
-import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
 import com.kvazars.radiot.R
 import com.kvazars.radiot.RadioTApplication
@@ -20,7 +21,6 @@ class BackgroundPlayerService : Service() {
 
     companion object {
         private const val NOTIFICATION_ID = 1
-        private const val CHANNEL_ID = "default"
 
         fun createLaunchIntent(context: Context): Intent {
             return Intent(context, BackgroundPlayerService::class.java)
@@ -58,24 +58,11 @@ class BackgroundPlayerService : Service() {
 
     private fun updateActiveNewsNotification(news: Optional<NewsItem>) {
         val notification = createNotification(news)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationManager.getNotificationChannel(CHANNEL_ID) == null) {
-            createChannel()
-        }
-        notificationManager.notify(NOTIFICATION_ID, notification)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createChannel() {
-        val importance = NotificationManager.IMPORTANCE_LOW
-        val channel = NotificationChannel(CHANNEL_ID, "Stream playback", importance)
-
-        channel.setShowBadge(false)
-        channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-        notificationManager.createNotificationChannel(channel)
+        NotificationUtils.notify(this, NOTIFICATION_ID, notification)
     }
 
     private fun createNotification(news: Optional<NewsItem>): Notification {
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+        val builder = NotificationCompat.Builder(this, NotificationUtils.NotificationChannelInfo.PRIMARY.id)
             .setSmallIcon(R.drawable.ic_audiotrack)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setAutoCancel(false)
@@ -91,7 +78,7 @@ class BackgroundPlayerService : Service() {
                     .bigText(newsItem.snippet)
             )
         } else {
-            builder.setContentTitle("No active news")
+            builder.setContentTitle(getString(R.string.stream_no_active_news))
         }
 
         return builder.build()
