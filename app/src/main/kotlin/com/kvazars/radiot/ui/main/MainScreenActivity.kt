@@ -34,7 +34,7 @@ class MainScreenActivity : BaseActivity(), MainScreenContract.View {
     private lateinit var fragmentChat: Fragment
     private var currentFragment: Fragment by Delegates.notNull()
 
-    private lateinit var presenter: MainScreenPresenter
+    private lateinit var presenter: MainScreenContract.Presenter
 
     //endregion
 
@@ -53,7 +53,16 @@ class MainScreenActivity : BaseActivity(), MainScreenContract.View {
         initBottomNavigation()
 
         val appComponent = RadioTApplication.getAppComponent(this)
-        presenter = MainScreenPresenter(this, appComponent.getNewsInteractor())
+        presenter = MainScreenPresenter(
+            this,
+            appComponent.newsInteractor(),
+            appComponent.reconnectTrigger()
+        )
+    }
+
+    override fun onDestroy() {
+        presenter.onDestroy()
+        super.onDestroy()
     }
 
     //endregion

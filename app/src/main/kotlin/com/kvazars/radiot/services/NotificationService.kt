@@ -14,7 +14,7 @@ class NotificationService {
 
     companion object {
         fun setupAlarm(context: Context) {
-            val streamInteractor = RadioTApplication.getAppComponent(context).getStreamInteractor()
+            val streamInteractor = RadioTApplication.getAppComponent(context).streamInteractor()
             val nextAirDate = streamInteractor.getNextAirDate()
 
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

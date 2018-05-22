@@ -41,8 +41,9 @@ class BackgroundPlayerService : Service() {
 
         val appComponent = RadioTApplication.getAppComponent(this)
         appComponent
-            .getNewsInteractor()
+            .newsInteractor()
             .activeNews
+            .retryWhen { appComponent.reconnectTrigger() }
             .subscribe(
                 { updateActiveNewsNotification(it) },
                 { it.printStackTrace() }

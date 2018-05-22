@@ -67,7 +67,6 @@ class GitterClientFacade(
             }
             .replay(1)
             .refCount()
-            .doOnError { println(it.toString() + "!@!@!@!@") }
 
     override val chatEventStream: Observable<ChatEvent>
         get() = stream

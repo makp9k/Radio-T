@@ -33,7 +33,7 @@ class ChatScreenFragment : Fragment(), ChatScreenContract.View {
 
     private val markdownSpannableBuilder = MarkdownSpannableBuilder()
 
-    private lateinit var presenter: ChatScreenPresenter
+    private lateinit var presenter: ChatScreenContract.Presenter
 
     //endregion
 
@@ -63,7 +63,8 @@ class ChatScreenFragment : Fragment(), ChatScreenContract.View {
             }
         })
 
-        presenter = ChatScreenPresenter(this, RadioTApplication.getAppComponent(context!!).getChatInteractor())
+        val appComponent = RadioTApplication.getAppComponent(context!!)
+        presenter = ChatScreenPresenter(this, appComponent.chatInteractor(), appComponent.reconnectTrigger())
 
         showLoadingIndicator()
     }

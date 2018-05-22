@@ -6,6 +6,7 @@ import com.kvazars.radiot.domain.player.PodcastStreamPlayer
 import com.kvazars.radiot.domain.stream.StreamInteractor
 import com.kvazars.radiot.domain.util.Optional
 import com.kvazars.radiot.domain.util.addTo
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.ZoneId
@@ -18,7 +19,8 @@ class StreamScreenPresenter(
     private val view: StreamScreenContract.View,
     newsInteractor: NewsInteractor,
     streamInteractor: StreamInteractor,
-    private val streamPlayer: PodcastStreamPlayer
+    private val streamPlayer: PodcastStreamPlayer,
+    private val reconnectTrigger: Observable<Unit>
 ) : StreamScreenContract.Presenter {
 
     //region CONSTANTS -----------------------------------------------------------------------------
@@ -43,7 +45,8 @@ class StreamScreenPresenter(
             .activeNews
             .doOnNext { activeNews = it }
             .map(::mapNewsViewModel)
-            .flatMap ({ streamInteractor.getStreamState().toObservable() }, { news, streamState -> Pair(news, streamState) })
+            .flatMap({ streamInteractor.getStreamState().toObservable() }, { news, streamState -> Pair(news, streamState) })
+            .retryWhen { reconnectTrigger }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
@@ -56,6 +59,7 @@ class StreamScreenPresenter(
 
         streamPlayer
             .statusUpdates
+            .retryWhen { reconnectTrigger }
             .subscribe(
                 {
                     handlePlayerStatus(it)
@@ -92,7 +96,7 @@ class StreamScreenPresenter(
         }
     }
 
-    private fun mapNewsViewModel(news:Optional<NewsItem>): Optional<StreamScreenContract.View.NewsViewModel> {
+    private fun mapNewsViewModel(news: Optional<NewsItem>): Optional<StreamScreenContract.View.NewsViewModel> {
         val newsItem = news.value
         return if (newsItem != null) {
             Optional(
@@ -139,10 +143,6 @@ class StreamScreenPresenter(
 
     override fun onInfoClick() {
         view.openUrl("https://radio-t.com/info/")
-    }
-
-    override fun onSettingsClick() {
-
     }
 
     override fun onActiveNewsClick() {

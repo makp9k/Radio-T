@@ -12,6 +12,7 @@ import com.kvazars.radiot.domain.stream.StreamInfoProvider
 import com.kvazars.radiot.domain.stream.StreamInteractor
 import dagger.Module
 import dagger.Provides
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Singleton
 
 
@@ -51,10 +52,12 @@ object AppModule {
     @Provides
     @JvmStatic
     fun provideChatInteractor(
-        gitterClientFacade: GitterClientFacade
+        gitterClientFacade: GitterClientFacade,
+        reconnectTrigger: PublishSubject<Unit>
     ): ChatInteractor {
         return ChatInteractor(
-            gitterClientFacade
+            gitterClientFacade,
+            reconnectTrigger
         )
     }
 
@@ -78,6 +81,14 @@ object AppModule {
         return PersistentApplicationPreferences(
             PreferenceManager.getDefaultSharedPreferences(application)
         )
+    }
+
+    @Singleton
+    @Provides
+    @JvmStatic
+    fun provideReconnectTrigger(
+    ): PublishSubject<Unit> {
+        return PublishSubject.create()
     }
 
     //endregion

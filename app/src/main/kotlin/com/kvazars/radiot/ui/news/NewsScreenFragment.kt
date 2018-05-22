@@ -28,7 +28,7 @@ class NewsScreenFragment : Fragment(), NewsScreenContract.View, EpoxyRecyclerVie
 
     //region CLASS VARIABLES -----------------------------------------------------------------------
 
-    private lateinit var presenter: NewsScreenPresenter
+    private lateinit var presenter: NewsScreenContract.Presenter
     private lateinit var epoxyRecyclerView: EpoxyRecyclerView
     private var news: List<NewsItemView.NewsViewModel>? = null
 
@@ -43,7 +43,8 @@ class NewsScreenFragment : Fragment(), NewsScreenContract.View, EpoxyRecyclerVie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = NewsScreenPresenter(this, RadioTApplication.getAppComponent(context!!).getNewsInteractor())
+        val appComponent = RadioTApplication.getAppComponent(context!!)
+        presenter = NewsScreenPresenter(this, appComponent.newsInteractor(), appComponent.reconnectTrigger())
 
         epoxyRecyclerView = view.findViewById(R.id.recycler_view)
         (epoxyRecyclerView.layoutManager as LinearLayoutManager).initialPrefetchItemCount = 4

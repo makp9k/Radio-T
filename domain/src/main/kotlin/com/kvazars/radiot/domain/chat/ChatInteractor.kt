@@ -11,7 +11,8 @@ import io.reactivex.subjects.PublishSubject
 import java.util.*
 
 class ChatInteractor(
-    private val chatDataProvider: ChatDataProvider
+    private val chatDataProvider: ChatDataProvider,
+    private val reconnectTrigger: Observable<Unit>
 ) {
 
     private val eventsEmitter = PublishSubject.create<Event>()
@@ -33,6 +34,7 @@ class ChatInteractor(
     init {
         chatDataProvider
             .chatEventStream
+            .retryWhen { reconnectTrigger }
             .subscribe(
                 {
                     processStreamEvent(it)

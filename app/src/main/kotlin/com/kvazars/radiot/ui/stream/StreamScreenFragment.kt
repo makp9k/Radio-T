@@ -30,7 +30,7 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
 
     //region CLASS VARIABLES -----------------------------------------------------------------------
 
-    private lateinit var presenter: StreamScreenPresenter
+    private lateinit var presenter: StreamScreenContract.Presenter
 
     //endregion
 
@@ -50,9 +50,10 @@ class StreamScreenFragment : Fragment(), StreamScreenContract.View {
         val appComponent = RadioTApplication.getAppComponent(context!!)
         presenter = StreamScreenPresenter(
             this,
-            appComponent.getNewsInteractor(),
-            appComponent.getStreamInteractor(),
-            appComponent.streamPlayer()
+            appComponent.newsInteractor(),
+            appComponent.streamInteractor(),
+            appComponent.streamPlayer(),
+            appComponent.reconnectTrigger()
         )
 
         controls_container.background = RadiotPatternBackgroundDrawable(context!!)

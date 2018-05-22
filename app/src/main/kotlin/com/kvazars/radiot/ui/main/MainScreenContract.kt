@@ -10,5 +10,7 @@ interface MainScreenContract {
 
     interface Presenter {
         fun onReconnectClick()
+
+        fun onDestroy()
     }
 }

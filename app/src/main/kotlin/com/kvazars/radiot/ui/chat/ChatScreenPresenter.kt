@@ -3,6 +3,7 @@ package com.kvazars.radiot.ui.chat
 import com.kvazars.radiot.domain.chat.ChatInteractor
 import com.kvazars.radiot.domain.chat.models.ChatMessage
 import com.kvazars.radiot.domain.util.addTo
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.ZoneId
@@ -14,7 +15,8 @@ import java.util.concurrent.TimeUnit
  */
 class ChatScreenPresenter(
     private val view: ChatScreenContract.View,
-    private val chatInteractor: ChatInteractor
+    private val chatInteractor: ChatInteractor,
+    private val reconnectTrigger: Observable<Unit>
 ) : ChatScreenContract.Presenter {
     //region CONSTANTS -----------------------------------------------------------------------------
 
@@ -50,6 +52,7 @@ class ChatScreenPresenter(
             .events
             .doOnNext { processChatEvent(it) }
             .debounce(100L, TimeUnit.MILLISECONDS)
+            .retryWhen { reconnectTrigger }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { view.showChatMessages(messages) },

@@ -6,6 +6,7 @@ import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
 import io.reactivex.schedulers.TestScheduler
+import io.reactivex.subjects.PublishSubject
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -60,8 +61,8 @@ class ChatInteractorTest {
     @Before
     fun setUp() {
         val testScheduler = TestScheduler()
-        chatInteractor = ChatInteractor(TestChatDataProvider(testScheduler))
-        testObserver = chatInteractor.eventsEmitter.test()
+        chatInteractor = ChatInteractor(TestChatDataProvider(testScheduler), PublishSubject.create())
+        testObserver = chatInteractor.events.test()
         testScheduler.advanceTimeBy(2, TimeUnit.SECONDS)
     }
 

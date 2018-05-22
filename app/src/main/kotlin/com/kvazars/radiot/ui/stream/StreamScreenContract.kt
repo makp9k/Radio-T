@@ -39,8 +39,6 @@ interface StreamScreenContract {
 
         fun onInfoClick()
 
-        fun onSettingsClick()
-
         fun onActiveNewsClick()
     }
 }

@@ -12,8 +12,9 @@ import org.threeten.bp.format.DateTimeFormatterBuilder
  * Created by Leo on 27.04.2017.
  */
 class NewsScreenPresenter(
-        private val view: NewsScreenContract.View,
-        newsInteractor: NewsInteractor
+    private val view: NewsScreenContract.View,
+    newsInteractor: NewsInteractor,
+    private val reconnectTrigger: Observable<Unit>
 ) : NewsScreenContract.Presenter {
     //region CONSTANTS -----------------------------------------------------------------------------
 
@@ -32,24 +33,25 @@ class NewsScreenPresenter(
 
     init {
         newsInteractor
-                .allNews
-                .flatMap {
-                    Observable.fromIterable(it)
-                            .map {
-                                NewsItemView.NewsViewModel(
-                                        it.title,
-                                    "${it.domain} - ${it.time.withZoneSameInstant(ZoneId.systemDefault()).format(dateFormat)}",
-                                        it.snippet,
-                                        it.link,
-                                        it.pictureUrl
-                                )
-                            }
-                            .toList()
-                            .toObservable()
-                }
-                .subscribe(
-                        { view.setNews(it) }
-                ).addTo(disposableBag)
+            .allNews
+            .flatMap {
+                Observable.fromIterable(it)
+                    .map {
+                        NewsItemView.NewsViewModel(
+                            it.title,
+                            "${it.domain} - ${it.time.withZoneSameInstant(ZoneId.systemDefault()).format(dateFormat)}",
+                            it.snippet,
+                            it.link,
+                            it.pictureUrl
+                        )
+                    }
+                    .toList()
+                    .toObservable()
+            }
+            .retryWhen { reconnectTrigger }
+            .subscribe(
+                { view.setNews(it) }
+            ).addTo(disposableBag)
     }
 
     override fun onNewsItemClick(item: NewsItemView.NewsViewModel) {
@@ -60,7 +62,7 @@ class NewsScreenPresenter(
 
     //region LOCAL METHODS -------------------------------------------------------------------------
 
-    fun onDestroy() {
+    override fun onDestroy() {
         disposableBag.clear()
     }
 

@@ -9,6 +9,7 @@ import com.kvazars.radiot.domain.preferences.ApplicationPreferences
 import com.kvazars.radiot.domain.stream.StreamInteractor
 import dagger.BindsInstance
 import dagger.Component
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Singleton
 
 
@@ -18,11 +19,12 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [AppModule::class, DataModule::class])
 interface AppComponent {
-    fun getNewsInteractor(): NewsInteractor
-    fun getChatInteractor(): ChatInteractor
-    fun getStreamInteractor(): StreamInteractor
+    fun newsInteractor(): NewsInteractor
+    fun chatInteractor(): ChatInteractor
+    fun streamInteractor(): StreamInteractor
     fun streamPlayer(): PodcastStreamPlayer
     fun appPreferences(): ApplicationPreferences
+    fun reconnectTrigger(): PublishSubject<Unit>
 
     @Component.Builder
     interface Builder {

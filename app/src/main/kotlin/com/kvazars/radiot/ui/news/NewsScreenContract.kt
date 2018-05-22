@@ -13,5 +13,7 @@ interface NewsScreenContract {
 
     interface Presenter {
         fun onNewsItemClick(item: NewsItemView.NewsViewModel)
+
+        fun onDestroy()
     }
 }
