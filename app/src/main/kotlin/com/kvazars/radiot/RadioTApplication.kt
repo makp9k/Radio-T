@@ -65,14 +65,10 @@ class RadioTApplication : Application() {
             .streamPlayer()
             .statusUpdates
             .distinctUntilChanged()
+            .filter { it == PodcastStreamPlayer.Status.PLAYING }
             .subscribe(
                 {
-                    when (it) {
-                        PodcastStreamPlayer.Status.PLAYING, PodcastStreamPlayer.Status.BUFFERING ->
-                            startBackgroundPlayerService()
-                        PodcastStreamPlayer.Status.STOPPED, PodcastStreamPlayer.Status.ERROR ->
-                            stopBackgroundPlayerService()
-                    }
+                    startBackgroundPlayerService()
                 }
             )
 
@@ -84,10 +80,6 @@ class RadioTApplication : Application() {
             this,
             serviceIntent
         )
-    }
-
-    private fun stopBackgroundPlayerService() {
-        stopService(serviceIntent)
     }
 
     //endregion

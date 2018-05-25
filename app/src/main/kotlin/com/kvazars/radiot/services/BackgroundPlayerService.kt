@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat
 import com.kvazars.radiot.R
 import com.kvazars.radiot.RadioTApplication
 import com.kvazars.radiot.domain.news.models.NewsItem
+import com.kvazars.radiot.domain.player.PodcastStreamPlayer
 import com.kvazars.radiot.domain.util.Optional
 import com.kvazars.radiot.domain.util.addTo
 import com.kvazars.radiot.ui.main.MainScreenActivity
@@ -37,6 +38,8 @@ class BackgroundPlayerService : Service() {
     override fun onCreate() {
         super.onCreate()
 
+        startForeground(NOTIFICATION_ID, createNotification(Optional.empty))
+
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val appComponent = RadioTApplication.getAppComponent(this)
@@ -50,7 +53,18 @@ class BackgroundPlayerService : Service() {
             )
             .addTo(disposableBag)
 
-        startForeground(NOTIFICATION_ID, createNotification(Optional.empty))
+        appComponent
+            .streamPlayer()
+            .statusUpdates
+            .distinctUntilChanged()
+            .filter { it == PodcastStreamPlayer.Status.STOPPED || it == PodcastStreamPlayer.Status.ERROR }
+            .subscribe(
+                {
+                    stopForeground(true)
+                    stopSelf()
+                }
+            )
+            .addTo(disposableBag)
     }
 
     override fun onDestroy() {
