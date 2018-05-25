@@ -128,7 +128,7 @@ class StreamScreenPresenter(
 
     override fun onPlaybackToggleClick() {
         if (!streamPlayer.isPlaying()) {
-            streamPlayer.play("http://media.blubrry.com/zavtracast/s/zavtracast.ru/p/105_mixdown.mp3")
+            streamPlayer.play("http://stream.radio-t.com/")
         } else {
             streamPlayer.stop()
         }
