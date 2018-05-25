@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk_version
@@ -12,8 +13,6 @@ android {
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        manifestPlaceholders = [HOCKEYAPP_APP_ID: "1dc216c2fc0f4a93a749e143135a0843"]
 
         resConfigs 'en', 'ru'
     }
@@ -81,7 +80,10 @@ dependencies {
     implementation project(":domain")
     implementation project(":data")
 
-    kapt "com.android.databinding:compiler:3.2.0-alpha10"
+    kapt 'com.android.databinding:compiler:3.2.0-alpha10'
 
-    implementation 'net.hockeyapp.android:HockeySDK:5.1.0'
+    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
 }
+
+apply plugin: 'com.google.gms.google-services'

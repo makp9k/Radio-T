@@ -18,11 +18,18 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
--keepattributes SourceFile, LineNumberTable
+-keepattributes *Annotation*, SourceFile, LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
+
+-keep public class * extends java.lang.Exception
+
+-printmapping mapping.txt
+
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
 
 #okhttp
 -dontwarn okhttp3.**

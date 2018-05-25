@@ -23,9 +23,9 @@ class SettingsScreenPresenter(
     override val notificationsEnabled = ObservableBoolean(false)
         .apply { appPreferences.notificationsEnabled.connectTo(this).apply { disposableBag += this } }
 
-    override val trackingEnabled = ObservableBoolean(false)
+    override val crashReportingEnabled = ObservableBoolean(false)
         .apply {
-            appPreferences.trackingEnabled.connectTo(this).apply { disposableBag += this }
+            appPreferences.crashReportingEnabled.connectTo(this).apply { disposableBag += this }
         }
 
     //endregion

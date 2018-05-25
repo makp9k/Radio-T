@@ -7,11 +7,5 @@ class PersistentApplicationPreferences(prefs: SharedPreferences) : ApplicationPr
 
     override val notificationsEnabled by prefs.boolean(true)
 
-    override val trackingEnabled by prefs.boolean(true)
-
-//    override val trackingEnabled by prefs.generic(
-//        true,
-//        { key, defaultValue -> getBoolean(key, defaultValue) },
-//        { key, value -> edit().putBoolean(key, value).apply() }
-//    )
+    override val crashReportingEnabled by prefs.boolean(false)
 }

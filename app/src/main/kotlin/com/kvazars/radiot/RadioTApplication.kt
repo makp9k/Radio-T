@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat
+import com.crashlytics.android.Crashlytics
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kvazars.radiot.data.DataModule
 import com.kvazars.radiot.di.AppComponent
@@ -12,8 +13,10 @@ import com.kvazars.radiot.domain.player.PodcastStreamPlayer
 import com.kvazars.radiot.services.BackgroundPlayerService
 import com.kvazars.radiot.services.NotificationService
 import com.kvazars.radiot.ui.main.MainScreenActivity
+import io.fabric.sdk.android.Fabric
 import io.reactivex.plugins.RxJavaPlugins
 import java.io.File
+
 
 /**
  * Created by Leo on 01.05.2017.
@@ -44,7 +47,17 @@ class RadioTApplication : Application() {
             .dataModule(DataModule(this, File(cacheDir, "http-cache")))
             .build()
 
-        RxJavaPlugins.setErrorHandler { it.printStackTrace() }
+        val crashReportingEnabled = appComponent.appPreferences().crashReportingEnabled
+        if (crashReportingEnabled.get()) {
+            Fabric.with(this, Crashlytics())
+        }
+
+        RxJavaPlugins.setErrorHandler {
+            if (crashReportingEnabled.get()) {
+                Crashlytics.logException(it)
+            }
+            it.printStackTrace()
+        }
 
         serviceIntent = BackgroundPlayerService.createLaunchIntent(this)
 
@@ -60,8 +73,7 @@ class RadioTApplication : Application() {
                         PodcastStreamPlayer.Status.STOPPED, PodcastStreamPlayer.Status.ERROR ->
                             stopBackgroundPlayerService()
                     }
-                },
-                { it.printStackTrace() }
+                }
             )
 
         NotificationService.setupAlarm(this)

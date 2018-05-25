@@ -18,4 +18,6 @@
     <string name="app_version">Версия приложения</string>
     <string name="alarm_notification_title">Радио-Т</string>
     <string name="alarm_notification_text">В эфире</string>
+    <string name="settings_crash_reporting_desc">Отчеты об ошибках</string>
+    <string name="settings_crash_reporting_title">Отправлять анонимную информацию о падениях</string>
 </resources>

@@ -31,8 +31,17 @@
             app:ssw_description="@string/settings_on_air_notifications_desc"
             app:ssw_title="@string/settings_on_air_notifications_title" />
 
-        <View
-            style="@style/SettingsItemDivider"/>
+        <View style="@style/SettingsItemDivider" />
+
+        <com.kvazars.radiot.ui.settings.views.SettingsSwitchView
+            android:id="@+id/crash_reporting_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:checked="@={model.crashReportingEnabled}"
+            app:ssw_description="@string/settings_crash_reporting_desc"
+            app:ssw_title="@string/settings_crash_reporting_title" />
+
+        <View style="@style/SettingsItemDivider" />
 
         <LinearLayout
             android:id="@+id/rate_app_btn"
@@ -54,8 +63,7 @@
 
         </LinearLayout>
 
-        <View
-            style="@style/SettingsItemDivider"/>
+        <View style="@style/SettingsItemDivider" />
 
         <LinearLayout
             android:id="@+id/source_code_btn"
@@ -77,8 +85,7 @@
 
         </LinearLayout>
 
-        <View
-            style="@style/SettingsItemDivider"/>
+        <View style="@style/SettingsItemDivider" />
 
         <LinearLayout
             style="@style/SettingsItemLinearLayoutContainer"

@@ -12,7 +12,7 @@ interface SettingsScreenContract {
 
     interface Presenter {
         val notificationsEnabled: ObservableBoolean
-        val trackingEnabled: ObservableBoolean
+        val crashReportingEnabled: ObservableBoolean
 
         fun dispose()
     }

@@ -4,5 +4,5 @@ interface ApplicationPreferences {
 
     val notificationsEnabled: Preference<Boolean>
 
-    val trackingEnabled: Preference<Boolean>
+    val crashReportingEnabled: Preference<Boolean>
 }
