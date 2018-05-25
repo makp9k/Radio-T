@@ -64,7 +64,6 @@ class ChatScreenPresenter(
     override fun loadPrevious() {
         view.showLoadingIndicator()
         chatInteractor.requestEarlierMessages()
-        throw Exception("testCrash")
     }
 
     private fun processChatEvent(event: ChatInteractor.Event) {
