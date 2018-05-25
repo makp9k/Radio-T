@@ -120,6 +120,10 @@ class ExoStreamPlayer(
                 statusUpdatesRelay.onNext(
                     PodcastStreamPlayer.Status.BUFFERING
                 )
+            } else {
+                statusUpdatesRelay.onNext(
+                    PodcastStreamPlayer.Status.PLAYING
+                )
             }
         }
 

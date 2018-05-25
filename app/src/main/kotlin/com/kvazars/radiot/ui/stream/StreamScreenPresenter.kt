@@ -52,8 +52,7 @@ class StreamScreenPresenter(
                 {
                     val (news, streamState) = it
                     handleNewsStatus(news, streamState)
-                },
-                { it.printStackTrace() }
+                }
             )
             .addTo(disposableBag)
 
@@ -63,9 +62,6 @@ class StreamScreenPresenter(
             .subscribe(
                 {
                     handlePlayerStatus(it)
-                },
-                {
-                    it.printStackTrace()
                 }
             )
             .addTo(disposableBag)
@@ -81,7 +77,7 @@ class StreamScreenPresenter(
 
     private fun handlePlayerStatus(status: PodcastStreamPlayer.Status) {
         when (status) {
-            PodcastStreamPlayer.Status.PLAYING ->
+            PodcastStreamPlayer.Status.PLAYING, PodcastStreamPlayer.Status.BUFFERING ->
                 view.setPlaybackState(StreamScreenContract.View.PlaybackState.PLAYING)
 
             PodcastStreamPlayer.Status.STOPPED ->
@@ -90,9 +86,6 @@ class StreamScreenPresenter(
             PodcastStreamPlayer.Status.ERROR -> {
                 view.setPlaybackState(StreamScreenContract.View.PlaybackState.ERROR)
             }
-
-            PodcastStreamPlayer.Status.BUFFERING ->
-                view.setPlaybackState(StreamScreenContract.View.PlaybackState.STOPPED)
         }
     }
 
@@ -135,7 +128,7 @@ class StreamScreenPresenter(
 
     override fun onPlaybackToggleClick() {
         if (!streamPlayer.isPlaying()) {
-            streamPlayer.play("http://stream.radio-t.com/")
+            streamPlayer.play("http://media.blubrry.com/zavtracast/s/zavtracast.ru/p/105_mixdown.mp3")
         } else {
             streamPlayer.stop()
         }
