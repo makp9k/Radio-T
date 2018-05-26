@@ -6,6 +6,7 @@ import android.databinding.InverseBindingListener
 import android.databinding.InverseBindingMethod
 import android.databinding.InverseBindingMethods
 import android.support.constraint.ConstraintLayout
+import android.support.constraint.ConstraintSet
 import android.support.v7.widget.SwitchCompat
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -62,6 +63,13 @@ class SettingsSwitchView : ConstraintLayout {
         switch = findViewById(R.id.switch_btn)
         setOnClickListener {
             switch.isChecked = !switch.isChecked
+        }
+
+        ConstraintSet().let {
+            it.clone(this)
+            it.connect(R.id.title, ConstraintSet.END, R.id.switch_btn, ConstraintSet.START)
+            it.connect(R.id.description, ConstraintSet.END, R.id.switch_btn, ConstraintSet.START)
+            it.applyTo(this)
         }
     }
 
