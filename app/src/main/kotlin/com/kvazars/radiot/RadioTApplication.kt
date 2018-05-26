@@ -21,7 +21,7 @@ import java.io.File
 /**
  * Created by Leo on 01.05.2017.
  */
-class RadioTApplication : Application() {
+open class RadioTApplication : Application() {
     //region CONSTANTS -----------------------------------------------------------------------------
 
     //endregion

@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "com.kvazars.radio_t"
         minSdkVersion 16
-        versionCode 1
+        versionCode 4
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -24,10 +24,13 @@ android {
         }
         debug {
             crunchPngs false
+
+            multiDexEnabled true
         }
     }
 
     sourceSets {
+        debug.java.srcDirs += 'src/debug/kotlin'
         main.java.srcDirs += 'src/main/kotlin'
     }
 

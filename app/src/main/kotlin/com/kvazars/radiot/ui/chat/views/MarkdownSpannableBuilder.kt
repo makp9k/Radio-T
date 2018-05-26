@@ -20,7 +20,9 @@ class MarkdownSpannableBuilder {
 
     private val parser: Parser = Parser
         .builder()
-        .customDelimiterProcessor(StrikethroughDelimiterProcessor())
+        .inlineParserFactory {
+            CustomInlineParser(listOf(StrikethroughDelimiterProcessor()))
+        }
         .build()
 
     fun build(text: String, context: Context): Spannable {
@@ -250,6 +252,11 @@ class MarkdownSpannableBuilder {
                 is StrikethroughEmphasis -> wrapSpan(StrikethroughSpan(), customNode)
                 else -> super.visit(customNode)
             }
+        }
+
+        override fun visit(customBlock: CustomBlock?) {
+            println(customBlock)
+            super.visit(customBlock)
         }
     }
 
