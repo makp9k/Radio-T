@@ -14,9 +14,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
-        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
-        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" />
 
         <activity android:name=".ui.main.MainScreenActivity">
             <intent-filter>
@@ -35,6 +41,10 @@
 
         <receiver
             android:name=".services.NotificationService$AlarmBroadcastReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".services.BackgroundPlayerService$NotificationIntentReceiver"
             android:exported="false" />
     </application>
 
